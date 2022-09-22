@@ -86,7 +86,7 @@ __STATIC_INLINE float __sensor_read(tempsensor_t *sensorobj) {
 
 	// 16비트 데이터를 MSB부터 차례대로 받는다.
 	HAL_GPIO_WritePin(sensorobj->csPort, sensorobj->csPin, GPIO_PIN_RESET);
-	HAL_SPI_Receive(sensorobj->hspi, (uint8_t *)&pData, 1, 50);
+	HAL_SPI_Receive(sensorobj->hspi, pData, 1, 50);
 	HAL_GPIO_WritePin(sensorobj->csPort, sensorobj->csPin, GPIO_PIN_SET);
 
 	if (((pData[0]|(pData[1]<<8))>>2)& 0x0001)
@@ -96,7 +96,7 @@ __STATIC_INLINE float __sensor_read(tempsensor_t *sensorobj) {
 	return temp * 0.25f;
 }
 float read(tempsensor_t *sensorobj) {
-	float data;
+	float data = .0f;
 	if (sensorobj->is_readable(sensorobj)) {
 		data = __sensor_read(sensorobj);
 		*(sensorobj->waitCount) = sensorobj->__sensor_interval;

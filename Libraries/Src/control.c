@@ -6,9 +6,6 @@
  */
 #include "control.h"
 
-heater_t heaterTop;
-heater_t heaterBottom;
-
 PIDConst PIDTransient = {
 		5.f,		// kp
 		0.f,		// ki
@@ -16,10 +13,6 @@ PIDConst PIDTransient = {
 		10.f,		// filterConst
 		5.f			// antiWindUpConst
 };
-
-void CONTROL_TIM1_IRQ(){
-
-}
 
 PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 하락 목표
 		5.f,		// kp

@@ -1,0 +1,17 @@
+../Libraries/Src/OLED.c:122:20:OLED_CS_Set	16	static
+../Libraries/Src/OLED.c:126:20:OLED_DC_Set	16	static
+../Libraries/Src/OLED.c:130:20:OLED_RS_Set	16	static
+../Libraries/Src/OLED.c:134:20:OLED_Send	16	static,ignoring_inline_asm
+../Libraries/Src/OLED.c:142:20:OLED_WriteCommand	16	static
+../Libraries/Src/OLED.c:147:20:OLED_WriteData	16	static
+../Libraries/Src/OLED.c:152:6:OLED_Clear	16	static
+../Libraries/Src/OLED.c:163:6:OLED_Begin	8	static
+../Libraries/Src/OLED.c:217:6:OLED_AddrWindow	32	static
+../Libraries/Src/OLED.c:255:6:OLED_Rectangle	48	static
+../Libraries/Src/OLED.c:269:6:OLED_Dot	32	static
+../Libraries/Src/OLED.c:274:6:OLED_WriteChar	32	static
+../Libraries/Src/OLED.c:295:12:str2hex	24	static
+../Libraries/Src/OLED.c:315:6:OLED_Printf	280	static
+../Libraries/Src/OLED.c:507:6:OLED_Line	32	static
+../Libraries/Src/OLED.c:523:6:OLED_MenuUI	40	static
+../Libraries/Src/OLED.c:537:6:OLED_Cursor	32	static

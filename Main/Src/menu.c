@@ -10,17 +10,19 @@
 
 extern SPI_HandleTypeDef hspi3;
 
-extern tempsensor_t *tempUp;
-extern tempsensor_t *tempDown;
+extern tempsensor_t *tempTop;
+extern tempsensor_t *tempBottom;
 
 void testTemp(){
 	SwitchLED(COLOR_BLACK);
 	for(;;){
 		uint16_t sw = Switch_Read();
 		if(sw) break;
-		if (tempUp->is_readable(tempUp)) {
-			OLED_Printf("/s/0/rtemp: /y%f\r\n", tempUp->read(tempUp));
-			OLED_Printf("/s/1/rtemp: /y%f\r\n", tempDown->read(tempDown));
+		if (tempTop->is_readable(tempTop) && tempBottom->is_readable(tempBottom)) {
+			float temp1 = tempTop->read(tempTop);
+			float temp2 = tempBottom->read(tempBottom);
+			OLED_Printf("/s/0/rtempU: /y%f\r\n", temp1);
+			OLED_Printf("/s/1/rtempD: /y%f\r\n", temp2);
 //			printf("temp: %f\r\n", temp1->read(temp1));
 		}
 	}
@@ -28,8 +30,17 @@ void testTemp(){
 
 void testHeat(){
 	SwitchLED(COLOR_SKY);
-
-
+	for(;;){
+		uint16_t sw = Switch_Read();
+		if(sw) break;
+		if (tempTop->is_readable(tempTop) && tempBottom->is_readable(tempBottom)) {
+			float temp1 = tempTop->read(tempTop);
+			float temp2 = tempBottom->read(tempBottom);
+			OLED_Printf("/s/0/rtempU: /y%f\r\n", temp1);
+			OLED_Printf("/s/1/rtempD: /y%f\r\n", temp2);
+//			printf("temp: %f\r\n", temp1->read(temp1));
+		}
+	}
 }
 
 

@@ -1,0 +1,2 @@
+../Libraries/Src/Switch.c:17:6:Switch_LED	16	static
+../Libraries/Src/Switch.c:22:10:Switch_Read	16	static
