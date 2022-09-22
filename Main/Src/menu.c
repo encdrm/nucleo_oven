@@ -209,16 +209,17 @@ void test(){
 					OLED_Printf("/3LAMP  : ON ");
 					break;
 				case 3:
-					// Heater Up
+					// Heater Top
 					HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 0);
 					OLED_Printf("/4HU    : ON ");
 					break;
 				case 4:
-					// Heater Down
+					// Heater Bottom
 					HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 0);
 					OLED_Printf("/5HD    : ON ");
 					break;
 				case 5:
+					// Mainboard Fan
 					HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 1);
 					OLED_Printf("/6FAN   : ON ");
 					break;
