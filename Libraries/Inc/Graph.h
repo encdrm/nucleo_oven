@@ -1,0 +1,41 @@
+#ifndef __GRAPH__H__
+#define __GRAPH__H__
+
+typedef struct _graphType{
+	float * xData;
+	float * yData;
+	uint16_t count;
+	uint8_t xAxisPos;
+	uint8_t yAxisPos;
+	float xDensity;
+	float yDensity;
+	void (* Print) (struct _graphType * graph_var, uint32_t color);
+	void (* Add) (struct _graphType * graph_var, float xData, float yData);
+	void (* Pop) (struct _graphType * graph_var, float * xData, float * yData);
+	void (* ChangeDensity) (struct _graphType * graph_var, float xDen, float yDen);
+	void (* ChangeAxis) (struct _graphType * graph_var, uint8_t xAxisPos, uint8_t yAxisPos);
+}graph_t;
+
+graph_t * _Graph_Init(float * xData, float * yData, uint16_t count, uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen);
+graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen);
+
+
+#define Graph_Init(xData, yData, xAxis, yAxis, xDen, yDen) \
+	_Graph_Init(xData, yData, sizeof(xData) / sizeof(float), xAxis, yAxis, xDen, yDen)
+
+//가운데 지점을 원점으로 하여 초기화하는 기법입니다.
+#define Graph_InitCenter(xData, yData, xDen, yDen) \
+	_Graph_Init(xData, yData, sizeof(xData), (OLED_SIZEX>>1), (OLED_SIZEY>>1), xDen, yDen)
+
+//왼쪽 아래 지점을 원점으로 하여 초기화하는 기법입니다.
+#define Graph_InitEdge(xData, yData, xDen, yDen) \
+	_Graph_Init(xData, yData, sizeof(xData), 0, OLED_SIZEY, xDen, yDen)
+
+void Graph_Delete(graph_t * graph_var);
+
+
+graph_t * regularPolygon(uint8_t number, float radius, float angle, uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen);
+
+
+
+#endif
