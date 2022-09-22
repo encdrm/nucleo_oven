@@ -8,14 +8,19 @@
 #ifndef INC_CONTROL_H_
 #define INC_CONTROL_H_
 
-# define PERIOD 10
+#include "main.h"
+#include <stdbool.h>
 
-typedef struct _temperatureVariable {
+#define PERIOD 1
+
+typedef struct _heater_t {
+		TIM_HandleTypeDef *htim;
+		uint32_t Channel;
 		float target;
 		float current;
 		float prev;
 		float errorSum;
-
+		bool onFlag;
 }heater_t;
 
 typedef struct _PIDConst {
@@ -33,6 +38,6 @@ extern heater_t heaterBottom;
 extern PIDConst PIDTransient;
 extern PIDConst PIDSteady;
 
-float Control_PID(float target, float sensorADCRead, heater_t *temperature, PIDConst PIDMode);
+float Control_PID(float sensorADCRead, heater_t *heater, PIDConst PIDMode);
 
 #endif /* INC_CONTROL_H_ */

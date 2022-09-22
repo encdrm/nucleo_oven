@@ -22,8 +22,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "menu.h"
-#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,6 +31,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define TEMPSENSOR_UP_CS_Port GPIOB
+#define TEMPSENSOR_UP_CS_Pin GPIO_PIN_14
+
+#define TEMPSENSOR_DOWN_CS_Port GPIOB
+#define TEMPSENSOR_DOWN_CS_Pin GPIO_PIN_15
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -54,8 +57,13 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 
 // Tempsensor object
-tempsensor_t *tempHigh;
-tempsensor_t *tempLow;
+tempsensor_t *tempUp;
+tempsensor_t *tempDown;
+
+// Heater object
+heater_t heaterUp;
+heater_t heaterDown;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -122,8 +130,12 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
 
   /* Make temperature sensor object */
-  tempHigh = Custom_Tempsensor(&hspi3, SENSOR_HIGH);
-  tempLow = Custom_Tempsensor(&hspi3, SENSOR_LOW);
+  tempUp = Custom_Tempsensor(&hspi3, TEMPSENSOR_UP_CS_Port, TEMPSENSOR_UP_CS_Pin, 300);
+  tempDown = Custom_Tempsensor(&hspi3, TEMPSENSOR_DOWN_CS_Port, TEMPSENSOR_DOWN_CS_Pin, 300);
+
+  /* Initialize heater struct */
+  ///@todo
+
   Menu();
 
 
@@ -279,9 +291,9 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
+  htim1.Init.Prescaler = 999;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 999;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

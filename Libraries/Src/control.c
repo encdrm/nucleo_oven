@@ -6,8 +6,6 @@
  */
 #include "control.h"
 
-#define PERIOD 1
-
 heater_t heaterTop;
 heater_t heaterBottom;
 
@@ -19,6 +17,10 @@ PIDConst PIDTransient = {
 		5.f			// antiWindUpConst
 };
 
+void CONTROL_TIM1_IRQ(){
+
+}
+
 PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 하락 목표
 		5.f,		// kp
 		4.f,		// ki
@@ -27,10 +29,9 @@ PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 �
 		5.f			// antiWindUpConst
 };
 
-float Control_PID(float target, float sensorADCRead, heater_t *heater, PIDConst PIDMode){
+float Control_PID(float sensorADCRead, heater_t *heater, PIDConst PIDMode){
 
 	float duty;
-	heater->target = target;
 	heater->prev = heater->current;
 	heater->current = sensorADCRead;
 

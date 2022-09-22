@@ -10,17 +10,17 @@
 
 extern SPI_HandleTypeDef hspi3;
 
-extern tempsensor_t *tempHigh;
-extern tempsensor_t *tempLow;
+extern tempsensor_t *tempUp;
+extern tempsensor_t *tempDown;
 
 void testTemp(){
 	SwitchLED(COLOR_BLACK);
 	for(;;){
 		uint16_t sw = Switch_Read();
 		if(sw) break;
-		if (tempHigh->is_readable(tempHigh)) {
-			OLED_Printf("/s/0/rtemp: /y%f\r\n", tempHigh->read(tempHigh));
-			OLED_Printf("/s/1/rtemp: /y%f\r\n", tempLow->read(tempLow));
+		if (tempUp->is_readable(tempUp)) {
+			OLED_Printf("/s/0/rtemp: /y%f\r\n", tempUp->read(tempUp));
+			OLED_Printf("/s/1/rtemp: /y%f\r\n", tempDown->read(tempDown));
 //			printf("temp: %f\r\n", temp1->read(temp1));
 		}
 	}

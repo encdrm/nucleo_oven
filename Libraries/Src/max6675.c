@@ -7,12 +7,6 @@
 
 #include "max6675.h"
 
-#define TEMPSENSOR_HIGH_CS_Port GPIOB
-#define TEMPSENSOR_HIGH_CS_Pin GPIO_PIN_14
-
-#define TEMPSENSOR_LOW_CS_Port GPIOB
-#define TEMPSENSOR_LOW_CS_Pin GPIO_PIN_15
-
 static void Add_GlobalWaitCountNode(waitcount_node *waitCntNode);
 __STATIC_INLINE float __sensor_read(tempsensor_t *sensorobj);
 static float read(tempsensor_t *sensorobj);
@@ -40,7 +34,7 @@ void Systick_Sensor_IRQ() {
 	}
 }
 
-tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *spi, sensorpos pos) {
+tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t interval) {
 	// Setting methods
 	tempsensor_t *sensorobj = (tempsensor_t*) calloc(1, sizeof(tempsensor_t));
 
@@ -52,18 +46,14 @@ tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *spi, sensorpos pos) {
 
 
 	// Setting fields
-	sensorobj->hspi = spi;
-	sensorobj->__sensor_interval = 300;
+	sensorobj->hspi = hspi;
+	sensorobj->__sensor_interval = interval;
 
-	if (pos == SENSOR_HIGH) {
-		sensorobj->csPin = TEMPSENSOR_HIGH_CS_Pin;
-		sensorobj->csPort = TEMPSENSOR_HIGH_CS_Port;
-	} else {
-		sensorobj->csPin = TEMPSENSOR_LOW_CS_Pin;
-		sensorobj->csPort = TEMPSENSOR_LOW_CS_Port;
-	}
+	// Setting CS pin
+	sensorobj->csPin = GPIO_Pin;
+	sensorobj->csPort = GPIOx;
 
-	// pull up CS pin
+	// Pulling up CS pin
 	HAL_GPIO_WritePin(sensorobj->csPort, sensorobj->csPin, GPIO_PIN_SET);
 
 	// setting waitCount object

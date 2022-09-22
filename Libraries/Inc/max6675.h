@@ -54,9 +54,7 @@ typedef struct __tempsensor_t {
 // 센서값을 읽어들일 때마다 250으로 설정되며, 1ms마다 1씩 줄어든다.
 extern waitcount global_waitcount;
 
-
 void Systick_Sensor_IRQ();
-tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *spi, sensorpos pos);
-
+tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t interval);
 
 #endif /* INC_MAX6675_H_ */

@@ -3032,7 +3032,7 @@ HAL_StatusTypeDef HAL_RCCEx_DisablePLLSAI(void)
   *           or HSI_VALUE(*) multiplied/divided by the PLL factors.
   * @note     (*) HSI_VALUE is a constant defined in stm32f4xx_hal_conf.h file (default value
   *               16 MHz) but the real value may vary depending on the variations
-  *               in voltage and heater->
+  *               in voltage and temperature.
   * @note     (**) HSE_VALUE is a constant defined in stm32f4xx_hal_conf.h file (default value
   *                25 MHz), user has to ensure that HSE_VALUE is same as the real
   *                frequency of the crystal used. Otherwise, this function may
