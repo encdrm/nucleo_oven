@@ -4,14 +4,18 @@
 #include "Graph.h"
 #include "Switch.h"
 
-
 #include <stdio.h>
 #include "max6675.h"
+#include "control.h"
 
 extern SPI_HandleTypeDef hspi3;
 
 extern tempsensor_t *tempTop;
 extern tempsensor_t *tempBottom;
+
+extern heater_t *heaterTop;
+extern heater_t *heaterBottom;
+
 
 void testTemp(){
 	SwitchLED(COLOR_BLACK);
@@ -28,19 +32,40 @@ void testTemp(){
 	}
 }
 
+// FLAG_TEMPSENSOR_DEBUG가 설정되어 있어야 온도를 직접 제어할 수 있다.
 void testHeat(){
 	SwitchLED(COLOR_SKY);
+	uint16_t idx = 0;
+	heaterTop->start(heaterTop);
 	for(;;){
 		uint16_t sw = Switch_Read();
-		if(sw) break;
-		if (tempTop->is_readable(tempTop) && tempBottom->is_readable(tempBottom)) {
-			float temp1 = tempTop->read(tempTop);
-			float temp2 = tempBottom->read(tempBottom);
-			OLED_Printf("/s/0/rtempU: /y%f\r\n", temp1);
-			OLED_Printf("/s/1/rtempD: /y%f\r\n", temp2);
-//			printf("temp: %f\r\n", temp1->read(temp1));
+
+		if(sw==SW_LEFT_LONG) break;
+		else if (sw==SW_LEFT) idx = 0;
+		else if (sw==SW_RIGHT) idx = 1;
+		else if (sw==SW_TOP || sw==SW_TOP_LONG) {
+			if (idx)
+				heaterTop->target += 1.0f;
+#ifdef FLAG_TEMPSENSOR_DEBUG
+			else
+				tempTop->lastTemp += 10.0f;
+#endif
 		}
+		else if (sw==SW_BOTTOM || sw==SW_BOTTOM_LONG) {
+			if (idx)
+				heaterTop->target -= 1.0f;
+#ifdef FLAG_TEMPSENSOR_DEBUG
+			else
+				tempTop->lastTemp -= 10.0f;
+#endif
+		}
+		float temp = tempTop->read(tempTop);
+		OLED_Printf("/s/0/rSelect: /p%s\r\n", (idx)?"target":"temp  ");
+		OLED_Printf("/s/1/rtempU: /y%f\r\n", temp);
+		OLED_Printf("/s/2/rtargetU: /y%f\r\n", heaterTop->target);
+		OLED_Printf("/s/3/rdutyU: /y%f\r\n", heaterTop->duty);
 	}
+	heaterTop->stop(heaterTop);
 }
 
 
@@ -55,7 +80,7 @@ Menu_t menuList[] = {
 		{testTemp, "TestTemp", COLOR_WHITE},
 		{test, "Test", COLOR_RED},
 		{test, "Test2", COLOR_BLUE},
-		{test, "Test3", COLOR_SKY},
+		{testHeat, "TestHeat", COLOR_SKY},
 		{test, "Test4", COLOR_BLACK},
 		{test, "Test5", COLOR_RED},
 

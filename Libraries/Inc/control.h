@@ -15,16 +15,20 @@
 
 #define PERIOD 1
 
+typedef struct _heater_t heater_t;
+
 typedef struct _heater_t {
 		TIM_HandleTypeDef *htim;
 		uint32_t channel;
 		uint32_t state;
-		uint32_t duty;
+		float duty;
 		float target;
 		float current;
 		float prev;
 		float errorSum;
 		bool onFlag;
+		void (*start)(heater_t *);
+		void (*stop)(heater_t *);
 }heater_t;
 
 typedef struct _PIDConst {
@@ -36,16 +40,14 @@ typedef struct _PIDConst {
 
 }PIDConst;
 
-extern heater_t heaterTop;
-extern heater_t heaterBottom;
+extern heater_t *heaterTop;
+extern heater_t *heaterBottom;
 
 extern PIDConst PIDTransient;
 extern PIDConst PIDSteady;
 
-void HeaterControl_Init(heater_t *heater, TIM_HandleTypeDef *htim, uint32_t Channel);
-void HeaterControl_Start(heater_t *heater);
-void HeaterControl_Stop(heater_t *heater);
+heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel);
 void HeaterControl_TIM9_IRQ();
 
-float Control_PID(float sensorADCRead, heater_t *heater, PIDConst PIDMode);
+float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode);
 #endif /* INC_CONTROL_H_ */

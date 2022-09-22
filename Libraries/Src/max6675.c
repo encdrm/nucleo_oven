@@ -8,7 +8,7 @@
 #include "max6675.h"
 
 static void Add_GlobalWaitCountNode(waitcount_node *waitCntNode);
-__STATIC_INLINE float __sensor_read(tempsensor_t *sensorobj);
+__weak float __sensor_read(tempsensor_t *sensorobj);
 static float read(tempsensor_t *sensorobj);
 static bool is_readable(tempsensor_t *sensorobj);
 static void set_interval(tempsensor_t *sensorobj, uint32_t interval);
@@ -80,7 +80,7 @@ void Add_GlobalWaitCountNode(waitcount_node *waitCntNode) {
 }
 
 /* Methods */
-__STATIC_INLINE float __sensor_read(tempsensor_t *sensorobj) {
+__weak float __sensor_read(tempsensor_t *sensorobj) {
 	uint8_t pData[2];
 	float temp = 0;
 

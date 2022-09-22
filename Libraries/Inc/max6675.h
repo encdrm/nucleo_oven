@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #include <math.h>
 
+// 온도센서 출력으로 tempsensorobject->lastTemp를 내놓는 플래그
+//#define FLAG_TEMPSENSOR_DEBUG
+
 typedef enum {
 	SENSOR_HIGH,
 	SENSOR_LOW
@@ -41,13 +44,13 @@ typedef struct __tempsensor_t {
 	float lastTemp;
 	uint16_t csPin;
 
-	float (*read)(tempsensor_t*);
-	bool (*is_readable)(tempsensor_t*);
+	float (*read)(tempsensor_t *);
+	bool (*is_readable)(tempsensor_t *);
 
-	void (*set_interval)(tempsensor_t*, uint32_t);
-	uint32_t (*get_interval)(tempsensor_t*);
+	void (*set_interval)(tempsensor_t *, uint32_t);
+	uint32_t (*get_interval)(tempsensor_t *);
 
-	uint32_t (*read_waitcount)(tempsensor_t*);
+	uint32_t (*read_waitcount)(tempsensor_t *);
 } tempsensor_t;
 
 // 센서와 통신하는 간격을 최소 250ms로 맞추기 위한 카운트

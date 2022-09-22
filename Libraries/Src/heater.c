@@ -41,105 +41,104 @@ float temperatureTestArr[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 
 							  180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180,
 							  150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100, 100,};
 
+extern TIM_HandleTypeDef htim9;
+
 extern tempsensor_t *tempTop;
 extern tempsensor_t *tempBottom;
 
+
 void HeaterControl_TIM9_IRQ();
-static void Heater_Start(heater_t *heater);
-static void Heater_Stop(heater_t *heater);
-static void Heater_Set(heater_t *heater);
-static void Heater_Controller(tempsensor_t *tempsensor, heater_t *heater);
+static void Heater_Start(heater_t *heaterobj);
+static void Heater_Stop(heater_t *heaterobj);
+static void Heater_Set(heater_t *heaterobj);
+static void Heater_Controller(tempsensor_t *tempsensor, heater_t *heaterobj);
 
 void HeaterControl_TIM9_IRQ(){
-	Heater_Controller(tempTop, &heaterTop);
-	Heater_Controller(tempBottom, &heaterBottom);
-	if(heaterTop.state)
-		Heater_Set(&heaterTop);
-	if(heaterBottom.state)
-		Heater_Set(&heaterBottom);
+	Heater_Controller(tempTop, heaterTop);
+	Heater_Controller(tempBottom, heaterBottom);
+	if(heaterTop->state)
+		Heater_Set(heaterTop);
+	if(heaterBottom->state)
+		Heater_Set(heaterBottom);
 }
 
-void HeaterControl_Start(heater_t *heater) {
-	if (heater != NULL){
-		HAL_TIM_Base_Start(heater->htim);
-		HAL_TIM_Base_Start_IT(heater->htim);
-		Heater_Start(heater);
-	}
+heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel){
+	//
+	heater_t *heaterobj = (heater_t*) calloc(1, sizeof(heater_t));
+
+	// Setting methods
+	heaterobj->channel = Channel;
+	heaterobj->current = .0f;
+	heaterobj->duty = .0f;
+	heaterobj->errorSum = .0f;
+	heaterobj->htim = htim;
+	heaterobj->onFlag = false;
+	heaterobj->prev = .0f;
+	heaterobj->state = OFF;
+	heaterobj->target = .0f;
+
+	// Setting fields
+	heaterobj->start = Heater_Start;
+	heaterobj->stop = Heater_Stop;
+
+	return heaterobj;
 }
 
-void HeaterControl_Stop(heater_t *heater) {
-	if (heater != NULL){
-		HAL_TIM_Base_Stop_IT(heater->htim);
-		HAL_TIM_Base_Stop(heater->htim);
-		Heater_Stop(heater);
-	}
+static void Heater_Start(heater_t *heaterobj){
+	heaterobj->onFlag = true;
+	HAL_TIM_PWM_Start(heaterobj->htim, heaterobj->channel);
 }
 
-void HeaterControl_Init(heater_t *heater, TIM_HandleTypeDef *htim, uint32_t Channel){
-	// Initialize heater struct
-	heater->channel = Channel;
-	heater->current = .0f;
-	heater->duty = .0f;
-	heater->errorSum = .0f;
-	heater->htim = htim;
-	heater->onFlag = false;
-	heater->prev = .0f;
-	heater->state = OFF;
-	heater->target = .0f;
+static void Heater_Stop(heater_t *heaterobj){
+	heaterobj->onFlag = false;
+	while (heaterobj->state != OFF)	// Heater_Controller가 OFF 상태인지 확인
+	HAL_TIM_PWM_Stop(heaterobj->htim, heaterobj->channel);
 }
 
-//히터 PWM은 10kHz마다 실행됨.
-static void Heater_Start(heater_t *heater){
-	HAL_TIM_PWM_Start(heater->htim, heater->channel);
-}
-
-static void Heater_Stop(heater_t *heater){
-	HAL_TIM_PWM_Stop(heater->htim, heater->channel);
-}
-
-static void Heater_Set(heater_t *heater){
+static void Heater_Set(heater_t *heaterobj){
 	// Duty ratio to duty cycle conversion
-	uint32_t dutycycle = heater->duty * (__HAL_TIM_GET_AUTORELOAD(heater->htim)+1) - 1;
+	uint32_t dutycycle = heaterobj->duty * (__HAL_TIM_GET_AUTORELOAD(heaterobj->htim)+1) - 1;
 	// Set duty rate of PWM
-	__HAL_TIM_SET_COMPARE(heater->htim, heater->channel, dutycycle);
+	__HAL_TIM_SET_COMPARE(heaterobj->htim, heaterobj->channel, dutycycle);
 }
 
-static void Heater_Controller(tempsensor_t *tempsensor, heater_t *heater){
-	uint32_t heaterState = heater->state;
-	float sensorADCRead = tempsensor->read(tempsensor);
+static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
+	float sensorADCRead = tempsensorobj->read(tempsensorobj);
 	if (sensorADCRead == NAN)
 		return;
 
-	switch (heaterState){
+	switch (heaterobj->state){
 		case OFF:
-			heater->duty = 0.f;
-			Heater_Stop(heater);
-			if (heater->onFlag) {
-				Heater_Start(heater);
-				heaterState = PREHEATING;
+			heaterobj->duty = 0.f;
+			heaterobj->errorSum = 0.f;
+			heaterobj->prev = 0.f;
+			heaterobj->current = 0.f;
+			if (heaterobj->onFlag) {
+				heaterobj->start(heaterobj);
+				heaterobj->state = PREHEATING;
 			}
 			break;
 
 		case PREHEATING:
-			heater->duty = 1.f;
-			if (!heater->onFlag) heaterState = OFF;
-			else if (heater->current > heater->target - 5.f) heaterState = TRANSIENT;
+			heaterobj->duty = 1.f;
+			if (!heaterobj->onFlag) heaterobj->state = OFF;
+			else if (heaterobj->current > heaterobj->target - 5.f) heaterobj->state = TRANSIENT;
 			break;
 
 		case TRANSIENT:
-			heater->duty = Control_PID(sensorADCRead, heater, PIDTransient);
-			if (!heater->onFlag) heaterState = OFF;
-			else if ((heater->current > heater->prev - DEVIATION) && (heater->current < heater->prev + DEVIATION)) heaterState = STEADY;
+			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDTransient);
+			if (!heaterobj->onFlag) heaterobj->state = OFF;
+			else if ((heaterobj->current > heaterobj->prev - DEVIATION) && (heaterobj->current < heaterobj->prev + DEVIATION)) heaterobj->state = STEADY;
 			break;
 
 		case STEADY:
-			heater->duty = Control_PID(sensorADCRead, heater, PIDSteady);
-			if (!heater->onFlag) heaterState = OFF;
-			else if ((heater->current <= heater->prev - DEVIATION) || (heater->current >= heater->prev + DEVIATION)) heaterState = TRANSIENT;
+			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDSteady);
+			if (!heaterobj->onFlag) heaterobj->state = OFF;
+			else if ((heaterobj->current <= heaterobj->prev - DEVIATION) || (heaterobj->current >= heaterobj->prev + DEVIATION)) heaterobj->state = TRANSIENT;
 			break;
 
 		default:
-			heater->onFlag = 0;
-			heaterState = OFF;
+			heaterobj->onFlag = 0;
+			heaterobj->state = OFF;
 	}
 }

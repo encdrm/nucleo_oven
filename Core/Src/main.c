@@ -39,6 +39,8 @@
 
 #define TEMPSENSOR_DOWN_CS_Port GPIOB
 #define TEMPSENSOR_DOWN_CS_Pin GPIO_PIN_13
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -64,8 +66,8 @@ tempsensor_t *tempTop;
 tempsensor_t *tempBottom;
 
 // Heater object
-heater_t heaterTop;
-heater_t heaterBottom;
+heater_t *heaterTop;
+heater_t *heaterBottom;
 
 /* USER CODE END PV */
 
@@ -92,6 +94,12 @@ int _write(int file, char *ptr, int len)
 	return -1;
 }
 
+
+#ifdef FLAG_TEMPSENSOR_DEBUG
+float __sensor_read(tempsensor_t *sensorobj) {
+	return sensorobj->lastTemp;
+}
+#endif
 /* USER CODE END 0 */
 
 /**
@@ -138,9 +146,12 @@ int main(void)
   tempTop = Custom_Tempsensor(&hspi3, TEMPSENSOR_UP_CS_Port, TEMPSENSOR_UP_CS_Pin, 300);
 
   /* Initialize heater struct */
-  HeaterControl_Init(&heaterTop, &htim3, TIM_CHANNEL_3);	// HU
-  HeaterControl_Init(&heaterBottom, &htim3, TIM_CHANNEL_2);	// HD
+  heaterTop = Custom_HeaterControl(&htim3, TIM_CHANNEL_3);	// HU
+  heaterBottom = Custom_HeaterControl(&htim3, TIM_CHANNEL_2);	// HD
 
+  /* Start HeaterControl interrupt */
+  HAL_TIM_Base_Start_IT(&htim9);
+  printf("Hello!\r\n");
   Menu();
 
 
@@ -411,9 +422,9 @@ static void MX_TIM9_Init(void)
 
   /* USER CODE END TIM9_Init 1 */
   htim9.Instance = TIM9;
-  htim9.Init.Prescaler = 999;
+  htim9.Init.Prescaler = 9999;
   htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 999;
+  htim9.Init.Period = 9999;
   htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim9) != HAL_OK)
