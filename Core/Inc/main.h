@@ -77,10 +77,10 @@ void Error_Handler(void);
 #define TEMP_ADU_GPIO_Port GPIOB
 #define OLED_MOSI_Pin GPIO_PIN_15
 #define OLED_MOSI_GPIO_Port GPIOB
-#define HD_Pin GPIO_PIN_7
-#define HD_GPIO_Port GPIOC
-#define HU_Pin GPIO_PIN_8
-#define HU_GPIO_Port GPIOC
+#define Heater_Bottom_Pin GPIO_PIN_7
+#define Heater_Bottom_GPIO_Port GPIOC
+#define Heater_Top_Pin GPIO_PIN_8
+#define Heater_Top_GPIO_Port GPIOC
 #define DCFAN_Pin GPIO_PIN_9
 #define DCFAN_GPIO_Port GPIOC
 #define Motor2_Pin GPIO_PIN_8
