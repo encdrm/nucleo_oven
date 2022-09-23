@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  000204e0  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0001a6ee  00000000  00000000  00020510  2**0
+ 12 .debug_info   0001a7c3  00000000  00000000  00020510  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00003320  00000000  00000000  0003abfe  2**0
+ 13 .debug_abbrev 00003320  00000000  00000000  0003acd3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000010c0  00000000  00000000  0003df20  2**3
+ 14 .debug_aranges 000010c8  00000000  00000000  0003dff8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00001010  00000000  00000000  0003efe0  2**3
+ 15 .debug_ranges 00001018  00000000  00000000  0003f0c0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00019584  00000000  00000000  0003fff0  2**0
+ 16 .debug_macro  00019584  00000000  00000000  000400d8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00015051  00000000  00000000  00059574  2**0
+ 17 .debug_line   0001505f  00000000  00000000  0005965c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00092bea  00000000  00000000  0006e5c5  2**0
+ 18 .debug_str    00092c24  00000000  00000000  0006e6bb  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  001011af  2**0
+ 19 .comment      00000053  00000000  00000000  001012df  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000057f4  00000000  00000000  00101204  2**2
+ 20 .debug_frame  0000581c  00000000  00000000  00101334  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1374,7 +1374,7 @@ int main(void)
  8001004:	f44f 5200 	mov.w	r2, #8192	; 0x2000
  8001008:	4915      	ldr	r1, [pc, #84]	; (8001060 <main+0x9c>)
  800100a:	4816      	ldr	r0, [pc, #88]	; (8001064 <main+0xa0>)
- 800100c:	f005 ffac 	bl	8006f68 <Custom_Tempsensor>
+ 800100c:	f005 ffae 	bl	8006f6c <Custom_Tempsensor>
  8001010:	4603      	mov	r3, r0
  8001012:	4a15      	ldr	r2, [pc, #84]	; (8001068 <main+0xa4>)
  8001014:	6013      	str	r3, [r2, #0]
@@ -1383,7 +1383,7 @@ int main(void)
  800101a:	f44f 4280 	mov.w	r2, #16384	; 0x4000
  800101e:	4910      	ldr	r1, [pc, #64]	; (8001060 <main+0x9c>)
  8001020:	4810      	ldr	r0, [pc, #64]	; (8001064 <main+0xa0>)
- 8001022:	f005 ffa1 	bl	8006f68 <Custom_Tempsensor>
+ 8001022:	f005 ffa3 	bl	8006f6c <Custom_Tempsensor>
  8001026:	4603      	mov	r3, r0
  8001028:	4a10      	ldr	r2, [pc, #64]	; (800106c <main+0xa8>)
  800102a:	6013      	str	r3, [r2, #0]
@@ -1392,14 +1392,14 @@ int main(void)
   heaterTop = Custom_HeaterControl(&htim3, TIM_CHANNEL_3);	// HU
  800102c:	2108      	movs	r1, #8
  800102e:	4810      	ldr	r0, [pc, #64]	; (8001070 <main+0xac>)
- 8001030:	f005 fdce 	bl	8006bd0 <Custom_HeaterControl>
+ 8001030:	f005 fdc6 	bl	8006bc0 <Custom_HeaterControl>
  8001034:	4603      	mov	r3, r0
  8001036:	4a0f      	ldr	r2, [pc, #60]	; (8001074 <main+0xb0>)
  8001038:	6013      	str	r3, [r2, #0]
   heaterBottom = Custom_HeaterControl(&htim3, TIM_CHANNEL_2);	// HD
  800103a:	2104      	movs	r1, #4
  800103c:	480c      	ldr	r0, [pc, #48]	; (8001070 <main+0xac>)
- 800103e:	f005 fdc7 	bl	8006bd0 <Custom_HeaterControl>
+ 800103e:	f005 fdbf 	bl	8006bc0 <Custom_HeaterControl>
  8001042:	4603      	mov	r3, r0
  8001044:	4a0c      	ldr	r2, [pc, #48]	; (8001078 <main+0xb4>)
  8001046:	6013      	str	r3, [r2, #0]
@@ -1412,7 +1412,7 @@ int main(void)
  800104e:	480c      	ldr	r0, [pc, #48]	; (8001080 <main+0xbc>)
  8001050:	f007 fefe 	bl	8008e50 <puts>
   Menu();
- 8001054:	f006 f96a 	bl	800732c <Menu>
+ 8001054:	f006 f96c 	bl	8007330 <Menu>
 
   /* USER CODE END 2 */
 
@@ -3301,7 +3301,7 @@ void SysTick_Handler(void)
  8001afa:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN SysTick_IRQn 0 */
   Systick_Sensor_IRQ();
- 8001afc:	f005 fa0e 	bl	8006f1c <Systick_Sensor_IRQ>
+ 8001afc:	f005 fa10 	bl	8006f20 <Systick_Sensor_IRQ>
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
  8001b00:	f000 f946 	bl	8001d90 <HAL_IncTick>
@@ -3323,7 +3323,7 @@ void TIM1_BRK_TIM9_IRQHandler(void)
  8001b0a:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 0 */
   HeaterControl_TIM9_IRQ();
- 8001b0c:	f005 f830 	bl	8006b70 <HeaterControl_TIM9_IRQ>
+ 8001b0c:	f005 f828 	bl	8006b60 <HeaterControl_TIM9_IRQ>
   /* USER CODE END TIM1_BRK_TIM9_IRQn 0 */
   HAL_TIM_IRQHandler(&htim9);
  8001b10:	4802      	ldr	r0, [pc, #8]	; (8001b1c <TIM1_BRK_TIM9_IRQHandler+0x14>)
@@ -16099,2493 +16099,2497 @@ uint16_t Switch_Read(){
 08006a00 <Control_PID>:
 		10.f,		// filterConst
 		5.f,		// antiWindUpConst
-		.5f			// deadBandConst
+		.25f		// deadBandConst
 };
 
-float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode){
+float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
  8006a00:	b084      	sub	sp, #16
  8006a02:	b480      	push	{r7}
  8006a04:	b087      	sub	sp, #28
  8006a06:	af00      	add	r7, sp, #0
- 8006a08:	ed87 0a01 	vstr	s0, [r7, #4]
- 8006a0c:	6038      	str	r0, [r7, #0]
- 8006a0e:	f107 0024 	add.w	r0, r7, #36	; 0x24
- 8006a12:	e880 000e 	stmia.w	r0, {r1, r2, r3}
-
+ 8006a08:	6078      	str	r0, [r7, #4]
+ 8006a0a:	f107 0024 	add.w	r0, r7, #36	; 0x24
+ 8006a0e:	e880 000e 	stmia.w	r0, {r1, r2, r3}
 	float duty;
-	heaterobj->prev = heaterobj->current;
- 8006a16:	683b      	ldr	r3, [r7, #0]
- 8006a18:	695a      	ldr	r2, [r3, #20]
- 8006a1a:	683b      	ldr	r3, [r7, #0]
- 8006a1c:	619a      	str	r2, [r3, #24]
-	heaterobj->current = sensorADCRead;
- 8006a1e:	683b      	ldr	r3, [r7, #0]
- 8006a20:	687a      	ldr	r2, [r7, #4]
- 8006a22:	615a      	str	r2, [r3, #20]
 
 	// Proportional term
 	float temperatureError = heaterobj->target - heaterobj->current;
- 8006a24:	683b      	ldr	r3, [r7, #0]
- 8006a26:	ed93 7a04 	vldr	s14, [r3, #16]
- 8006a2a:	683b      	ldr	r3, [r7, #0]
- 8006a2c:	edd3 7a05 	vldr	s15, [r3, #20]
- 8006a30:	ee77 7a67 	vsub.f32	s15, s14, s15
- 8006a34:	edc7 7a04 	vstr	s15, [r7, #16]
+ 8006a12:	687b      	ldr	r3, [r7, #4]
+ 8006a14:	ed93 7a04 	vldr	s14, [r3, #16]
+ 8006a18:	687b      	ldr	r3, [r7, #4]
+ 8006a1a:	edd3 7a05 	vldr	s15, [r3, #20]
+ 8006a1e:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 8006a22:	edc7 7a04 	vstr	s15, [r7, #16]
 
 	// Derivative term
 	float temperatureDifferential = (heaterobj->current - heaterobj->prev) / PERIOD;
- 8006a38:	683b      	ldr	r3, [r7, #0]
- 8006a3a:	ed93 7a05 	vldr	s14, [r3, #20]
- 8006a3e:	683b      	ldr	r3, [r7, #0]
- 8006a40:	edd3 7a06 	vldr	s15, [r3, #24]
- 8006a44:	ee77 7a67 	vsub.f32	s15, s14, s15
- 8006a48:	edc7 7a03 	vstr	s15, [r7, #12]
+ 8006a26:	687b      	ldr	r3, [r7, #4]
+ 8006a28:	ed93 7a05 	vldr	s14, [r3, #20]
+ 8006a2c:	687b      	ldr	r3, [r7, #4]
+ 8006a2e:	edd3 7a06 	vldr	s15, [r3, #24]
+ 8006a32:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 8006a36:	edc7 7a03 	vstr	s15, [r7, #12]
 
 	// Integral term
 	if (temperatureError < -PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError + PIDMode.deadBandConst) * PERIOD;
- 8006a4c:	edd7 7a0e 	vldr	s15, [r7, #56]	; 0x38
- 8006a50:	eef1 7a67 	vneg.f32	s15, s15
- 8006a54:	ed97 7a04 	vldr	s14, [r7, #16]
- 8006a58:	eeb4 7ae7 	vcmpe.f32	s14, s15
- 8006a5c:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006a60:	d50e      	bpl.n	8006a80 <Control_PID+0x80>
- 8006a62:	683b      	ldr	r3, [r7, #0]
- 8006a64:	ed93 7a07 	vldr	s14, [r3, #28]
- 8006a68:	edd7 6a0e 	vldr	s13, [r7, #56]	; 0x38
- 8006a6c:	edd7 7a04 	vldr	s15, [r7, #16]
- 8006a70:	ee76 7aa7 	vadd.f32	s15, s13, s15
- 8006a74:	ee77 7a27 	vadd.f32	s15, s14, s15
- 8006a78:	683b      	ldr	r3, [r7, #0]
- 8006a7a:	edc3 7a07 	vstr	s15, [r3, #28]
- 8006a7e:	e016      	b.n	8006aae <Control_PID+0xae>
+ 8006a3a:	edd7 7a0e 	vldr	s15, [r7, #56]	; 0x38
+ 8006a3e:	eef1 7a67 	vneg.f32	s15, s15
+ 8006a42:	ed97 7a04 	vldr	s14, [r7, #16]
+ 8006a46:	eeb4 7ae7 	vcmpe.f32	s14, s15
+ 8006a4a:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006a4e:	d50e      	bpl.n	8006a6e <Control_PID+0x6e>
+ 8006a50:	687b      	ldr	r3, [r7, #4]
+ 8006a52:	ed93 7a07 	vldr	s14, [r3, #28]
+ 8006a56:	edd7 6a0e 	vldr	s13, [r7, #56]	; 0x38
+ 8006a5a:	edd7 7a04 	vldr	s15, [r7, #16]
+ 8006a5e:	ee76 7aa7 	vadd.f32	s15, s13, s15
+ 8006a62:	ee77 7a27 	vadd.f32	s15, s14, s15
+ 8006a66:	687b      	ldr	r3, [r7, #4]
+ 8006a68:	edc3 7a07 	vstr	s15, [r3, #28]
+ 8006a6c:	e016      	b.n	8006a9c <Control_PID+0x9c>
 	else if (temperatureError > PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError - PIDMode.deadBandConst) * PERIOD;
- 8006a80:	edd7 7a0e 	vldr	s15, [r7, #56]	; 0x38
- 8006a84:	ed97 7a04 	vldr	s14, [r7, #16]
- 8006a88:	eeb4 7ae7 	vcmpe.f32	s14, s15
- 8006a8c:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006a90:	dd0d      	ble.n	8006aae <Control_PID+0xae>
- 8006a92:	683b      	ldr	r3, [r7, #0]
- 8006a94:	ed93 7a07 	vldr	s14, [r3, #28]
- 8006a98:	edd7 7a0e 	vldr	s15, [r7, #56]	; 0x38
- 8006a9c:	edd7 6a04 	vldr	s13, [r7, #16]
- 8006aa0:	ee76 7ae7 	vsub.f32	s15, s13, s15
- 8006aa4:	ee77 7a27 	vadd.f32	s15, s14, s15
- 8006aa8:	683b      	ldr	r3, [r7, #0]
- 8006aaa:	edc3 7a07 	vstr	s15, [r3, #28]
+ 8006a6e:	edd7 7a0e 	vldr	s15, [r7, #56]	; 0x38
+ 8006a72:	ed97 7a04 	vldr	s14, [r7, #16]
+ 8006a76:	eeb4 7ae7 	vcmpe.f32	s14, s15
+ 8006a7a:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006a7e:	dd0d      	ble.n	8006a9c <Control_PID+0x9c>
+ 8006a80:	687b      	ldr	r3, [r7, #4]
+ 8006a82:	ed93 7a07 	vldr	s14, [r3, #28]
+ 8006a86:	edd7 7a0e 	vldr	s15, [r7, #56]	; 0x38
+ 8006a8a:	edd7 6a04 	vldr	s13, [r7, #16]
+ 8006a8e:	ee76 7ae7 	vsub.f32	s15, s13, s15
+ 8006a92:	ee77 7a27 	vadd.f32	s15, s14, s15
+ 8006a96:	687b      	ldr	r3, [r7, #4]
+ 8006a98:	edc3 7a07 	vstr	s15, [r3, #28]
 
 
 	// anti wind-up
 	if (heaterobj->errorSum > PIDMode.antiWindUpConst) heaterobj->errorSum = PIDMode.antiWindUpConst;
- 8006aae:	683b      	ldr	r3, [r7, #0]
- 8006ab0:	ed93 7a07 	vldr	s14, [r3, #28]
- 8006ab4:	edd7 7a0d 	vldr	s15, [r7, #52]	; 0x34
- 8006ab8:	eeb4 7ae7 	vcmpe.f32	s14, s15
- 8006abc:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006ac0:	dd03      	ble.n	8006aca <Control_PID+0xca>
- 8006ac2:	6b7a      	ldr	r2, [r7, #52]	; 0x34
- 8006ac4:	683b      	ldr	r3, [r7, #0]
- 8006ac6:	61da      	str	r2, [r3, #28]
- 8006ac8:	e012      	b.n	8006af0 <Control_PID+0xf0>
+ 8006a9c:	687b      	ldr	r3, [r7, #4]
+ 8006a9e:	ed93 7a07 	vldr	s14, [r3, #28]
+ 8006aa2:	edd7 7a0d 	vldr	s15, [r7, #52]	; 0x34
+ 8006aa6:	eeb4 7ae7 	vcmpe.f32	s14, s15
+ 8006aaa:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006aae:	dd03      	ble.n	8006ab8 <Control_PID+0xb8>
+ 8006ab0:	6b7a      	ldr	r2, [r7, #52]	; 0x34
+ 8006ab2:	687b      	ldr	r3, [r7, #4]
+ 8006ab4:	61da      	str	r2, [r3, #28]
+ 8006ab6:	e012      	b.n	8006ade <Control_PID+0xde>
 	else if (heaterobj->errorSum < -PIDMode.antiWindUpConst) heaterobj->errorSum = -PIDMode.antiWindUpConst;
- 8006aca:	683b      	ldr	r3, [r7, #0]
- 8006acc:	ed93 7a07 	vldr	s14, [r3, #28]
+ 8006ab8:	687b      	ldr	r3, [r7, #4]
+ 8006aba:	ed93 7a07 	vldr	s14, [r3, #28]
+ 8006abe:	edd7 7a0d 	vldr	s15, [r7, #52]	; 0x34
+ 8006ac2:	eef1 7a67 	vneg.f32	s15, s15
+ 8006ac6:	eeb4 7ae7 	vcmpe.f32	s14, s15
+ 8006aca:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006ace:	d506      	bpl.n	8006ade <Control_PID+0xde>
  8006ad0:	edd7 7a0d 	vldr	s15, [r7, #52]	; 0x34
  8006ad4:	eef1 7a67 	vneg.f32	s15, s15
- 8006ad8:	eeb4 7ae7 	vcmpe.f32	s14, s15
- 8006adc:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006ae0:	d506      	bpl.n	8006af0 <Control_PID+0xf0>
- 8006ae2:	edd7 7a0d 	vldr	s15, [r7, #52]	; 0x34
- 8006ae6:	eef1 7a67 	vneg.f32	s15, s15
- 8006aea:	683b      	ldr	r3, [r7, #0]
- 8006aec:	edc3 7a07 	vstr	s15, [r3, #28]
+ 8006ad8:	687b      	ldr	r3, [r7, #4]
+ 8006ada:	edc3 7a07 	vstr	s15, [r3, #28]
 
 	// PID control
 	duty = (temperatureError * PIDMode.kp - temperatureDifferential * PIDMode.kd + heaterobj->errorSum * PIDMode.ki);
- 8006af0:	ed97 7a09 	vldr	s14, [r7, #36]	; 0x24
- 8006af4:	edd7 7a04 	vldr	s15, [r7, #16]
- 8006af8:	ee27 7a27 	vmul.f32	s14, s14, s15
- 8006afc:	edd7 6a0b 	vldr	s13, [r7, #44]	; 0x2c
- 8006b00:	edd7 7a03 	vldr	s15, [r7, #12]
+ 8006ade:	ed97 7a09 	vldr	s14, [r7, #36]	; 0x24
+ 8006ae2:	edd7 7a04 	vldr	s15, [r7, #16]
+ 8006ae6:	ee27 7a27 	vmul.f32	s14, s14, s15
+ 8006aea:	edd7 6a0b 	vldr	s13, [r7, #44]	; 0x2c
+ 8006aee:	edd7 7a03 	vldr	s15, [r7, #12]
+ 8006af2:	ee66 7aa7 	vmul.f32	s15, s13, s15
+ 8006af6:	ee37 7a67 	vsub.f32	s14, s14, s15
+ 8006afa:	687b      	ldr	r3, [r7, #4]
+ 8006afc:	edd3 6a07 	vldr	s13, [r3, #28]
+ 8006b00:	edd7 7a0a 	vldr	s15, [r7, #40]	; 0x28
  8006b04:	ee66 7aa7 	vmul.f32	s15, s13, s15
- 8006b08:	ee37 7a67 	vsub.f32	s14, s14, s15
- 8006b0c:	683b      	ldr	r3, [r7, #0]
- 8006b0e:	edd3 6a07 	vldr	s13, [r3, #28]
- 8006b12:	edd7 7a0a 	vldr	s15, [r7, #40]	; 0x28
- 8006b16:	ee66 7aa7 	vmul.f32	s15, s13, s15
- 8006b1a:	ee77 7a27 	vadd.f32	s15, s14, s15
- 8006b1e:	edc7 7a05 	vstr	s15, [r7, #20]
+ 8006b08:	ee77 7a27 	vadd.f32	s15, s14, s15
+ 8006b0c:	edc7 7a05 	vstr	s15, [r7, #20]
 
 	// output limit
 	if (duty < 0.01f) duty = 0.f;
- 8006b22:	edd7 7a05 	vldr	s15, [r7, #20]
- 8006b26:	ed9f 7a10 	vldr	s14, [pc, #64]	; 8006b68 <Control_PID+0x168>
- 8006b2a:	eef4 7ac7 	vcmpe.f32	s15, s14
- 8006b2e:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006b32:	d502      	bpl.n	8006b3a <Control_PID+0x13a>
- 8006b34:	f04f 0300 	mov.w	r3, #0
- 8006b38:	617b      	str	r3, [r7, #20]
+ 8006b10:	edd7 7a05 	vldr	s15, [r7, #20]
+ 8006b14:	ed9f 7a10 	vldr	s14, [pc, #64]	; 8006b58 <Control_PID+0x158>
+ 8006b18:	eef4 7ac7 	vcmpe.f32	s15, s14
+ 8006b1c:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006b20:	d502      	bpl.n	8006b28 <Control_PID+0x128>
+ 8006b22:	f04f 0300 	mov.w	r3, #0
+ 8006b26:	617b      	str	r3, [r7, #20]
 	if (duty > 0.99f) duty = 1.f;
- 8006b3a:	edd7 7a05 	vldr	s15, [r7, #20]
- 8006b3e:	ed9f 7a0b 	vldr	s14, [pc, #44]	; 8006b6c <Control_PID+0x16c>
- 8006b42:	eef4 7ac7 	vcmpe.f32	s15, s14
- 8006b46:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006b4a:	dd02      	ble.n	8006b52 <Control_PID+0x152>
- 8006b4c:	f04f 537e 	mov.w	r3, #1065353216	; 0x3f800000
- 8006b50:	617b      	str	r3, [r7, #20]
+ 8006b28:	edd7 7a05 	vldr	s15, [r7, #20]
+ 8006b2c:	ed9f 7a0b 	vldr	s14, [pc, #44]	; 8006b5c <Control_PID+0x15c>
+ 8006b30:	eef4 7ac7 	vcmpe.f32	s15, s14
+ 8006b34:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006b38:	dd02      	ble.n	8006b40 <Control_PID+0x140>
+ 8006b3a:	f04f 537e 	mov.w	r3, #1065353216	; 0x3f800000
+ 8006b3e:	617b      	str	r3, [r7, #20]
 	return duty;
- 8006b52:	697b      	ldr	r3, [r7, #20]
- 8006b54:	ee07 3a90 	vmov	s15, r3
+ 8006b40:	697b      	ldr	r3, [r7, #20]
+ 8006b42:	ee07 3a90 	vmov	s15, r3
 }
- 8006b58:	eeb0 0a67 	vmov.f32	s0, s15
- 8006b5c:	371c      	adds	r7, #28
- 8006b5e:	46bd      	mov	sp, r7
- 8006b60:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8006b64:	b004      	add	sp, #16
- 8006b66:	4770      	bx	lr
- 8006b68:	3c23d70a 	.word	0x3c23d70a
- 8006b6c:	3f7d70a4 	.word	0x3f7d70a4
+ 8006b46:	eeb0 0a67 	vmov.f32	s0, s15
+ 8006b4a:	371c      	adds	r7, #28
+ 8006b4c:	46bd      	mov	sp, r7
+ 8006b4e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8006b52:	b004      	add	sp, #16
+ 8006b54:	4770      	bx	lr
+ 8006b56:	bf00      	nop
+ 8006b58:	3c23d70a 	.word	0x3c23d70a
+ 8006b5c:	3f7d70a4 	.word	0x3f7d70a4
 
-08006b70 <HeaterControl_TIM9_IRQ>:
-static void Heater_Start(heater_t *heaterobj);
-static void Heater_Stop(heater_t *heaterobj);
-static void Heater_Set(heater_t *heaterobj);
+08006b60 <HeaterControl_TIM9_IRQ>:
+static void heater_stop(heater_t *heaterobj);
+static void heater_set_target_temp(heater_t *heaterobj, float targetTemp);
+__STATIC_INLINE void __Heater_SetDuty(heater_t *heaterobj);
 static void Heater_Controller(tempsensor_t *tempsensor, heater_t *heaterobj);
 
 void HeaterControl_TIM9_IRQ(){
- 8006b70:	b580      	push	{r7, lr}
- 8006b72:	af00      	add	r7, sp, #0
+ 8006b60:	b580      	push	{r7, lr}
+ 8006b62:	af00      	add	r7, sp, #0
 	Heater_Controller(tempTop, heaterTop);
- 8006b74:	4b12      	ldr	r3, [pc, #72]	; (8006bc0 <HeaterControl_TIM9_IRQ+0x50>)
+ 8006b64:	4b12      	ldr	r3, [pc, #72]	; (8006bb0 <HeaterControl_TIM9_IRQ+0x50>)
+ 8006b66:	681b      	ldr	r3, [r3, #0]
+ 8006b68:	4a12      	ldr	r2, [pc, #72]	; (8006bb4 <HeaterControl_TIM9_IRQ+0x54>)
+ 8006b6a:	6812      	ldr	r2, [r2, #0]
+ 8006b6c:	4611      	mov	r1, r2
+ 8006b6e:	4618      	mov	r0, r3
+ 8006b70:	f000 f8e8 	bl	8006d44 <Heater_Controller>
+	Heater_Controller(tempBottom, heaterBottom);
+ 8006b74:	4b10      	ldr	r3, [pc, #64]	; (8006bb8 <HeaterControl_TIM9_IRQ+0x58>)
  8006b76:	681b      	ldr	r3, [r3, #0]
- 8006b78:	4a12      	ldr	r2, [pc, #72]	; (8006bc4 <HeaterControl_TIM9_IRQ+0x54>)
+ 8006b78:	4a10      	ldr	r2, [pc, #64]	; (8006bbc <HeaterControl_TIM9_IRQ+0x5c>)
  8006b7a:	6812      	ldr	r2, [r2, #0]
  8006b7c:	4611      	mov	r1, r2
  8006b7e:	4618      	mov	r0, r3
- 8006b80:	f000 f8d4 	bl	8006d2c <Heater_Controller>
-	Heater_Controller(tempBottom, heaterBottom);
- 8006b84:	4b10      	ldr	r3, [pc, #64]	; (8006bc8 <HeaterControl_TIM9_IRQ+0x58>)
- 8006b86:	681b      	ldr	r3, [r3, #0]
- 8006b88:	4a10      	ldr	r2, [pc, #64]	; (8006bcc <HeaterControl_TIM9_IRQ+0x5c>)
- 8006b8a:	6812      	ldr	r2, [r2, #0]
- 8006b8c:	4611      	mov	r1, r2
- 8006b8e:	4618      	mov	r0, r3
- 8006b90:	f000 f8cc 	bl	8006d2c <Heater_Controller>
+ 8006b80:	f000 f8e0 	bl	8006d44 <Heater_Controller>
 	if(heaterTop->state)
- 8006b94:	4b0b      	ldr	r3, [pc, #44]	; (8006bc4 <HeaterControl_TIM9_IRQ+0x54>)
- 8006b96:	681b      	ldr	r3, [r3, #0]
- 8006b98:	689b      	ldr	r3, [r3, #8]
- 8006b9a:	2b00      	cmp	r3, #0
- 8006b9c:	d004      	beq.n	8006ba8 <HeaterControl_TIM9_IRQ+0x38>
-		Heater_Set(heaterTop);
- 8006b9e:	4b09      	ldr	r3, [pc, #36]	; (8006bc4 <HeaterControl_TIM9_IRQ+0x54>)
- 8006ba0:	681b      	ldr	r3, [r3, #0]
- 8006ba2:	4618      	mov	r0, r3
- 8006ba4:	f000 f87e 	bl	8006ca4 <Heater_Set>
+ 8006b84:	4b0b      	ldr	r3, [pc, #44]	; (8006bb4 <HeaterControl_TIM9_IRQ+0x54>)
+ 8006b86:	681b      	ldr	r3, [r3, #0]
+ 8006b88:	689b      	ldr	r3, [r3, #8]
+ 8006b8a:	2b00      	cmp	r3, #0
+ 8006b8c:	d004      	beq.n	8006b98 <HeaterControl_TIM9_IRQ+0x38>
+		__Heater_SetDuty(heaterTop);
+ 8006b8e:	4b09      	ldr	r3, [pc, #36]	; (8006bb4 <HeaterControl_TIM9_IRQ+0x54>)
+ 8006b90:	681b      	ldr	r3, [r3, #0]
+ 8006b92:	4618      	mov	r0, r3
+ 8006b94:	f000 f891 	bl	8006cba <__Heater_SetDuty>
 	if(heaterBottom->state)
- 8006ba8:	4b08      	ldr	r3, [pc, #32]	; (8006bcc <HeaterControl_TIM9_IRQ+0x5c>)
- 8006baa:	681b      	ldr	r3, [r3, #0]
- 8006bac:	689b      	ldr	r3, [r3, #8]
- 8006bae:	2b00      	cmp	r3, #0
- 8006bb0:	d004      	beq.n	8006bbc <HeaterControl_TIM9_IRQ+0x4c>
-		Heater_Set(heaterBottom);
- 8006bb2:	4b06      	ldr	r3, [pc, #24]	; (8006bcc <HeaterControl_TIM9_IRQ+0x5c>)
- 8006bb4:	681b      	ldr	r3, [r3, #0]
- 8006bb6:	4618      	mov	r0, r3
- 8006bb8:	f000 f874 	bl	8006ca4 <Heater_Set>
+ 8006b98:	4b08      	ldr	r3, [pc, #32]	; (8006bbc <HeaterControl_TIM9_IRQ+0x5c>)
+ 8006b9a:	681b      	ldr	r3, [r3, #0]
+ 8006b9c:	689b      	ldr	r3, [r3, #8]
+ 8006b9e:	2b00      	cmp	r3, #0
+ 8006ba0:	d004      	beq.n	8006bac <HeaterControl_TIM9_IRQ+0x4c>
+		__Heater_SetDuty(heaterBottom);
+ 8006ba2:	4b06      	ldr	r3, [pc, #24]	; (8006bbc <HeaterControl_TIM9_IRQ+0x5c>)
+ 8006ba4:	681b      	ldr	r3, [r3, #0]
+ 8006ba6:	4618      	mov	r0, r3
+ 8006ba8:	f000 f887 	bl	8006cba <__Heater_SetDuty>
 }
- 8006bbc:	bf00      	nop
- 8006bbe:	bd80      	pop	{r7, pc}
- 8006bc0:	2000073c 	.word	0x2000073c
- 8006bc4:	200005c8 	.word	0x200005c8
- 8006bc8:	200005c4 	.word	0x200005c4
- 8006bcc:	20000578 	.word	0x20000578
+ 8006bac:	bf00      	nop
+ 8006bae:	bd80      	pop	{r7, pc}
+ 8006bb0:	2000073c 	.word	0x2000073c
+ 8006bb4:	200005c8 	.word	0x200005c8
+ 8006bb8:	200005c4 	.word	0x200005c4
+ 8006bbc:	20000578 	.word	0x20000578
 
-08006bd0 <Custom_HeaterControl>:
+08006bc0 <Custom_HeaterControl>:
 
 heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel){
- 8006bd0:	b580      	push	{r7, lr}
- 8006bd2:	b084      	sub	sp, #16
- 8006bd4:	af00      	add	r7, sp, #0
- 8006bd6:	6078      	str	r0, [r7, #4]
- 8006bd8:	6039      	str	r1, [r7, #0]
+ 8006bc0:	b580      	push	{r7, lr}
+ 8006bc2:	b084      	sub	sp, #16
+ 8006bc4:	af00      	add	r7, sp, #0
+ 8006bc6:	6078      	str	r0, [r7, #4]
+ 8006bc8:	6039      	str	r1, [r7, #0]
 	//
 	heater_t *heaterobj = (heater_t*) calloc(1, sizeof(heater_t));
- 8006bda:	212c      	movs	r1, #44	; 0x2c
- 8006bdc:	2001      	movs	r0, #1
- 8006bde:	f001 fb5b 	bl	8008298 <calloc>
- 8006be2:	4603      	mov	r3, r0
- 8006be4:	60fb      	str	r3, [r7, #12]
+ 8006bca:	2130      	movs	r1, #48	; 0x30
+ 8006bcc:	2001      	movs	r0, #1
+ 8006bce:	f001 fb63 	bl	8008298 <calloc>
+ 8006bd2:	4603      	mov	r3, r0
+ 8006bd4:	60fb      	str	r3, [r7, #12]
 
 	// Setting methods
 	heaterobj->channel = Channel;
- 8006be6:	68fb      	ldr	r3, [r7, #12]
- 8006be8:	683a      	ldr	r2, [r7, #0]
- 8006bea:	605a      	str	r2, [r3, #4]
+ 8006bd6:	68fb      	ldr	r3, [r7, #12]
+ 8006bd8:	683a      	ldr	r2, [r7, #0]
+ 8006bda:	605a      	str	r2, [r3, #4]
 	heaterobj->current = .0f;
+ 8006bdc:	68fb      	ldr	r3, [r7, #12]
+ 8006bde:	f04f 0200 	mov.w	r2, #0
+ 8006be2:	615a      	str	r2, [r3, #20]
+	heaterobj->duty = .0f;
+ 8006be4:	68fb      	ldr	r3, [r7, #12]
+ 8006be6:	f04f 0200 	mov.w	r2, #0
+ 8006bea:	60da      	str	r2, [r3, #12]
+	heaterobj->errorSum = .0f;
  8006bec:	68fb      	ldr	r3, [r7, #12]
  8006bee:	f04f 0200 	mov.w	r2, #0
- 8006bf2:	615a      	str	r2, [r3, #20]
-	heaterobj->duty = .0f;
- 8006bf4:	68fb      	ldr	r3, [r7, #12]
- 8006bf6:	f04f 0200 	mov.w	r2, #0
- 8006bfa:	60da      	str	r2, [r3, #12]
-	heaterobj->errorSum = .0f;
- 8006bfc:	68fb      	ldr	r3, [r7, #12]
- 8006bfe:	f04f 0200 	mov.w	r2, #0
- 8006c02:	61da      	str	r2, [r3, #28]
+ 8006bf2:	61da      	str	r2, [r3, #28]
 	heaterobj->htim = htim;
- 8006c04:	68fb      	ldr	r3, [r7, #12]
- 8006c06:	687a      	ldr	r2, [r7, #4]
- 8006c08:	601a      	str	r2, [r3, #0]
+ 8006bf4:	68fb      	ldr	r3, [r7, #12]
+ 8006bf6:	687a      	ldr	r2, [r7, #4]
+ 8006bf8:	601a      	str	r2, [r3, #0]
 	heaterobj->onFlag = false;
+ 8006bfa:	68fb      	ldr	r3, [r7, #12]
+ 8006bfc:	2200      	movs	r2, #0
+ 8006bfe:	f883 2020 	strb.w	r2, [r3, #32]
+	heaterobj->prev = .0f;
+ 8006c02:	68fb      	ldr	r3, [r7, #12]
+ 8006c04:	f04f 0200 	mov.w	r2, #0
+ 8006c08:	619a      	str	r2, [r3, #24]
+	heaterobj->state = OFF;
  8006c0a:	68fb      	ldr	r3, [r7, #12]
  8006c0c:	2200      	movs	r2, #0
- 8006c0e:	f883 2020 	strb.w	r2, [r3, #32]
-	heaterobj->prev = .0f;
- 8006c12:	68fb      	ldr	r3, [r7, #12]
- 8006c14:	f04f 0200 	mov.w	r2, #0
- 8006c18:	619a      	str	r2, [r3, #24]
-	heaterobj->state = OFF;
- 8006c1a:	68fb      	ldr	r3, [r7, #12]
- 8006c1c:	2200      	movs	r2, #0
- 8006c1e:	609a      	str	r2, [r3, #8]
+ 8006c0e:	609a      	str	r2, [r3, #8]
 	heaterobj->target = .0f;
- 8006c20:	68fb      	ldr	r3, [r7, #12]
- 8006c22:	f04f 0200 	mov.w	r2, #0
- 8006c26:	611a      	str	r2, [r3, #16]
+ 8006c10:	68fb      	ldr	r3, [r7, #12]
+ 8006c12:	f04f 0200 	mov.w	r2, #0
+ 8006c16:	611a      	str	r2, [r3, #16]
 
 	// Setting fields
-	heaterobj->start = Heater_Start;
- 8006c28:	68fb      	ldr	r3, [r7, #12]
- 8006c2a:	4a05      	ldr	r2, [pc, #20]	; (8006c40 <Custom_HeaterControl+0x70>)
- 8006c2c:	625a      	str	r2, [r3, #36]	; 0x24
-	heaterobj->stop = Heater_Stop;
- 8006c2e:	68fb      	ldr	r3, [r7, #12]
- 8006c30:	4a04      	ldr	r2, [pc, #16]	; (8006c44 <Custom_HeaterControl+0x74>)
- 8006c32:	629a      	str	r2, [r3, #40]	; 0x28
+	heaterobj->start = heater_start;
+ 8006c18:	68fb      	ldr	r3, [r7, #12]
+ 8006c1a:	4a06      	ldr	r2, [pc, #24]	; (8006c34 <Custom_HeaterControl+0x74>)
+ 8006c1c:	625a      	str	r2, [r3, #36]	; 0x24
+	heaterobj->stop = heater_stop;
+ 8006c1e:	68fb      	ldr	r3, [r7, #12]
+ 8006c20:	4a05      	ldr	r2, [pc, #20]	; (8006c38 <Custom_HeaterControl+0x78>)
+ 8006c22:	629a      	str	r2, [r3, #40]	; 0x28
+	heaterobj->set_target_temp = heater_set_target_temp;
+ 8006c24:	68fb      	ldr	r3, [r7, #12]
+ 8006c26:	4a05      	ldr	r2, [pc, #20]	; (8006c3c <Custom_HeaterControl+0x7c>)
+ 8006c28:	62da      	str	r2, [r3, #44]	; 0x2c
 
 	return heaterobj;
- 8006c34:	68fb      	ldr	r3, [r7, #12]
+ 8006c2a:	68fb      	ldr	r3, [r7, #12]
 }
- 8006c36:	4618      	mov	r0, r3
- 8006c38:	3710      	adds	r7, #16
- 8006c3a:	46bd      	mov	sp, r7
- 8006c3c:	bd80      	pop	{r7, pc}
- 8006c3e:	bf00      	nop
- 8006c40:	08006c49 	.word	0x08006c49
- 8006c44:	08006c71 	.word	0x08006c71
+ 8006c2c:	4618      	mov	r0, r3
+ 8006c2e:	3710      	adds	r7, #16
+ 8006c30:	46bd      	mov	sp, r7
+ 8006c32:	bd80      	pop	{r7, pc}
+ 8006c34:	08006c41 	.word	0x08006c41
+ 8006c38:	08006c69 	.word	0x08006c69
+ 8006c3c:	08006c9d 	.word	0x08006c9d
 
-08006c48 <Heater_Start>:
+08006c40 <heater_start>:
 
-static void Heater_Start(heater_t *heaterobj){
- 8006c48:	b580      	push	{r7, lr}
- 8006c4a:	b082      	sub	sp, #8
- 8006c4c:	af00      	add	r7, sp, #0
- 8006c4e:	6078      	str	r0, [r7, #4]
+static void heater_start(heater_t *heaterobj){
+ 8006c40:	b580      	push	{r7, lr}
+ 8006c42:	b082      	sub	sp, #8
+ 8006c44:	af00      	add	r7, sp, #0
+ 8006c46:	6078      	str	r0, [r7, #4]
 	heaterobj->onFlag = true;
- 8006c50:	687b      	ldr	r3, [r7, #4]
- 8006c52:	2201      	movs	r2, #1
- 8006c54:	f883 2020 	strb.w	r2, [r3, #32]
+ 8006c48:	687b      	ldr	r3, [r7, #4]
+ 8006c4a:	2201      	movs	r2, #1
+ 8006c4c:	f883 2020 	strb.w	r2, [r3, #32]
 	HAL_TIM_PWM_Start(heaterobj->htim, heaterobj->channel);
- 8006c58:	687b      	ldr	r3, [r7, #4]
- 8006c5a:	681a      	ldr	r2, [r3, #0]
- 8006c5c:	687b      	ldr	r3, [r7, #4]
- 8006c5e:	685b      	ldr	r3, [r3, #4]
- 8006c60:	4619      	mov	r1, r3
- 8006c62:	4610      	mov	r0, r2
- 8006c64:	f7fc fe92 	bl	800398c <HAL_TIM_PWM_Start>
+ 8006c50:	687b      	ldr	r3, [r7, #4]
+ 8006c52:	681a      	ldr	r2, [r3, #0]
+ 8006c54:	687b      	ldr	r3, [r7, #4]
+ 8006c56:	685b      	ldr	r3, [r3, #4]
+ 8006c58:	4619      	mov	r1, r3
+ 8006c5a:	4610      	mov	r0, r2
+ 8006c5c:	f7fc fe96 	bl	800398c <HAL_TIM_PWM_Start>
 }
- 8006c68:	bf00      	nop
- 8006c6a:	3708      	adds	r7, #8
- 8006c6c:	46bd      	mov	sp, r7
- 8006c6e:	bd80      	pop	{r7, pc}
+ 8006c60:	bf00      	nop
+ 8006c62:	3708      	adds	r7, #8
+ 8006c64:	46bd      	mov	sp, r7
+ 8006c66:	bd80      	pop	{r7, pc}
 
-08006c70 <Heater_Stop>:
+08006c68 <heater_stop>:
 
-static void Heater_Stop(heater_t *heaterobj){
- 8006c70:	b580      	push	{r7, lr}
- 8006c72:	b082      	sub	sp, #8
- 8006c74:	af00      	add	r7, sp, #0
- 8006c76:	6078      	str	r0, [r7, #4]
+static void heater_stop(heater_t *heaterobj){
+ 8006c68:	b580      	push	{r7, lr}
+ 8006c6a:	b082      	sub	sp, #8
+ 8006c6c:	af00      	add	r7, sp, #0
+ 8006c6e:	6078      	str	r0, [r7, #4]
 	heaterobj->onFlag = false;
- 8006c78:	687b      	ldr	r3, [r7, #4]
- 8006c7a:	2200      	movs	r2, #0
- 8006c7c:	f883 2020 	strb.w	r2, [r3, #32]
+ 8006c70:	687b      	ldr	r3, [r7, #4]
+ 8006c72:	2200      	movs	r2, #0
+ 8006c74:	f883 2020 	strb.w	r2, [r3, #32]
 	while (heaterobj->state != OFF)	// Heater_Controller가 OFF 상태인지 확인
- 8006c80:	e007      	b.n	8006c92 <Heater_Stop+0x22>
+ 8006c78:	e007      	b.n	8006c8a <heater_stop+0x22>
 	HAL_TIM_PWM_Stop(heaterobj->htim, heaterobj->channel);
- 8006c82:	687b      	ldr	r3, [r7, #4]
- 8006c84:	681a      	ldr	r2, [r3, #0]
- 8006c86:	687b      	ldr	r3, [r7, #4]
- 8006c88:	685b      	ldr	r3, [r3, #4]
- 8006c8a:	4619      	mov	r1, r3
- 8006c8c:	4610      	mov	r0, r2
- 8006c8e:	f7fc ff2d 	bl	8003aec <HAL_TIM_PWM_Stop>
+ 8006c7a:	687b      	ldr	r3, [r7, #4]
+ 8006c7c:	681a      	ldr	r2, [r3, #0]
+ 8006c7e:	687b      	ldr	r3, [r7, #4]
+ 8006c80:	685b      	ldr	r3, [r3, #4]
+ 8006c82:	4619      	mov	r1, r3
+ 8006c84:	4610      	mov	r0, r2
+ 8006c86:	f7fc ff31 	bl	8003aec <HAL_TIM_PWM_Stop>
 	while (heaterobj->state != OFF)	// Heater_Controller가 OFF 상태인지 확인
- 8006c92:	687b      	ldr	r3, [r7, #4]
- 8006c94:	689b      	ldr	r3, [r3, #8]
- 8006c96:	2b00      	cmp	r3, #0
- 8006c98:	d1f3      	bne.n	8006c82 <Heater_Stop+0x12>
+ 8006c8a:	687b      	ldr	r3, [r7, #4]
+ 8006c8c:	689b      	ldr	r3, [r3, #8]
+ 8006c8e:	2b00      	cmp	r3, #0
+ 8006c90:	d1f3      	bne.n	8006c7a <heater_stop+0x12>
 }
- 8006c9a:	bf00      	nop
- 8006c9c:	bf00      	nop
- 8006c9e:	3708      	adds	r7, #8
- 8006ca0:	46bd      	mov	sp, r7
- 8006ca2:	bd80      	pop	{r7, pc}
+ 8006c92:	bf00      	nop
+ 8006c94:	bf00      	nop
+ 8006c96:	3708      	adds	r7, #8
+ 8006c98:	46bd      	mov	sp, r7
+ 8006c9a:	bd80      	pop	{r7, pc}
 
-08006ca4 <Heater_Set>:
+08006c9c <heater_set_target_temp>:
 
-static void Heater_Set(heater_t *heaterobj){
- 8006ca4:	b480      	push	{r7}
- 8006ca6:	b085      	sub	sp, #20
- 8006ca8:	af00      	add	r7, sp, #0
- 8006caa:	6078      	str	r0, [r7, #4]
+static void heater_set_target_temp(heater_t *heaterobj, float targetTemp){
+ 8006c9c:	b480      	push	{r7}
+ 8006c9e:	b083      	sub	sp, #12
+ 8006ca0:	af00      	add	r7, sp, #0
+ 8006ca2:	6078      	str	r0, [r7, #4]
+ 8006ca4:	ed87 0a00 	vstr	s0, [r7]
+	heaterobj->target = targetTemp;
+ 8006ca8:	687b      	ldr	r3, [r7, #4]
+ 8006caa:	683a      	ldr	r2, [r7, #0]
+ 8006cac:	611a      	str	r2, [r3, #16]
+}
+ 8006cae:	bf00      	nop
+ 8006cb0:	370c      	adds	r7, #12
+ 8006cb2:	46bd      	mov	sp, r7
+ 8006cb4:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8006cb8:	4770      	bx	lr
+
+08006cba <__Heater_SetDuty>:
+
+__STATIC_INLINE void __Heater_SetDuty(heater_t *heaterobj){
+ 8006cba:	b480      	push	{r7}
+ 8006cbc:	b085      	sub	sp, #20
+ 8006cbe:	af00      	add	r7, sp, #0
+ 8006cc0:	6078      	str	r0, [r7, #4]
 	// Duty ratio to duty cycle conversion
 	uint32_t dutycycle = heaterobj->duty * (__HAL_TIM_GET_AUTORELOAD(heaterobj->htim)+1) - 1;
- 8006cac:	687b      	ldr	r3, [r7, #4]
- 8006cae:	ed93 7a03 	vldr	s14, [r3, #12]
- 8006cb2:	687b      	ldr	r3, [r7, #4]
- 8006cb4:	681b      	ldr	r3, [r3, #0]
- 8006cb6:	681b      	ldr	r3, [r3, #0]
- 8006cb8:	6adb      	ldr	r3, [r3, #44]	; 0x2c
- 8006cba:	3301      	adds	r3, #1
- 8006cbc:	ee07 3a90 	vmov	s15, r3
- 8006cc0:	eef8 7a67 	vcvt.f32.u32	s15, s15
- 8006cc4:	ee67 7a27 	vmul.f32	s15, s14, s15
- 8006cc8:	eeb7 7a00 	vmov.f32	s14, #112	; 0x3f800000  1.0
- 8006ccc:	ee77 7ac7 	vsub.f32	s15, s15, s14
- 8006cd0:	eefc 7ae7 	vcvt.u32.f32	s15, s15
- 8006cd4:	ee17 3a90 	vmov	r3, s15
- 8006cd8:	60fb      	str	r3, [r7, #12]
+ 8006cc2:	687b      	ldr	r3, [r7, #4]
+ 8006cc4:	ed93 7a03 	vldr	s14, [r3, #12]
+ 8006cc8:	687b      	ldr	r3, [r7, #4]
+ 8006cca:	681b      	ldr	r3, [r3, #0]
+ 8006ccc:	681b      	ldr	r3, [r3, #0]
+ 8006cce:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 8006cd0:	3301      	adds	r3, #1
+ 8006cd2:	ee07 3a90 	vmov	s15, r3
+ 8006cd6:	eef8 7a67 	vcvt.f32.u32	s15, s15
+ 8006cda:	ee67 7a27 	vmul.f32	s15, s14, s15
+ 8006cde:	eeb7 7a00 	vmov.f32	s14, #112	; 0x3f800000  1.0
+ 8006ce2:	ee77 7ac7 	vsub.f32	s15, s15, s14
+ 8006ce6:	eefc 7ae7 	vcvt.u32.f32	s15, s15
+ 8006cea:	ee17 3a90 	vmov	r3, s15
+ 8006cee:	60fb      	str	r3, [r7, #12]
 	// Set duty rate of PWM
 	__HAL_TIM_SET_COMPARE(heaterobj->htim, heaterobj->channel, dutycycle);
- 8006cda:	687b      	ldr	r3, [r7, #4]
- 8006cdc:	685b      	ldr	r3, [r3, #4]
- 8006cde:	2b00      	cmp	r3, #0
- 8006ce0:	d105      	bne.n	8006cee <Heater_Set+0x4a>
- 8006ce2:	687b      	ldr	r3, [r7, #4]
- 8006ce4:	681b      	ldr	r3, [r3, #0]
- 8006ce6:	681b      	ldr	r3, [r3, #0]
- 8006ce8:	68fa      	ldr	r2, [r7, #12]
- 8006cea:	635a      	str	r2, [r3, #52]	; 0x34
+ 8006cf0:	687b      	ldr	r3, [r7, #4]
+ 8006cf2:	685b      	ldr	r3, [r3, #4]
+ 8006cf4:	2b00      	cmp	r3, #0
+ 8006cf6:	d105      	bne.n	8006d04 <__Heater_SetDuty+0x4a>
+ 8006cf8:	687b      	ldr	r3, [r7, #4]
+ 8006cfa:	681b      	ldr	r3, [r3, #0]
+ 8006cfc:	681b      	ldr	r3, [r3, #0]
+ 8006cfe:	68fa      	ldr	r2, [r7, #12]
+ 8006d00:	635a      	str	r2, [r3, #52]	; 0x34
 }
- 8006cec:	e018      	b.n	8006d20 <Heater_Set+0x7c>
+ 8006d02:	e018      	b.n	8006d36 <__Heater_SetDuty+0x7c>
 	__HAL_TIM_SET_COMPARE(heaterobj->htim, heaterobj->channel, dutycycle);
- 8006cee:	687b      	ldr	r3, [r7, #4]
- 8006cf0:	685b      	ldr	r3, [r3, #4]
- 8006cf2:	2b04      	cmp	r3, #4
- 8006cf4:	d105      	bne.n	8006d02 <Heater_Set+0x5e>
- 8006cf6:	687b      	ldr	r3, [r7, #4]
- 8006cf8:	681b      	ldr	r3, [r3, #0]
- 8006cfa:	681a      	ldr	r2, [r3, #0]
- 8006cfc:	68fb      	ldr	r3, [r7, #12]
- 8006cfe:	6393      	str	r3, [r2, #56]	; 0x38
+ 8006d04:	687b      	ldr	r3, [r7, #4]
+ 8006d06:	685b      	ldr	r3, [r3, #4]
+ 8006d08:	2b04      	cmp	r3, #4
+ 8006d0a:	d105      	bne.n	8006d18 <__Heater_SetDuty+0x5e>
+ 8006d0c:	687b      	ldr	r3, [r7, #4]
+ 8006d0e:	681b      	ldr	r3, [r3, #0]
+ 8006d10:	681a      	ldr	r2, [r3, #0]
+ 8006d12:	68fb      	ldr	r3, [r7, #12]
+ 8006d14:	6393      	str	r3, [r2, #56]	; 0x38
 }
- 8006d00:	e00e      	b.n	8006d20 <Heater_Set+0x7c>
+ 8006d16:	e00e      	b.n	8006d36 <__Heater_SetDuty+0x7c>
 	__HAL_TIM_SET_COMPARE(heaterobj->htim, heaterobj->channel, dutycycle);
- 8006d02:	687b      	ldr	r3, [r7, #4]
- 8006d04:	685b      	ldr	r3, [r3, #4]
- 8006d06:	2b08      	cmp	r3, #8
- 8006d08:	d105      	bne.n	8006d16 <Heater_Set+0x72>
- 8006d0a:	687b      	ldr	r3, [r7, #4]
- 8006d0c:	681b      	ldr	r3, [r3, #0]
- 8006d0e:	681a      	ldr	r2, [r3, #0]
- 8006d10:	68fb      	ldr	r3, [r7, #12]
- 8006d12:	63d3      	str	r3, [r2, #60]	; 0x3c
+ 8006d18:	687b      	ldr	r3, [r7, #4]
+ 8006d1a:	685b      	ldr	r3, [r3, #4]
+ 8006d1c:	2b08      	cmp	r3, #8
+ 8006d1e:	d105      	bne.n	8006d2c <__Heater_SetDuty+0x72>
+ 8006d20:	687b      	ldr	r3, [r7, #4]
+ 8006d22:	681b      	ldr	r3, [r3, #0]
+ 8006d24:	681a      	ldr	r2, [r3, #0]
+ 8006d26:	68fb      	ldr	r3, [r7, #12]
+ 8006d28:	63d3      	str	r3, [r2, #60]	; 0x3c
 }
- 8006d14:	e004      	b.n	8006d20 <Heater_Set+0x7c>
+ 8006d2a:	e004      	b.n	8006d36 <__Heater_SetDuty+0x7c>
 	__HAL_TIM_SET_COMPARE(heaterobj->htim, heaterobj->channel, dutycycle);
- 8006d16:	687b      	ldr	r3, [r7, #4]
- 8006d18:	681b      	ldr	r3, [r3, #0]
- 8006d1a:	681a      	ldr	r2, [r3, #0]
- 8006d1c:	68fb      	ldr	r3, [r7, #12]
- 8006d1e:	6413      	str	r3, [r2, #64]	; 0x40
+ 8006d2c:	687b      	ldr	r3, [r7, #4]
+ 8006d2e:	681b      	ldr	r3, [r3, #0]
+ 8006d30:	681a      	ldr	r2, [r3, #0]
+ 8006d32:	68fb      	ldr	r3, [r7, #12]
+ 8006d34:	6413      	str	r3, [r2, #64]	; 0x40
 }
- 8006d20:	bf00      	nop
- 8006d22:	3714      	adds	r7, #20
- 8006d24:	46bd      	mov	sp, r7
- 8006d26:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8006d2a:	4770      	bx	lr
+ 8006d36:	bf00      	nop
+ 8006d38:	3714      	adds	r7, #20
+ 8006d3a:	46bd      	mov	sp, r7
+ 8006d3c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8006d40:	4770      	bx	lr
+	...
 
-08006d2c <Heater_Controller>:
+08006d44 <Heater_Controller>:
 
 static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
- 8006d2c:	b590      	push	{r4, r7, lr}
- 8006d2e:	b089      	sub	sp, #36	; 0x24
- 8006d30:	af04      	add	r7, sp, #16
- 8006d32:	6078      	str	r0, [r7, #4]
- 8006d34:	6039      	str	r1, [r7, #0]
+ 8006d44:	b590      	push	{r4, r7, lr}
+ 8006d46:	b089      	sub	sp, #36	; 0x24
+ 8006d48:	af04      	add	r7, sp, #16
+ 8006d4a:	6078      	str	r0, [r7, #4]
+ 8006d4c:	6039      	str	r1, [r7, #0]
 	float sensorADCRead = tempsensorobj->read(tempsensorobj);
- 8006d36:	687b      	ldr	r3, [r7, #4]
- 8006d38:	699b      	ldr	r3, [r3, #24]
- 8006d3a:	6878      	ldr	r0, [r7, #4]
- 8006d3c:	4798      	blx	r3
- 8006d3e:	ed87 0a03 	vstr	s0, [r7, #12]
-
-
+ 8006d4e:	687b      	ldr	r3, [r7, #4]
+ 8006d50:	699b      	ldr	r3, [r3, #24]
+ 8006d52:	6878      	ldr	r0, [r7, #4]
+ 8006d54:	4798      	blx	r3
+ 8006d56:	ed87 0a03 	vstr	s0, [r7, #12]
 	if (sensorADCRead == NAN)
 		return;
+	heaterobj->prev = heaterobj->current;
+ 8006d5a:	683b      	ldr	r3, [r7, #0]
+ 8006d5c:	695a      	ldr	r2, [r3, #20]
+ 8006d5e:	683b      	ldr	r3, [r7, #0]
+ 8006d60:	619a      	str	r2, [r3, #24]
+	heaterobj->current = sensorADCRead;
+ 8006d62:	683b      	ldr	r3, [r7, #0]
+ 8006d64:	68fa      	ldr	r2, [r7, #12]
+ 8006d66:	615a      	str	r2, [r3, #20]
 
 	switch (heaterobj->state){
- 8006d42:	683b      	ldr	r3, [r7, #0]
- 8006d44:	689b      	ldr	r3, [r3, #8]
- 8006d46:	2b03      	cmp	r3, #3
- 8006d48:	f200 80d7 	bhi.w	8006efa <Heater_Controller+0x1ce>
- 8006d4c:	a201      	add	r2, pc, #4	; (adr r2, 8006d54 <Heater_Controller+0x28>)
- 8006d4e:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
- 8006d52:	bf00      	nop
- 8006d54:	08006d65 	.word	0x08006d65
- 8006d58:	08006da1 	.word	0x08006da1
- 8006d5c:	08006dff 	.word	0x08006dff
- 8006d60:	08006e81 	.word	0x08006e81
+ 8006d68:	683b      	ldr	r3, [r7, #0]
+ 8006d6a:	689b      	ldr	r3, [r3, #8]
+ 8006d6c:	2b03      	cmp	r3, #3
+ 8006d6e:	f200 80c6 	bhi.w	8006efe <Heater_Controller+0x1ba>
+ 8006d72:	a201      	add	r2, pc, #4	; (adr r2, 8006d78 <Heater_Controller+0x34>)
+ 8006d74:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8006d78:	08006d89 	.word	0x08006d89
+ 8006d7c:	08006dad 	.word	0x08006dad
+ 8006d80:	08006e0b 	.word	0x08006e0b
+ 8006d84:	08006e89 	.word	0x08006e89
 		case OFF:
 			heaterobj->duty = 0.f;
- 8006d64:	683b      	ldr	r3, [r7, #0]
- 8006d66:	f04f 0200 	mov.w	r2, #0
- 8006d6a:	60da      	str	r2, [r3, #12]
+ 8006d88:	683b      	ldr	r3, [r7, #0]
+ 8006d8a:	f04f 0200 	mov.w	r2, #0
+ 8006d8e:	60da      	str	r2, [r3, #12]
 			heaterobj->errorSum = 0.f;
- 8006d6c:	683b      	ldr	r3, [r7, #0]
- 8006d6e:	f04f 0200 	mov.w	r2, #0
- 8006d72:	61da      	str	r2, [r3, #28]
-			heaterobj->prev = 0.f;
- 8006d74:	683b      	ldr	r3, [r7, #0]
- 8006d76:	f04f 0200 	mov.w	r2, #0
- 8006d7a:	619a      	str	r2, [r3, #24]
-			heaterobj->current = 0.f;
- 8006d7c:	683b      	ldr	r3, [r7, #0]
- 8006d7e:	f04f 0200 	mov.w	r2, #0
- 8006d82:	615a      	str	r2, [r3, #20]
-			if (heaterobj->onFlag) {
- 8006d84:	683b      	ldr	r3, [r7, #0]
- 8006d86:	f893 3020 	ldrb.w	r3, [r3, #32]
- 8006d8a:	2b00      	cmp	r3, #0
- 8006d8c:	f000 80bd 	beq.w	8006f0a <Heater_Controller+0x1de>
-				heaterobj->start(heaterobj);
  8006d90:	683b      	ldr	r3, [r7, #0]
- 8006d92:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8006d94:	6838      	ldr	r0, [r7, #0]
- 8006d96:	4798      	blx	r3
-				heaterobj->state = PREHEATING;
+ 8006d92:	f04f 0200 	mov.w	r2, #0
+ 8006d96:	61da      	str	r2, [r3, #28]
+			if (heaterobj->onFlag) {
  8006d98:	683b      	ldr	r3, [r7, #0]
- 8006d9a:	2201      	movs	r2, #1
- 8006d9c:	609a      	str	r2, [r3, #8]
+ 8006d9a:	f893 3020 	ldrb.w	r3, [r3, #32]
+ 8006d9e:	2b00      	cmp	r3, #0
+ 8006da0:	f000 80b5 	beq.w	8006f0e <Heater_Controller+0x1ca>
+				heaterobj->state = PREHEATING;
+ 8006da4:	683b      	ldr	r3, [r7, #0]
+ 8006da6:	2201      	movs	r2, #1
+ 8006da8:	609a      	str	r2, [r3, #8]
 			}
 			break;
- 8006d9e:	e0b4      	b.n	8006f0a <Heater_Controller+0x1de>
+ 8006daa:	e0b0      	b.n	8006f0e <Heater_Controller+0x1ca>
 
 		case PREHEATING:
 			heaterobj->duty = 1.f;
- 8006da0:	683b      	ldr	r3, [r7, #0]
- 8006da2:	f04f 527e 	mov.w	r2, #1065353216	; 0x3f800000
- 8006da6:	60da      	str	r2, [r3, #12]
+ 8006dac:	683b      	ldr	r3, [r7, #0]
+ 8006dae:	f04f 527e 	mov.w	r2, #1065353216	; 0x3f800000
+ 8006db2:	60da      	str	r2, [r3, #12]
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
- 8006da8:	683b      	ldr	r3, [r7, #0]
- 8006daa:	f893 3020 	ldrb.w	r3, [r3, #32]
- 8006dae:	f083 0301 	eor.w	r3, r3, #1
- 8006db2:	b2db      	uxtb	r3, r3
- 8006db4:	2b00      	cmp	r3, #0
- 8006db6:	d003      	beq.n	8006dc0 <Heater_Controller+0x94>
- 8006db8:	683b      	ldr	r3, [r7, #0]
- 8006dba:	2200      	movs	r2, #0
- 8006dbc:	609a      	str	r2, [r3, #8]
+ 8006db4:	683b      	ldr	r3, [r7, #0]
+ 8006db6:	f893 3020 	ldrb.w	r3, [r3, #32]
+ 8006dba:	f083 0301 	eor.w	r3, r3, #1
+ 8006dbe:	b2db      	uxtb	r3, r3
+ 8006dc0:	2b00      	cmp	r3, #0
+ 8006dc2:	d003      	beq.n	8006dcc <Heater_Controller+0x88>
+ 8006dc4:	683b      	ldr	r3, [r7, #0]
+ 8006dc6:	2200      	movs	r2, #0
+ 8006dc8:	609a      	str	r2, [r3, #8]
 			else if (abs(heaterobj->target - heaterobj->current) <= 5.f) heaterobj->state = TRANSIENT;
 
 			break;
- 8006dbe:	e0a5      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006dca:	e0a1      	b.n	8006f10 <Heater_Controller+0x1cc>
 			else if (abs(heaterobj->target - heaterobj->current) <= 5.f) heaterobj->state = TRANSIENT;
- 8006dc0:	683b      	ldr	r3, [r7, #0]
- 8006dc2:	ed93 7a04 	vldr	s14, [r3, #16]
- 8006dc6:	683b      	ldr	r3, [r7, #0]
- 8006dc8:	edd3 7a05 	vldr	s15, [r3, #20]
- 8006dcc:	ee77 7a67 	vsub.f32	s15, s14, s15
- 8006dd0:	eefd 7ae7 	vcvt.s32.f32	s15, s15
- 8006dd4:	ee17 3a90 	vmov	r3, s15
- 8006dd8:	2b00      	cmp	r3, #0
- 8006dda:	bfb8      	it	lt
- 8006ddc:	425b      	neglt	r3, r3
- 8006dde:	ee07 3a90 	vmov	s15, r3
- 8006de2:	eef8 7ae7 	vcvt.f32.s32	s15, s15
- 8006de6:	eeb1 7a04 	vmov.f32	s14, #20	; 0x40a00000  5.0
- 8006dea:	eef4 7ac7 	vcmpe.f32	s15, s14
- 8006dee:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006df2:	d900      	bls.n	8006df6 <Heater_Controller+0xca>
+ 8006dcc:	683b      	ldr	r3, [r7, #0]
+ 8006dce:	ed93 7a04 	vldr	s14, [r3, #16]
+ 8006dd2:	683b      	ldr	r3, [r7, #0]
+ 8006dd4:	edd3 7a05 	vldr	s15, [r3, #20]
+ 8006dd8:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 8006ddc:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+ 8006de0:	ee17 3a90 	vmov	r3, s15
+ 8006de4:	2b00      	cmp	r3, #0
+ 8006de6:	bfb8      	it	lt
+ 8006de8:	425b      	neglt	r3, r3
+ 8006dea:	ee07 3a90 	vmov	s15, r3
+ 8006dee:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+ 8006df2:	eeb1 7a04 	vmov.f32	s14, #20	; 0x40a00000  5.0
+ 8006df6:	eef4 7ac7 	vcmpe.f32	s15, s14
+ 8006dfa:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006dfe:	d900      	bls.n	8006e02 <Heater_Controller+0xbe>
 			break;
- 8006df4:	e08a      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006e00:	e086      	b.n	8006f10 <Heater_Controller+0x1cc>
 			else if (abs(heaterobj->target - heaterobj->current) <= 5.f) heaterobj->state = TRANSIENT;
- 8006df6:	683b      	ldr	r3, [r7, #0]
- 8006df8:	2202      	movs	r2, #2
- 8006dfa:	609a      	str	r2, [r3, #8]
+ 8006e02:	683b      	ldr	r3, [r7, #0]
+ 8006e04:	2202      	movs	r2, #2
+ 8006e06:	609a      	str	r2, [r3, #8]
 			break;
- 8006dfc:	e086      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006e08:	e082      	b.n	8006f10 <Heater_Controller+0x1cc>
 
 		case TRANSIENT:
 			heaterobj->errorSum = .0f;
- 8006dfe:	683b      	ldr	r3, [r7, #0]
- 8006e00:	f04f 0200 	mov.w	r2, #0
- 8006e04:	61da      	str	r2, [r3, #28]
-			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDTransient);
- 8006e06:	4b43      	ldr	r3, [pc, #268]	; (8006f14 <Heater_Controller+0x1e8>)
- 8006e08:	466c      	mov	r4, sp
- 8006e0a:	f103 020c 	add.w	r2, r3, #12
- 8006e0e:	ca07      	ldmia	r2, {r0, r1, r2}
- 8006e10:	e884 0007 	stmia.w	r4, {r0, r1, r2}
- 8006e14:	cb0e      	ldmia	r3, {r1, r2, r3}
- 8006e16:	6838      	ldr	r0, [r7, #0]
- 8006e18:	ed97 0a03 	vldr	s0, [r7, #12]
- 8006e1c:	f7ff fdf0 	bl	8006a00 <Control_PID>
- 8006e20:	eef0 7a40 	vmov.f32	s15, s0
- 8006e24:	683b      	ldr	r3, [r7, #0]
- 8006e26:	edc3 7a03 	vstr	s15, [r3, #12]
+ 8006e0a:	683b      	ldr	r3, [r7, #0]
+ 8006e0c:	f04f 0200 	mov.w	r2, #0
+ 8006e10:	61da      	str	r2, [r3, #28]
+			heaterobj->duty = Control_PID(heaterobj, PIDTransient);
+ 8006e12:	4b41      	ldr	r3, [pc, #260]	; (8006f18 <Heater_Controller+0x1d4>)
+ 8006e14:	466c      	mov	r4, sp
+ 8006e16:	f103 020c 	add.w	r2, r3, #12
+ 8006e1a:	ca07      	ldmia	r2, {r0, r1, r2}
+ 8006e1c:	e884 0007 	stmia.w	r4, {r0, r1, r2}
+ 8006e20:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8006e22:	6838      	ldr	r0, [r7, #0]
+ 8006e24:	f7ff fdec 	bl	8006a00 <Control_PID>
+ 8006e28:	eef0 7a40 	vmov.f32	s15, s0
+ 8006e2c:	683b      	ldr	r3, [r7, #0]
+ 8006e2e:	edc3 7a03 	vstr	s15, [r3, #12]
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
- 8006e2a:	683b      	ldr	r3, [r7, #0]
- 8006e2c:	f893 3020 	ldrb.w	r3, [r3, #32]
- 8006e30:	f083 0301 	eor.w	r3, r3, #1
- 8006e34:	b2db      	uxtb	r3, r3
- 8006e36:	2b00      	cmp	r3, #0
- 8006e38:	d003      	beq.n	8006e42 <Heater_Controller+0x116>
- 8006e3a:	683b      	ldr	r3, [r7, #0]
- 8006e3c:	2200      	movs	r2, #0
- 8006e3e:	609a      	str	r2, [r3, #8]
-			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
-			break;
- 8006e40:	e064      	b.n	8006f0c <Heater_Controller+0x1e0>
-			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
+ 8006e32:	683b      	ldr	r3, [r7, #0]
+ 8006e34:	f893 3020 	ldrb.w	r3, [r3, #32]
+ 8006e38:	f083 0301 	eor.w	r3, r3, #1
+ 8006e3c:	b2db      	uxtb	r3, r3
+ 8006e3e:	2b00      	cmp	r3, #0
+ 8006e40:	d003      	beq.n	8006e4a <Heater_Controller+0x106>
  8006e42:	683b      	ldr	r3, [r7, #0]
- 8006e44:	ed93 7a04 	vldr	s14, [r3, #16]
- 8006e48:	683b      	ldr	r3, [r7, #0]
- 8006e4a:	edd3 7a05 	vldr	s15, [r3, #20]
- 8006e4e:	ee77 7a67 	vsub.f32	s15, s14, s15
- 8006e52:	eefd 7ae7 	vcvt.s32.f32	s15, s15
- 8006e56:	ee17 3a90 	vmov	r3, s15
- 8006e5a:	2b00      	cmp	r3, #0
- 8006e5c:	bfb8      	it	lt
- 8006e5e:	425b      	neglt	r3, r3
- 8006e60:	ee07 3a90 	vmov	s15, r3
- 8006e64:	eef8 7ae7 	vcvt.f32.s32	s15, s15
- 8006e68:	eeb0 7a08 	vmov.f32	s14, #8	; 0x40400000  3.0
- 8006e6c:	eef4 7ac7 	vcmpe.f32	s15, s14
- 8006e70:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006e74:	d900      	bls.n	8006e78 <Heater_Controller+0x14c>
-			break;
- 8006e76:	e049      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006e44:	2200      	movs	r2, #0
+ 8006e46:	609a      	str	r2, [r3, #8]
 			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
- 8006e78:	683b      	ldr	r3, [r7, #0]
- 8006e7a:	2203      	movs	r2, #3
- 8006e7c:	609a      	str	r2, [r3, #8]
 			break;
- 8006e7e:	e045      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006e48:	e062      	b.n	8006f10 <Heater_Controller+0x1cc>
+			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
+ 8006e4a:	683b      	ldr	r3, [r7, #0]
+ 8006e4c:	ed93 7a04 	vldr	s14, [r3, #16]
+ 8006e50:	683b      	ldr	r3, [r7, #0]
+ 8006e52:	edd3 7a05 	vldr	s15, [r3, #20]
+ 8006e56:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 8006e5a:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+ 8006e5e:	ee17 3a90 	vmov	r3, s15
+ 8006e62:	2b00      	cmp	r3, #0
+ 8006e64:	bfb8      	it	lt
+ 8006e66:	425b      	neglt	r3, r3
+ 8006e68:	ee07 3a90 	vmov	s15, r3
+ 8006e6c:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+ 8006e70:	eeb0 7a08 	vmov.f32	s14, #8	; 0x40400000  3.0
+ 8006e74:	eef4 7ac7 	vcmpe.f32	s15, s14
+ 8006e78:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006e7c:	d900      	bls.n	8006e80 <Heater_Controller+0x13c>
+			break;
+ 8006e7e:	e047      	b.n	8006f10 <Heater_Controller+0x1cc>
+			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
+ 8006e80:	683b      	ldr	r3, [r7, #0]
+ 8006e82:	2203      	movs	r2, #3
+ 8006e84:	609a      	str	r2, [r3, #8]
+			break;
+ 8006e86:	e043      	b.n	8006f10 <Heater_Controller+0x1cc>
 
 		case STEADY:
-			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDSteady);
- 8006e80:	4b25      	ldr	r3, [pc, #148]	; (8006f18 <Heater_Controller+0x1ec>)
- 8006e82:	466c      	mov	r4, sp
- 8006e84:	f103 020c 	add.w	r2, r3, #12
- 8006e88:	ca07      	ldmia	r2, {r0, r1, r2}
- 8006e8a:	e884 0007 	stmia.w	r4, {r0, r1, r2}
- 8006e8e:	cb0e      	ldmia	r3, {r1, r2, r3}
- 8006e90:	6838      	ldr	r0, [r7, #0]
- 8006e92:	ed97 0a03 	vldr	s0, [r7, #12]
- 8006e96:	f7ff fdb3 	bl	8006a00 <Control_PID>
- 8006e9a:	eef0 7a40 	vmov.f32	s15, s0
- 8006e9e:	683b      	ldr	r3, [r7, #0]
- 8006ea0:	edc3 7a03 	vstr	s15, [r3, #12]
+			heaterobj->duty = Control_PID(heaterobj, PIDSteady);
+ 8006e88:	4b24      	ldr	r3, [pc, #144]	; (8006f1c <Heater_Controller+0x1d8>)
+ 8006e8a:	466c      	mov	r4, sp
+ 8006e8c:	f103 020c 	add.w	r2, r3, #12
+ 8006e90:	ca07      	ldmia	r2, {r0, r1, r2}
+ 8006e92:	e884 0007 	stmia.w	r4, {r0, r1, r2}
+ 8006e96:	cb0e      	ldmia	r3, {r1, r2, r3}
+ 8006e98:	6838      	ldr	r0, [r7, #0]
+ 8006e9a:	f7ff fdb1 	bl	8006a00 <Control_PID>
+ 8006e9e:	eef0 7a40 	vmov.f32	s15, s0
+ 8006ea2:	683b      	ldr	r3, [r7, #0]
+ 8006ea4:	edc3 7a03 	vstr	s15, [r3, #12]
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
- 8006ea4:	683b      	ldr	r3, [r7, #0]
- 8006ea6:	f893 3020 	ldrb.w	r3, [r3, #32]
- 8006eaa:	f083 0301 	eor.w	r3, r3, #1
- 8006eae:	b2db      	uxtb	r3, r3
- 8006eb0:	2b00      	cmp	r3, #0
- 8006eb2:	d003      	beq.n	8006ebc <Heater_Controller+0x190>
- 8006eb4:	683b      	ldr	r3, [r7, #0]
- 8006eb6:	2200      	movs	r2, #0
- 8006eb8:	609a      	str	r2, [r3, #8]
+ 8006ea8:	683b      	ldr	r3, [r7, #0]
+ 8006eaa:	f893 3020 	ldrb.w	r3, [r3, #32]
+ 8006eae:	f083 0301 	eor.w	r3, r3, #1
+ 8006eb2:	b2db      	uxtb	r3, r3
+ 8006eb4:	2b00      	cmp	r3, #0
+ 8006eb6:	d003      	beq.n	8006ec0 <Heater_Controller+0x17c>
+ 8006eb8:	683b      	ldr	r3, [r7, #0]
+ 8006eba:	2200      	movs	r2, #0
+ 8006ebc:	609a      	str	r2, [r3, #8]
 			else if (abs(heaterobj->target - heaterobj->current) > DEVIATION) heaterobj->state = TRANSIENT;
 			break;
- 8006eba:	e027      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006ebe:	e027      	b.n	8006f10 <Heater_Controller+0x1cc>
 			else if (abs(heaterobj->target - heaterobj->current) > DEVIATION) heaterobj->state = TRANSIENT;
- 8006ebc:	683b      	ldr	r3, [r7, #0]
- 8006ebe:	ed93 7a04 	vldr	s14, [r3, #16]
- 8006ec2:	683b      	ldr	r3, [r7, #0]
- 8006ec4:	edd3 7a05 	vldr	s15, [r3, #20]
- 8006ec8:	ee77 7a67 	vsub.f32	s15, s14, s15
- 8006ecc:	eefd 7ae7 	vcvt.s32.f32	s15, s15
- 8006ed0:	ee17 3a90 	vmov	r3, s15
- 8006ed4:	2b00      	cmp	r3, #0
- 8006ed6:	bfb8      	it	lt
- 8006ed8:	425b      	neglt	r3, r3
- 8006eda:	ee07 3a90 	vmov	s15, r3
- 8006ede:	eef8 7ae7 	vcvt.f32.s32	s15, s15
- 8006ee2:	eeb0 7a08 	vmov.f32	s14, #8	; 0x40400000  3.0
- 8006ee6:	eef4 7ac7 	vcmpe.f32	s15, s14
- 8006eea:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8006eee:	dc00      	bgt.n	8006ef2 <Heater_Controller+0x1c6>
+ 8006ec0:	683b      	ldr	r3, [r7, #0]
+ 8006ec2:	ed93 7a04 	vldr	s14, [r3, #16]
+ 8006ec6:	683b      	ldr	r3, [r7, #0]
+ 8006ec8:	edd3 7a05 	vldr	s15, [r3, #20]
+ 8006ecc:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 8006ed0:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+ 8006ed4:	ee17 3a90 	vmov	r3, s15
+ 8006ed8:	2b00      	cmp	r3, #0
+ 8006eda:	bfb8      	it	lt
+ 8006edc:	425b      	neglt	r3, r3
+ 8006ede:	ee07 3a90 	vmov	s15, r3
+ 8006ee2:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+ 8006ee6:	eeb0 7a08 	vmov.f32	s14, #8	; 0x40400000  3.0
+ 8006eea:	eef4 7ac7 	vcmpe.f32	s15, s14
+ 8006eee:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8006ef2:	dc00      	bgt.n	8006ef6 <Heater_Controller+0x1b2>
 			break;
- 8006ef0:	e00c      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006ef4:	e00c      	b.n	8006f10 <Heater_Controller+0x1cc>
 			else if (abs(heaterobj->target - heaterobj->current) > DEVIATION) heaterobj->state = TRANSIENT;
- 8006ef2:	683b      	ldr	r3, [r7, #0]
- 8006ef4:	2202      	movs	r2, #2
- 8006ef6:	609a      	str	r2, [r3, #8]
+ 8006ef6:	683b      	ldr	r3, [r7, #0]
+ 8006ef8:	2202      	movs	r2, #2
+ 8006efa:	609a      	str	r2, [r3, #8]
 			break;
- 8006ef8:	e008      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006efc:	e008      	b.n	8006f10 <Heater_Controller+0x1cc>
 
 		default:
 			heaterobj->onFlag = 0;
- 8006efa:	683b      	ldr	r3, [r7, #0]
- 8006efc:	2200      	movs	r2, #0
- 8006efe:	f883 2020 	strb.w	r2, [r3, #32]
+ 8006efe:	683b      	ldr	r3, [r7, #0]
+ 8006f00:	2200      	movs	r2, #0
+ 8006f02:	f883 2020 	strb.w	r2, [r3, #32]
 			heaterobj->state = OFF;
- 8006f02:	683b      	ldr	r3, [r7, #0]
- 8006f04:	2200      	movs	r2, #0
- 8006f06:	609a      	str	r2, [r3, #8]
- 8006f08:	e000      	b.n	8006f0c <Heater_Controller+0x1e0>
+ 8006f06:	683b      	ldr	r3, [r7, #0]
+ 8006f08:	2200      	movs	r2, #0
+ 8006f0a:	609a      	str	r2, [r3, #8]
+ 8006f0c:	e000      	b.n	8006f10 <Heater_Controller+0x1cc>
 			break;
- 8006f0a:	bf00      	nop
+ 8006f0e:	bf00      	nop
 	}
 }
- 8006f0c:	3714      	adds	r7, #20
- 8006f0e:	46bd      	mov	sp, r7
- 8006f10:	bd90      	pop	{r4, r7, pc}
- 8006f12:	bf00      	nop
- 8006f14:	20000204 	.word	0x20000204
- 8006f18:	2000021c 	.word	0x2000021c
+ 8006f10:	3714      	adds	r7, #20
+ 8006f12:	46bd      	mov	sp, r7
+ 8006f14:	bd90      	pop	{r4, r7, pc}
+ 8006f16:	bf00      	nop
+ 8006f18:	20000204 	.word	0x20000204
+ 8006f1c:	2000021c 	.word	0x2000021c
 
-08006f1c <Systick_Sensor_IRQ>:
+08006f20 <Systick_Sensor_IRQ>:
 /* Functions */
 
 // 카운트 값을 1씩 줄이기 위한 인터럽트 핸들러.
 // HAL_InitTick 함수에서 Systick 인터럽트가 1ms마다 실행되도록 설정되므로,
 // 핸들러의 실행주기도 1ms이다.
 void Systick_Sensor_IRQ() {
- 8006f1c:	b480      	push	{r7}
- 8006f1e:	b083      	sub	sp, #12
- 8006f20:	af00      	add	r7, sp, #0
+ 8006f20:	b480      	push	{r7}
+ 8006f22:	b083      	sub	sp, #12
+ 8006f24:	af00      	add	r7, sp, #0
 	// 카운트가 0이 아니면, waitcount의 값을 1 감소시킨다.
 	// 현재 카운트 node를 읽으면, next node가 없을 때까지 다음으로 넘어가 읽기를 반복한다.
 	if (waitcount_node_storage.size > 0) {
- 8006f22:	4b10      	ldr	r3, [pc, #64]	; (8006f64 <Systick_Sensor_IRQ+0x48>)
- 8006f24:	689b      	ldr	r3, [r3, #8]
- 8006f26:	2b00      	cmp	r3, #0
- 8006f28:	d015      	beq.n	8006f56 <Systick_Sensor_IRQ+0x3a>
+ 8006f26:	4b10      	ldr	r3, [pc, #64]	; (8006f68 <Systick_Sensor_IRQ+0x48>)
+ 8006f28:	689b      	ldr	r3, [r3, #8]
+ 8006f2a:	2b00      	cmp	r3, #0
+ 8006f2c:	d015      	beq.n	8006f5a <Systick_Sensor_IRQ+0x3a>
 		waitcount_node *cur_node = waitcount_node_storage.frontPtr;
- 8006f2a:	4b0e      	ldr	r3, [pc, #56]	; (8006f64 <Systick_Sensor_IRQ+0x48>)
- 8006f2c:	681b      	ldr	r3, [r3, #0]
- 8006f2e:	607b      	str	r3, [r7, #4]
+ 8006f2e:	4b0e      	ldr	r3, [pc, #56]	; (8006f68 <Systick_Sensor_IRQ+0x48>)
+ 8006f30:	681b      	ldr	r3, [r3, #0]
+ 8006f32:	607b      	str	r3, [r7, #4]
 		while (cur_node != NULL) {
- 8006f30:	e00e      	b.n	8006f50 <Systick_Sensor_IRQ+0x34>
+ 8006f34:	e00e      	b.n	8006f54 <Systick_Sensor_IRQ+0x34>
 			cur_node->data -= (cur_node->data == 0) ? 0 : 1;
- 8006f32:	687b      	ldr	r3, [r7, #4]
- 8006f34:	681b      	ldr	r3, [r3, #0]
- 8006f36:	687a      	ldr	r2, [r7, #4]
- 8006f38:	6812      	ldr	r2, [r2, #0]
- 8006f3a:	2a00      	cmp	r2, #0
- 8006f3c:	bf14      	ite	ne
- 8006f3e:	2201      	movne	r2, #1
- 8006f40:	2200      	moveq	r2, #0
- 8006f42:	b2d2      	uxtb	r2, r2
- 8006f44:	1a9a      	subs	r2, r3, r2
- 8006f46:	687b      	ldr	r3, [r7, #4]
- 8006f48:	601a      	str	r2, [r3, #0]
-			cur_node = cur_node->next;
+ 8006f36:	687b      	ldr	r3, [r7, #4]
+ 8006f38:	681b      	ldr	r3, [r3, #0]
+ 8006f3a:	687a      	ldr	r2, [r7, #4]
+ 8006f3c:	6812      	ldr	r2, [r2, #0]
+ 8006f3e:	2a00      	cmp	r2, #0
+ 8006f40:	bf14      	ite	ne
+ 8006f42:	2201      	movne	r2, #1
+ 8006f44:	2200      	moveq	r2, #0
+ 8006f46:	b2d2      	uxtb	r2, r2
+ 8006f48:	1a9a      	subs	r2, r3, r2
  8006f4a:	687b      	ldr	r3, [r7, #4]
- 8006f4c:	685b      	ldr	r3, [r3, #4]
- 8006f4e:	607b      	str	r3, [r7, #4]
+ 8006f4c:	601a      	str	r2, [r3, #0]
+			cur_node = cur_node->next;
+ 8006f4e:	687b      	ldr	r3, [r7, #4]
+ 8006f50:	685b      	ldr	r3, [r3, #4]
+ 8006f52:	607b      	str	r3, [r7, #4]
 		while (cur_node != NULL) {
- 8006f50:	687b      	ldr	r3, [r7, #4]
- 8006f52:	2b00      	cmp	r3, #0
- 8006f54:	d1ed      	bne.n	8006f32 <Systick_Sensor_IRQ+0x16>
+ 8006f54:	687b      	ldr	r3, [r7, #4]
+ 8006f56:	2b00      	cmp	r3, #0
+ 8006f58:	d1ed      	bne.n	8006f36 <Systick_Sensor_IRQ+0x16>
 		}
 	}
 }
- 8006f56:	bf00      	nop
- 8006f58:	370c      	adds	r7, #12
- 8006f5a:	46bd      	mov	sp, r7
- 8006f5c:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8006f60:	4770      	bx	lr
- 8006f62:	bf00      	nop
- 8006f64:	20000744 	.word	0x20000744
+ 8006f5a:	bf00      	nop
+ 8006f5c:	370c      	adds	r7, #12
+ 8006f5e:	46bd      	mov	sp, r7
+ 8006f60:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8006f64:	4770      	bx	lr
+ 8006f66:	bf00      	nop
+ 8006f68:	20000744 	.word	0x20000744
 
-08006f68 <Custom_Tempsensor>:
+08006f6c <Custom_Tempsensor>:
 
 tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t interval) {
- 8006f68:	b580      	push	{r7, lr}
- 8006f6a:	b086      	sub	sp, #24
- 8006f6c:	af00      	add	r7, sp, #0
- 8006f6e:	60f8      	str	r0, [r7, #12]
- 8006f70:	60b9      	str	r1, [r7, #8]
- 8006f72:	603b      	str	r3, [r7, #0]
- 8006f74:	4613      	mov	r3, r2
- 8006f76:	80fb      	strh	r3, [r7, #6]
+ 8006f6c:	b580      	push	{r7, lr}
+ 8006f6e:	b086      	sub	sp, #24
+ 8006f70:	af00      	add	r7, sp, #0
+ 8006f72:	60f8      	str	r0, [r7, #12]
+ 8006f74:	60b9      	str	r1, [r7, #8]
+ 8006f76:	603b      	str	r3, [r7, #0]
+ 8006f78:	4613      	mov	r3, r2
+ 8006f7a:	80fb      	strh	r3, [r7, #6]
 	// Setting methods
 	tempsensor_t *sensorobj = (tempsensor_t*) calloc(1, sizeof(tempsensor_t));
- 8006f78:	212c      	movs	r1, #44	; 0x2c
- 8006f7a:	2001      	movs	r0, #1
- 8006f7c:	f001 f98c 	bl	8008298 <calloc>
- 8006f80:	4603      	mov	r3, r0
- 8006f82:	617b      	str	r3, [r7, #20]
+ 8006f7c:	212c      	movs	r1, #44	; 0x2c
+ 8006f7e:	2001      	movs	r0, #1
+ 8006f80:	f001 f98a 	bl	8008298 <calloc>
+ 8006f84:	4603      	mov	r3, r0
+ 8006f86:	617b      	str	r3, [r7, #20]
 
-	sensorobj->read = read;
- 8006f84:	697b      	ldr	r3, [r7, #20]
- 8006f86:	4a1b      	ldr	r2, [pc, #108]	; (8006ff4 <Custom_Tempsensor+0x8c>)
- 8006f88:	619a      	str	r2, [r3, #24]
-	sensorobj->is_readable = is_readable;
- 8006f8a:	697b      	ldr	r3, [r7, #20]
- 8006f8c:	4a1a      	ldr	r2, [pc, #104]	; (8006ff8 <Custom_Tempsensor+0x90>)
- 8006f8e:	61da      	str	r2, [r3, #28]
-	sensorobj->set_interval = set_interval;
- 8006f90:	697b      	ldr	r3, [r7, #20]
- 8006f92:	4a1a      	ldr	r2, [pc, #104]	; (8006ffc <Custom_Tempsensor+0x94>)
- 8006f94:	621a      	str	r2, [r3, #32]
-	sensorobj->get_interval = get_interval;
- 8006f96:	697b      	ldr	r3, [r7, #20]
- 8006f98:	4a19      	ldr	r2, [pc, #100]	; (8007000 <Custom_Tempsensor+0x98>)
- 8006f9a:	625a      	str	r2, [r3, #36]	; 0x24
-	sensorobj->read_waitcount = read_waitcount;
- 8006f9c:	697b      	ldr	r3, [r7, #20]
- 8006f9e:	4a19      	ldr	r2, [pc, #100]	; (8007004 <Custom_Tempsensor+0x9c>)
- 8006fa0:	629a      	str	r2, [r3, #40]	; 0x28
+	sensorobj->read = sensor_read;
+ 8006f88:	697b      	ldr	r3, [r7, #20]
+ 8006f8a:	4a1b      	ldr	r2, [pc, #108]	; (8006ff8 <Custom_Tempsensor+0x8c>)
+ 8006f8c:	619a      	str	r2, [r3, #24]
+	sensorobj->is_readable = sensor_is_readable;
+ 8006f8e:	697b      	ldr	r3, [r7, #20]
+ 8006f90:	4a1a      	ldr	r2, [pc, #104]	; (8006ffc <Custom_Tempsensor+0x90>)
+ 8006f92:	61da      	str	r2, [r3, #28]
+	sensorobj->set_interval = sensor_set_interval;
+ 8006f94:	697b      	ldr	r3, [r7, #20]
+ 8006f96:	4a1a      	ldr	r2, [pc, #104]	; (8007000 <Custom_Tempsensor+0x94>)
+ 8006f98:	621a      	str	r2, [r3, #32]
+	sensorobj->get_interval = sensor_get_interval;
+ 8006f9a:	697b      	ldr	r3, [r7, #20]
+ 8006f9c:	4a19      	ldr	r2, [pc, #100]	; (8007004 <Custom_Tempsensor+0x98>)
+ 8006f9e:	625a      	str	r2, [r3, #36]	; 0x24
+	sensorobj->read_waitcount = sensor_read_waitcount;
+ 8006fa0:	697b      	ldr	r3, [r7, #20]
+ 8006fa2:	4a19      	ldr	r2, [pc, #100]	; (8007008 <Custom_Tempsensor+0x9c>)
+ 8006fa4:	629a      	str	r2, [r3, #40]	; 0x28
 
 
 	// Setting fields
 	sensorobj->hspi = hspi;
- 8006fa2:	697b      	ldr	r3, [r7, #20]
- 8006fa4:	68fa      	ldr	r2, [r7, #12]
- 8006fa6:	601a      	str	r2, [r3, #0]
+ 8006fa6:	697b      	ldr	r3, [r7, #20]
+ 8006fa8:	68fa      	ldr	r2, [r7, #12]
+ 8006faa:	601a      	str	r2, [r3, #0]
 	sensorobj->__sensor_interval = interval;
- 8006fa8:	697b      	ldr	r3, [r7, #20]
- 8006faa:	683a      	ldr	r2, [r7, #0]
- 8006fac:	60da      	str	r2, [r3, #12]
+ 8006fac:	697b      	ldr	r3, [r7, #20]
+ 8006fae:	683a      	ldr	r2, [r7, #0]
+ 8006fb0:	60da      	str	r2, [r3, #12]
 
 	// Setting CS pin
 	sensorobj->csPin = GPIO_Pin;
- 8006fae:	697b      	ldr	r3, [r7, #20]
- 8006fb0:	88fa      	ldrh	r2, [r7, #6]
- 8006fb2:	829a      	strh	r2, [r3, #20]
+ 8006fb2:	697b      	ldr	r3, [r7, #20]
+ 8006fb4:	88fa      	ldrh	r2, [r7, #6]
+ 8006fb6:	829a      	strh	r2, [r3, #20]
 	sensorobj->csPort = GPIOx;
- 8006fb4:	697b      	ldr	r3, [r7, #20]
- 8006fb6:	68ba      	ldr	r2, [r7, #8]
- 8006fb8:	605a      	str	r2, [r3, #4]
+ 8006fb8:	697b      	ldr	r3, [r7, #20]
+ 8006fba:	68ba      	ldr	r2, [r7, #8]
+ 8006fbc:	605a      	str	r2, [r3, #4]
 
 	// Pulling up CS pin
 	HAL_GPIO_WritePin(sensorobj->csPort, sensorobj->csPin, GPIO_PIN_SET);
- 8006fba:	697b      	ldr	r3, [r7, #20]
- 8006fbc:	6858      	ldr	r0, [r3, #4]
  8006fbe:	697b      	ldr	r3, [r7, #20]
- 8006fc0:	8a9b      	ldrh	r3, [r3, #20]
- 8006fc2:	2201      	movs	r2, #1
- 8006fc4:	4619      	mov	r1, r3
- 8006fc6:	f7fb f9d5 	bl	8002374 <HAL_GPIO_WritePin>
+ 8006fc0:	6858      	ldr	r0, [r3, #4]
+ 8006fc2:	697b      	ldr	r3, [r7, #20]
+ 8006fc4:	8a9b      	ldrh	r3, [r3, #20]
+ 8006fc6:	2201      	movs	r2, #1
+ 8006fc8:	4619      	mov	r1, r3
+ 8006fca:	f7fb f9d3 	bl	8002374 <HAL_GPIO_WritePin>
 
 	// setting waitCount object
 	waitcount_node *waitCntNode = (waitcount_node*) calloc(1, sizeof(waitcount_node));
- 8006fca:	2108      	movs	r1, #8
- 8006fcc:	2001      	movs	r0, #1
- 8006fce:	f001 f963 	bl	8008298 <calloc>
- 8006fd2:	4603      	mov	r3, r0
- 8006fd4:	613b      	str	r3, [r7, #16]
+ 8006fce:	2108      	movs	r1, #8
+ 8006fd0:	2001      	movs	r0, #1
+ 8006fd2:	f001 f961 	bl	8008298 <calloc>
+ 8006fd6:	4603      	mov	r3, r0
+ 8006fd8:	613b      	str	r3, [r7, #16]
 	sensorobj->waitCount = &(waitCntNode->data);
- 8006fd6:	693a      	ldr	r2, [r7, #16]
- 8006fd8:	697b      	ldr	r3, [r7, #20]
- 8006fda:	609a      	str	r2, [r3, #8]
-	*(sensorobj->waitCount) = 10;	// for initialize&interrupt working test
+ 8006fda:	693a      	ldr	r2, [r7, #16]
  8006fdc:	697b      	ldr	r3, [r7, #20]
- 8006fde:	689b      	ldr	r3, [r3, #8]
- 8006fe0:	220a      	movs	r2, #10
- 8006fe2:	601a      	str	r2, [r3, #0]
+ 8006fde:	609a      	str	r2, [r3, #8]
+	*(sensorobj->waitCount) = 10;	// for initialize&interrupt working test
+ 8006fe0:	697b      	ldr	r3, [r7, #20]
+ 8006fe2:	689b      	ldr	r3, [r3, #8]
+ 8006fe4:	220a      	movs	r2, #10
+ 8006fe6:	601a      	str	r2, [r3, #0]
 	Add_GlobalWaitCountNode(waitCntNode);
- 8006fe4:	6938      	ldr	r0, [r7, #16]
- 8006fe6:	f000 f80f 	bl	8007008 <Add_GlobalWaitCountNode>
+ 8006fe8:	6938      	ldr	r0, [r7, #16]
+ 8006fea:	f000 f80f 	bl	800700c <Add_GlobalWaitCountNode>
 
 	return sensorobj;
- 8006fea:	697b      	ldr	r3, [r7, #20]
+ 8006fee:	697b      	ldr	r3, [r7, #20]
 }
- 8006fec:	4618      	mov	r0, r3
- 8006fee:	3718      	adds	r7, #24
- 8006ff0:	46bd      	mov	sp, r7
- 8006ff2:	bd80      	pop	{r7, pc}
- 8006ff4:	080070d9 	.word	0x080070d9
- 8006ff8:	08007127 	.word	0x08007127
- 8006ffc:	0800714b 	.word	0x0800714b
- 8007000:	08007167 	.word	0x08007167
- 8007004:	0800717f 	.word	0x0800717f
+ 8006ff0:	4618      	mov	r0, r3
+ 8006ff2:	3718      	adds	r7, #24
+ 8006ff4:	46bd      	mov	sp, r7
+ 8006ff6:	bd80      	pop	{r7, pc}
+ 8006ff8:	080070dd 	.word	0x080070dd
+ 8006ffc:	0800712b 	.word	0x0800712b
+ 8007000:	0800714f 	.word	0x0800714f
+ 8007004:	0800716b 	.word	0x0800716b
+ 8007008:	08007183 	.word	0x08007183
 
-08007008 <Add_GlobalWaitCountNode>:
+0800700c <Add_GlobalWaitCountNode>:
 
 void Add_GlobalWaitCountNode(waitcount_node *waitCntNode) {
- 8007008:	b480      	push	{r7}
- 800700a:	b083      	sub	sp, #12
- 800700c:	af00      	add	r7, sp, #0
- 800700e:	6078      	str	r0, [r7, #4]
+ 800700c:	b480      	push	{r7}
+ 800700e:	b083      	sub	sp, #12
+ 8007010:	af00      	add	r7, sp, #0
+ 8007012:	6078      	str	r0, [r7, #4]
 	if (waitCntNode != NULL) {
- 8007010:	687b      	ldr	r3, [r7, #4]
- 8007012:	2b00      	cmp	r3, #0
- 8007014:	d013      	beq.n	800703e <Add_GlobalWaitCountNode+0x36>
+ 8007014:	687b      	ldr	r3, [r7, #4]
+ 8007016:	2b00      	cmp	r3, #0
+ 8007018:	d013      	beq.n	8007042 <Add_GlobalWaitCountNode+0x36>
 
 		if (waitcount_node_storage.size == 0) {
- 8007016:	4b0d      	ldr	r3, [pc, #52]	; (800704c <Add_GlobalWaitCountNode+0x44>)
- 8007018:	689b      	ldr	r3, [r3, #8]
- 800701a:	2b00      	cmp	r3, #0
- 800701c:	d103      	bne.n	8007026 <Add_GlobalWaitCountNode+0x1e>
+ 800701a:	4b0d      	ldr	r3, [pc, #52]	; (8007050 <Add_GlobalWaitCountNode+0x44>)
+ 800701c:	689b      	ldr	r3, [r3, #8]
+ 800701e:	2b00      	cmp	r3, #0
+ 8007020:	d103      	bne.n	800702a <Add_GlobalWaitCountNode+0x1e>
 			waitcount_node_storage.frontPtr = waitCntNode;
- 800701e:	4a0b      	ldr	r2, [pc, #44]	; (800704c <Add_GlobalWaitCountNode+0x44>)
- 8007020:	687b      	ldr	r3, [r7, #4]
- 8007022:	6013      	str	r3, [r2, #0]
- 8007024:	e003      	b.n	800702e <Add_GlobalWaitCountNode+0x26>
+ 8007022:	4a0b      	ldr	r2, [pc, #44]	; (8007050 <Add_GlobalWaitCountNode+0x44>)
+ 8007024:	687b      	ldr	r3, [r7, #4]
+ 8007026:	6013      	str	r3, [r2, #0]
+ 8007028:	e003      	b.n	8007032 <Add_GlobalWaitCountNode+0x26>
 		} else {
 			waitcount_node_storage.backPtr->next = waitCntNode;
- 8007026:	4b09      	ldr	r3, [pc, #36]	; (800704c <Add_GlobalWaitCountNode+0x44>)
- 8007028:	685b      	ldr	r3, [r3, #4]
- 800702a:	687a      	ldr	r2, [r7, #4]
- 800702c:	605a      	str	r2, [r3, #4]
+ 800702a:	4b09      	ldr	r3, [pc, #36]	; (8007050 <Add_GlobalWaitCountNode+0x44>)
+ 800702c:	685b      	ldr	r3, [r3, #4]
+ 800702e:	687a      	ldr	r2, [r7, #4]
+ 8007030:	605a      	str	r2, [r3, #4]
 
 		}
 		waitcount_node_storage.backPtr = waitCntNode;
- 800702e:	4a07      	ldr	r2, [pc, #28]	; (800704c <Add_GlobalWaitCountNode+0x44>)
- 8007030:	687b      	ldr	r3, [r7, #4]
- 8007032:	6053      	str	r3, [r2, #4]
+ 8007032:	4a07      	ldr	r2, [pc, #28]	; (8007050 <Add_GlobalWaitCountNode+0x44>)
+ 8007034:	687b      	ldr	r3, [r7, #4]
+ 8007036:	6053      	str	r3, [r2, #4]
 		waitcount_node_storage.size++;
- 8007034:	4b05      	ldr	r3, [pc, #20]	; (800704c <Add_GlobalWaitCountNode+0x44>)
- 8007036:	689b      	ldr	r3, [r3, #8]
- 8007038:	3301      	adds	r3, #1
- 800703a:	4a04      	ldr	r2, [pc, #16]	; (800704c <Add_GlobalWaitCountNode+0x44>)
- 800703c:	6093      	str	r3, [r2, #8]
+ 8007038:	4b05      	ldr	r3, [pc, #20]	; (8007050 <Add_GlobalWaitCountNode+0x44>)
+ 800703a:	689b      	ldr	r3, [r3, #8]
+ 800703c:	3301      	adds	r3, #1
+ 800703e:	4a04      	ldr	r2, [pc, #16]	; (8007050 <Add_GlobalWaitCountNode+0x44>)
+ 8007040:	6093      	str	r3, [r2, #8]
 	}
 }
- 800703e:	bf00      	nop
- 8007040:	370c      	adds	r7, #12
- 8007042:	46bd      	mov	sp, r7
- 8007044:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8007048:	4770      	bx	lr
- 800704a:	bf00      	nop
- 800704c:	20000744 	.word	0x20000744
+ 8007042:	bf00      	nop
+ 8007044:	370c      	adds	r7, #12
+ 8007046:	46bd      	mov	sp, r7
+ 8007048:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800704c:	4770      	bx	lr
+ 800704e:	bf00      	nop
+ 8007050:	20000744 	.word	0x20000744
 
-08007050 <__sensor_read>:
+08007054 <__sensor_read>:
 
 /* Methods */
 __weak float __sensor_read(tempsensor_t *sensorobj) {
- 8007050:	b580      	push	{r7, lr}
- 8007052:	b084      	sub	sp, #16
- 8007054:	af00      	add	r7, sp, #0
- 8007056:	6078      	str	r0, [r7, #4]
+ 8007054:	b580      	push	{r7, lr}
+ 8007056:	b084      	sub	sp, #16
+ 8007058:	af00      	add	r7, sp, #0
+ 800705a:	6078      	str	r0, [r7, #4]
 	uint8_t pData[2];
 	float temp = 0;
- 8007058:	f04f 0300 	mov.w	r3, #0
- 800705c:	60fb      	str	r3, [r7, #12]
+ 800705c:	f04f 0300 	mov.w	r3, #0
+ 8007060:	60fb      	str	r3, [r7, #12]
 
 	// 16비트 데이터를 MSB부터 차례대로 받는다.
 	HAL_GPIO_WritePin(sensorobj->csPort, sensorobj->csPin, GPIO_PIN_RESET);
- 800705e:	687b      	ldr	r3, [r7, #4]
- 8007060:	6858      	ldr	r0, [r3, #4]
  8007062:	687b      	ldr	r3, [r7, #4]
- 8007064:	8a9b      	ldrh	r3, [r3, #20]
- 8007066:	2200      	movs	r2, #0
- 8007068:	4619      	mov	r1, r3
- 800706a:	f7fb f983 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007064:	6858      	ldr	r0, [r3, #4]
+ 8007066:	687b      	ldr	r3, [r7, #4]
+ 8007068:	8a9b      	ldrh	r3, [r3, #20]
+ 800706a:	2200      	movs	r2, #0
+ 800706c:	4619      	mov	r1, r3
+ 800706e:	f7fb f981 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_SPI_Receive(sensorobj->hspi, pData, 1, 50);
- 800706e:	687b      	ldr	r3, [r7, #4]
- 8007070:	6818      	ldr	r0, [r3, #0]
- 8007072:	f107 0108 	add.w	r1, r7, #8
- 8007076:	2332      	movs	r3, #50	; 0x32
- 8007078:	2201      	movs	r2, #1
- 800707a:	f7fb ffa2 	bl	8002fc2 <HAL_SPI_Receive>
+ 8007072:	687b      	ldr	r3, [r7, #4]
+ 8007074:	6818      	ldr	r0, [r3, #0]
+ 8007076:	f107 0108 	add.w	r1, r7, #8
+ 800707a:	2332      	movs	r3, #50	; 0x32
+ 800707c:	2201      	movs	r2, #1
+ 800707e:	f7fb ffa0 	bl	8002fc2 <HAL_SPI_Receive>
 	HAL_GPIO_WritePin(sensorobj->csPort, sensorobj->csPin, GPIO_PIN_SET);
- 800707e:	687b      	ldr	r3, [r7, #4]
- 8007080:	6858      	ldr	r0, [r3, #4]
  8007082:	687b      	ldr	r3, [r7, #4]
- 8007084:	8a9b      	ldrh	r3, [r3, #20]
- 8007086:	2201      	movs	r2, #1
- 8007088:	4619      	mov	r1, r3
- 800708a:	f7fb f973 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007084:	6858      	ldr	r0, [r3, #4]
+ 8007086:	687b      	ldr	r3, [r7, #4]
+ 8007088:	8a9b      	ldrh	r3, [r3, #20]
+ 800708a:	2201      	movs	r2, #1
+ 800708c:	4619      	mov	r1, r3
+ 800708e:	f7fb f971 	bl	8002374 <HAL_GPIO_WritePin>
 
 	if (((pData[0]|(pData[1]<<8))>>2)& 0x0001)
- 800708e:	7a3b      	ldrb	r3, [r7, #8]
- 8007090:	461a      	mov	r2, r3
- 8007092:	7a7b      	ldrb	r3, [r7, #9]
- 8007094:	021b      	lsls	r3, r3, #8
- 8007096:	4313      	orrs	r3, r2
- 8007098:	f003 0304 	and.w	r3, r3, #4
- 800709c:	2b00      	cmp	r3, #0
- 800709e:	d002      	beq.n	80070a6 <__sensor_read+0x56>
+ 8007092:	7a3b      	ldrb	r3, [r7, #8]
+ 8007094:	461a      	mov	r2, r3
+ 8007096:	7a7b      	ldrb	r3, [r7, #9]
+ 8007098:	021b      	lsls	r3, r3, #8
+ 800709a:	4313      	orrs	r3, r2
+ 800709c:	f003 0304 	and.w	r3, r3, #4
+ 80070a0:	2b00      	cmp	r3, #0
+ 80070a2:	d002      	beq.n	80070aa <__sensor_read+0x56>
 	   return NAN;
- 80070a0:	eddf 7a0c 	vldr	s15, [pc, #48]	; 80070d4 <__sensor_read+0x84>
- 80070a4:	e011      	b.n	80070ca <__sensor_read+0x7a>
+ 80070a4:	eddf 7a0c 	vldr	s15, [pc, #48]	; 80070d8 <__sensor_read+0x84>
+ 80070a8:	e011      	b.n	80070ce <__sensor_read+0x7a>
 	temp = ((((pData[0]|pData[1]<<8)))>>3);
- 80070a6:	7a3b      	ldrb	r3, [r7, #8]
- 80070a8:	461a      	mov	r2, r3
- 80070aa:	7a7b      	ldrb	r3, [r7, #9]
- 80070ac:	021b      	lsls	r3, r3, #8
- 80070ae:	4313      	orrs	r3, r2
- 80070b0:	10db      	asrs	r3, r3, #3
- 80070b2:	ee07 3a90 	vmov	s15, r3
- 80070b6:	eef8 7ae7 	vcvt.f32.s32	s15, s15
- 80070ba:	edc7 7a03 	vstr	s15, [r7, #12]
+ 80070aa:	7a3b      	ldrb	r3, [r7, #8]
+ 80070ac:	461a      	mov	r2, r3
+ 80070ae:	7a7b      	ldrb	r3, [r7, #9]
+ 80070b0:	021b      	lsls	r3, r3, #8
+ 80070b2:	4313      	orrs	r3, r2
+ 80070b4:	10db      	asrs	r3, r3, #3
+ 80070b6:	ee07 3a90 	vmov	s15, r3
+ 80070ba:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+ 80070be:	edc7 7a03 	vstr	s15, [r7, #12]
 
 	return temp * 0.25f;
- 80070be:	edd7 7a03 	vldr	s15, [r7, #12]
- 80070c2:	eeb5 7a00 	vmov.f32	s14, #80	; 0x3e800000  0.250
- 80070c6:	ee67 7a87 	vmul.f32	s15, s15, s14
+ 80070c2:	edd7 7a03 	vldr	s15, [r7, #12]
+ 80070c6:	eeb5 7a00 	vmov.f32	s14, #80	; 0x3e800000  0.250
+ 80070ca:	ee67 7a87 	vmul.f32	s15, s15, s14
 }
- 80070ca:	eeb0 0a67 	vmov.f32	s0, s15
- 80070ce:	3710      	adds	r7, #16
- 80070d0:	46bd      	mov	sp, r7
- 80070d2:	bd80      	pop	{r7, pc}
- 80070d4:	7fc00000 	.word	0x7fc00000
+ 80070ce:	eeb0 0a67 	vmov.f32	s0, s15
+ 80070d2:	3710      	adds	r7, #16
+ 80070d4:	46bd      	mov	sp, r7
+ 80070d6:	bd80      	pop	{r7, pc}
+ 80070d8:	7fc00000 	.word	0x7fc00000
 
-080070d8 <read>:
-float read(tempsensor_t *sensorobj) {
- 80070d8:	b580      	push	{r7, lr}
- 80070da:	b084      	sub	sp, #16
- 80070dc:	af00      	add	r7, sp, #0
- 80070de:	6078      	str	r0, [r7, #4]
+080070dc <sensor_read>:
+float sensor_read(tempsensor_t *sensorobj) {
+ 80070dc:	b580      	push	{r7, lr}
+ 80070de:	b084      	sub	sp, #16
+ 80070e0:	af00      	add	r7, sp, #0
+ 80070e2:	6078      	str	r0, [r7, #4]
 	float data = .0f;
- 80070e0:	f04f 0300 	mov.w	r3, #0
- 80070e4:	60fb      	str	r3, [r7, #12]
+ 80070e4:	f04f 0300 	mov.w	r3, #0
+ 80070e8:	60fb      	str	r3, [r7, #12]
 	if (sensorobj->is_readable(sensorobj)) {
- 80070e6:	687b      	ldr	r3, [r7, #4]
- 80070e8:	69db      	ldr	r3, [r3, #28]
- 80070ea:	6878      	ldr	r0, [r7, #4]
- 80070ec:	4798      	blx	r3
- 80070ee:	4603      	mov	r3, r0
- 80070f0:	2b00      	cmp	r3, #0
- 80070f2:	d00d      	beq.n	8007110 <read+0x38>
+ 80070ea:	687b      	ldr	r3, [r7, #4]
+ 80070ec:	69db      	ldr	r3, [r3, #28]
+ 80070ee:	6878      	ldr	r0, [r7, #4]
+ 80070f0:	4798      	blx	r3
+ 80070f2:	4603      	mov	r3, r0
+ 80070f4:	2b00      	cmp	r3, #0
+ 80070f6:	d00d      	beq.n	8007114 <sensor_read+0x38>
 		data = __sensor_read(sensorobj);
- 80070f4:	6878      	ldr	r0, [r7, #4]
- 80070f6:	f7ff ffab 	bl	8007050 <__sensor_read>
- 80070fa:	ed87 0a03 	vstr	s0, [r7, #12]
+ 80070f8:	6878      	ldr	r0, [r7, #4]
+ 80070fa:	f7ff ffab 	bl	8007054 <__sensor_read>
+ 80070fe:	ed87 0a03 	vstr	s0, [r7, #12]
 		*(sensorobj->waitCount) = sensorobj->__sensor_interval;
- 80070fe:	687b      	ldr	r3, [r7, #4]
- 8007100:	689b      	ldr	r3, [r3, #8]
- 8007102:	687a      	ldr	r2, [r7, #4]
- 8007104:	68d2      	ldr	r2, [r2, #12]
- 8007106:	601a      	str	r2, [r3, #0]
+ 8007102:	687b      	ldr	r3, [r7, #4]
+ 8007104:	689b      	ldr	r3, [r3, #8]
+ 8007106:	687a      	ldr	r2, [r7, #4]
+ 8007108:	68d2      	ldr	r2, [r2, #12]
+ 800710a:	601a      	str	r2, [r3, #0]
 		sensorobj->lastTemp = data;
- 8007108:	687b      	ldr	r3, [r7, #4]
- 800710a:	68fa      	ldr	r2, [r7, #12]
- 800710c:	611a      	str	r2, [r3, #16]
- 800710e:	e002      	b.n	8007116 <read+0x3e>
+ 800710c:	687b      	ldr	r3, [r7, #4]
+ 800710e:	68fa      	ldr	r2, [r7, #12]
+ 8007110:	611a      	str	r2, [r3, #16]
+ 8007112:	e002      	b.n	800711a <sensor_read+0x3e>
 	} else {
 		data = sensorobj->lastTemp;
- 8007110:	687b      	ldr	r3, [r7, #4]
- 8007112:	691b      	ldr	r3, [r3, #16]
- 8007114:	60fb      	str	r3, [r7, #12]
+ 8007114:	687b      	ldr	r3, [r7, #4]
+ 8007116:	691b      	ldr	r3, [r3, #16]
+ 8007118:	60fb      	str	r3, [r7, #12]
 	}
 	return data;
- 8007116:	68fb      	ldr	r3, [r7, #12]
- 8007118:	ee07 3a90 	vmov	s15, r3
+ 800711a:	68fb      	ldr	r3, [r7, #12]
+ 800711c:	ee07 3a90 	vmov	s15, r3
 }
- 800711c:	eeb0 0a67 	vmov.f32	s0, s15
- 8007120:	3710      	adds	r7, #16
- 8007122:	46bd      	mov	sp, r7
- 8007124:	bd80      	pop	{r7, pc}
+ 8007120:	eeb0 0a67 	vmov.f32	s0, s15
+ 8007124:	3710      	adds	r7, #16
+ 8007126:	46bd      	mov	sp, r7
+ 8007128:	bd80      	pop	{r7, pc}
 
-08007126 <is_readable>:
-bool is_readable(tempsensor_t *sensorobj) {
- 8007126:	b580      	push	{r7, lr}
- 8007128:	b082      	sub	sp, #8
- 800712a:	af00      	add	r7, sp, #0
- 800712c:	6078      	str	r0, [r7, #4]
+0800712a <sensor_is_readable>:
+bool sensor_is_readable(tempsensor_t *sensorobj) {
+ 800712a:	b580      	push	{r7, lr}
+ 800712c:	b082      	sub	sp, #8
+ 800712e:	af00      	add	r7, sp, #0
+ 8007130:	6078      	str	r0, [r7, #4]
 	return !(sensorobj->read_waitcount(sensorobj));
- 800712e:	687b      	ldr	r3, [r7, #4]
- 8007130:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 8007132:	6878      	ldr	r0, [r7, #4]
- 8007134:	4798      	blx	r3
- 8007136:	4603      	mov	r3, r0
- 8007138:	2b00      	cmp	r3, #0
- 800713a:	bf0c      	ite	eq
- 800713c:	2301      	moveq	r3, #1
- 800713e:	2300      	movne	r3, #0
- 8007140:	b2db      	uxtb	r3, r3
+ 8007132:	687b      	ldr	r3, [r7, #4]
+ 8007134:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8007136:	6878      	ldr	r0, [r7, #4]
+ 8007138:	4798      	blx	r3
+ 800713a:	4603      	mov	r3, r0
+ 800713c:	2b00      	cmp	r3, #0
+ 800713e:	bf0c      	ite	eq
+ 8007140:	2301      	moveq	r3, #1
+ 8007142:	2300      	movne	r3, #0
+ 8007144:	b2db      	uxtb	r3, r3
 }
- 8007142:	4618      	mov	r0, r3
- 8007144:	3708      	adds	r7, #8
- 8007146:	46bd      	mov	sp, r7
- 8007148:	bd80      	pop	{r7, pc}
+ 8007146:	4618      	mov	r0, r3
+ 8007148:	3708      	adds	r7, #8
+ 800714a:	46bd      	mov	sp, r7
+ 800714c:	bd80      	pop	{r7, pc}
 
-0800714a <set_interval>:
+0800714e <sensor_set_interval>:
 
-void set_interval(tempsensor_t *sensorobj, uint32_t interval) {
- 800714a:	b480      	push	{r7}
- 800714c:	b083      	sub	sp, #12
- 800714e:	af00      	add	r7, sp, #0
- 8007150:	6078      	str	r0, [r7, #4]
- 8007152:	6039      	str	r1, [r7, #0]
+void sensor_set_interval(tempsensor_t *sensorobj, uint32_t interval) {
+ 800714e:	b480      	push	{r7}
+ 8007150:	b083      	sub	sp, #12
+ 8007152:	af00      	add	r7, sp, #0
+ 8007154:	6078      	str	r0, [r7, #4]
+ 8007156:	6039      	str	r1, [r7, #0]
 	sensorobj->__sensor_interval = interval;
- 8007154:	687b      	ldr	r3, [r7, #4]
- 8007156:	683a      	ldr	r2, [r7, #0]
- 8007158:	60da      	str	r2, [r3, #12]
+ 8007158:	687b      	ldr	r3, [r7, #4]
+ 800715a:	683a      	ldr	r2, [r7, #0]
+ 800715c:	60da      	str	r2, [r3, #12]
 }
- 800715a:	bf00      	nop
- 800715c:	370c      	adds	r7, #12
- 800715e:	46bd      	mov	sp, r7
- 8007160:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8007164:	4770      	bx	lr
+ 800715e:	bf00      	nop
+ 8007160:	370c      	adds	r7, #12
+ 8007162:	46bd      	mov	sp, r7
+ 8007164:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8007168:	4770      	bx	lr
 
-08007166 <get_interval>:
-uint32_t get_interval(tempsensor_t *sensorobj) {
- 8007166:	b480      	push	{r7}
- 8007168:	b083      	sub	sp, #12
- 800716a:	af00      	add	r7, sp, #0
- 800716c:	6078      	str	r0, [r7, #4]
+0800716a <sensor_get_interval>:
+uint32_t sensor_get_interval(tempsensor_t *sensorobj) {
+ 800716a:	b480      	push	{r7}
+ 800716c:	b083      	sub	sp, #12
+ 800716e:	af00      	add	r7, sp, #0
+ 8007170:	6078      	str	r0, [r7, #4]
 	return sensorobj->__sensor_interval;
- 800716e:	687b      	ldr	r3, [r7, #4]
- 8007170:	68db      	ldr	r3, [r3, #12]
+ 8007172:	687b      	ldr	r3, [r7, #4]
+ 8007174:	68db      	ldr	r3, [r3, #12]
 }
- 8007172:	4618      	mov	r0, r3
- 8007174:	370c      	adds	r7, #12
- 8007176:	46bd      	mov	sp, r7
- 8007178:	f85d 7b04 	ldr.w	r7, [sp], #4
- 800717c:	4770      	bx	lr
+ 8007176:	4618      	mov	r0, r3
+ 8007178:	370c      	adds	r7, #12
+ 800717a:	46bd      	mov	sp, r7
+ 800717c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8007180:	4770      	bx	lr
 
-0800717e <read_waitcount>:
-uint32_t read_waitcount(tempsensor_t *sensorobj) {
- 800717e:	b480      	push	{r7}
- 8007180:	b083      	sub	sp, #12
- 8007182:	af00      	add	r7, sp, #0
- 8007184:	6078      	str	r0, [r7, #4]
+08007182 <sensor_read_waitcount>:
+uint32_t sensor_read_waitcount(tempsensor_t *sensorobj) {
+ 8007182:	b480      	push	{r7}
+ 8007184:	b083      	sub	sp, #12
+ 8007186:	af00      	add	r7, sp, #0
+ 8007188:	6078      	str	r0, [r7, #4]
 	return *(sensorobj->waitCount);
- 8007186:	687b      	ldr	r3, [r7, #4]
- 8007188:	689b      	ldr	r3, [r3, #8]
- 800718a:	681b      	ldr	r3, [r3, #0]
+ 800718a:	687b      	ldr	r3, [r7, #4]
+ 800718c:	689b      	ldr	r3, [r3, #8]
+ 800718e:	681b      	ldr	r3, [r3, #0]
 }
- 800718c:	4618      	mov	r0, r3
- 800718e:	370c      	adds	r7, #12
- 8007190:	46bd      	mov	sp, r7
- 8007192:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8007196:	4770      	bx	lr
+ 8007190:	4618      	mov	r0, r3
+ 8007192:	370c      	adds	r7, #12
+ 8007194:	46bd      	mov	sp, r7
+ 8007196:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800719a:	4770      	bx	lr
 
-08007198 <testTemp>:
+0800719c <testTemp>:
 
 extern heater_t *heaterTop;
 extern heater_t *heaterBottom;
 
 void testTemp();
 void testTemp(){
- 8007198:	b580      	push	{r7, lr}
- 800719a:	b084      	sub	sp, #16
- 800719c:	af00      	add	r7, sp, #0
+ 800719c:	b580      	push	{r7, lr}
+ 800719e:	b084      	sub	sp, #16
+ 80071a0:	af00      	add	r7, sp, #0
 	SwitchLED(COLOR_BLACK);
- 800719e:	2100      	movs	r1, #0
- 80071a0:	2000      	movs	r0, #0
- 80071a2:	f7ff fa1f 	bl	80065e4 <Switch_LED>
+ 80071a2:	2100      	movs	r1, #0
+ 80071a4:	2000      	movs	r0, #0
+ 80071a6:	f7ff fa1d 	bl	80065e4 <Switch_LED>
 	for(;;){
 		uint16_t sw = Switch_Read();
- 80071a6:	f7ff faf3 	bl	8006790 <Switch_Read>
- 80071aa:	4603      	mov	r3, r0
- 80071ac:	81fb      	strh	r3, [r7, #14]
+ 80071aa:	f7ff faf1 	bl	8006790 <Switch_Read>
+ 80071ae:	4603      	mov	r3, r0
+ 80071b0:	81fb      	strh	r3, [r7, #14]
 		if(sw) break;
- 80071ae:	89fb      	ldrh	r3, [r7, #14]
- 80071b0:	2b00      	cmp	r3, #0
- 80071b2:	d136      	bne.n	8007222 <testTemp+0x8a>
+ 80071b2:	89fb      	ldrh	r3, [r7, #14]
+ 80071b4:	2b00      	cmp	r3, #0
+ 80071b6:	d136      	bne.n	8007226 <testTemp+0x8a>
 		if (tempTop->is_readable(tempTop) && tempBottom->is_readable(tempBottom)) {
- 80071b4:	4b1d      	ldr	r3, [pc, #116]	; (800722c <testTemp+0x94>)
- 80071b6:	681b      	ldr	r3, [r3, #0]
- 80071b8:	69db      	ldr	r3, [r3, #28]
- 80071ba:	4a1c      	ldr	r2, [pc, #112]	; (800722c <testTemp+0x94>)
- 80071bc:	6812      	ldr	r2, [r2, #0]
- 80071be:	4610      	mov	r0, r2
- 80071c0:	4798      	blx	r3
- 80071c2:	4603      	mov	r3, r0
- 80071c4:	2b00      	cmp	r3, #0
- 80071c6:	d0ee      	beq.n	80071a6 <testTemp+0xe>
- 80071c8:	4b19      	ldr	r3, [pc, #100]	; (8007230 <testTemp+0x98>)
- 80071ca:	681b      	ldr	r3, [r3, #0]
- 80071cc:	69db      	ldr	r3, [r3, #28]
- 80071ce:	4a18      	ldr	r2, [pc, #96]	; (8007230 <testTemp+0x98>)
- 80071d0:	6812      	ldr	r2, [r2, #0]
- 80071d2:	4610      	mov	r0, r2
- 80071d4:	4798      	blx	r3
- 80071d6:	4603      	mov	r3, r0
- 80071d8:	2b00      	cmp	r3, #0
- 80071da:	d0e4      	beq.n	80071a6 <testTemp+0xe>
+ 80071b8:	4b1d      	ldr	r3, [pc, #116]	; (8007230 <testTemp+0x94>)
+ 80071ba:	681b      	ldr	r3, [r3, #0]
+ 80071bc:	69db      	ldr	r3, [r3, #28]
+ 80071be:	4a1c      	ldr	r2, [pc, #112]	; (8007230 <testTemp+0x94>)
+ 80071c0:	6812      	ldr	r2, [r2, #0]
+ 80071c2:	4610      	mov	r0, r2
+ 80071c4:	4798      	blx	r3
+ 80071c6:	4603      	mov	r3, r0
+ 80071c8:	2b00      	cmp	r3, #0
+ 80071ca:	d0ee      	beq.n	80071aa <testTemp+0xe>
+ 80071cc:	4b19      	ldr	r3, [pc, #100]	; (8007234 <testTemp+0x98>)
+ 80071ce:	681b      	ldr	r3, [r3, #0]
+ 80071d0:	69db      	ldr	r3, [r3, #28]
+ 80071d2:	4a18      	ldr	r2, [pc, #96]	; (8007234 <testTemp+0x98>)
+ 80071d4:	6812      	ldr	r2, [r2, #0]
+ 80071d6:	4610      	mov	r0, r2
+ 80071d8:	4798      	blx	r3
+ 80071da:	4603      	mov	r3, r0
+ 80071dc:	2b00      	cmp	r3, #0
+ 80071de:	d0e4      	beq.n	80071aa <testTemp+0xe>
 			float temp1 = tempTop->read(tempTop);
- 80071dc:	4b13      	ldr	r3, [pc, #76]	; (800722c <testTemp+0x94>)
- 80071de:	681b      	ldr	r3, [r3, #0]
- 80071e0:	699b      	ldr	r3, [r3, #24]
- 80071e2:	4a12      	ldr	r2, [pc, #72]	; (800722c <testTemp+0x94>)
- 80071e4:	6812      	ldr	r2, [r2, #0]
- 80071e6:	4610      	mov	r0, r2
- 80071e8:	4798      	blx	r3
- 80071ea:	ed87 0a02 	vstr	s0, [r7, #8]
+ 80071e0:	4b13      	ldr	r3, [pc, #76]	; (8007230 <testTemp+0x94>)
+ 80071e2:	681b      	ldr	r3, [r3, #0]
+ 80071e4:	699b      	ldr	r3, [r3, #24]
+ 80071e6:	4a12      	ldr	r2, [pc, #72]	; (8007230 <testTemp+0x94>)
+ 80071e8:	6812      	ldr	r2, [r2, #0]
+ 80071ea:	4610      	mov	r0, r2
+ 80071ec:	4798      	blx	r3
+ 80071ee:	ed87 0a02 	vstr	s0, [r7, #8]
 			float temp2 = tempBottom->read(tempBottom);
- 80071ee:	4b10      	ldr	r3, [pc, #64]	; (8007230 <testTemp+0x98>)
- 80071f0:	681b      	ldr	r3, [r3, #0]
- 80071f2:	699b      	ldr	r3, [r3, #24]
- 80071f4:	4a0e      	ldr	r2, [pc, #56]	; (8007230 <testTemp+0x98>)
- 80071f6:	6812      	ldr	r2, [r2, #0]
- 80071f8:	4610      	mov	r0, r2
- 80071fa:	4798      	blx	r3
- 80071fc:	ed87 0a01 	vstr	s0, [r7, #4]
+ 80071f2:	4b10      	ldr	r3, [pc, #64]	; (8007234 <testTemp+0x98>)
+ 80071f4:	681b      	ldr	r3, [r3, #0]
+ 80071f6:	699b      	ldr	r3, [r3, #24]
+ 80071f8:	4a0e      	ldr	r2, [pc, #56]	; (8007234 <testTemp+0x98>)
+ 80071fa:	6812      	ldr	r2, [r2, #0]
+ 80071fc:	4610      	mov	r0, r2
+ 80071fe:	4798      	blx	r3
+ 8007200:	ed87 0a01 	vstr	s0, [r7, #4]
 			OLED_Printf("/s/0/rtempU: /y%f\r\n", temp1);
- 8007200:	68b8      	ldr	r0, [r7, #8]
- 8007202:	f7f9 f9a9 	bl	8000558 <__aeabi_f2d>
- 8007206:	4602      	mov	r2, r0
- 8007208:	460b      	mov	r3, r1
- 800720a:	480a      	ldr	r0, [pc, #40]	; (8007234 <testTemp+0x9c>)
- 800720c:	f7fe fd22 	bl	8005c54 <OLED_Printf>
+ 8007204:	68b8      	ldr	r0, [r7, #8]
+ 8007206:	f7f9 f9a7 	bl	8000558 <__aeabi_f2d>
+ 800720a:	4602      	mov	r2, r0
+ 800720c:	460b      	mov	r3, r1
+ 800720e:	480a      	ldr	r0, [pc, #40]	; (8007238 <testTemp+0x9c>)
+ 8007210:	f7fe fd20 	bl	8005c54 <OLED_Printf>
 			OLED_Printf("/s/1/rtempD: /y%f\r\n", temp2);
- 8007210:	6878      	ldr	r0, [r7, #4]
- 8007212:	f7f9 f9a1 	bl	8000558 <__aeabi_f2d>
- 8007216:	4602      	mov	r2, r0
- 8007218:	460b      	mov	r3, r1
- 800721a:	4807      	ldr	r0, [pc, #28]	; (8007238 <testTemp+0xa0>)
- 800721c:	f7fe fd1a 	bl	8005c54 <OLED_Printf>
+ 8007214:	6878      	ldr	r0, [r7, #4]
+ 8007216:	f7f9 f99f 	bl	8000558 <__aeabi_f2d>
+ 800721a:	4602      	mov	r2, r0
+ 800721c:	460b      	mov	r3, r1
+ 800721e:	4807      	ldr	r0, [pc, #28]	; (800723c <testTemp+0xa0>)
+ 8007220:	f7fe fd18 	bl	8005c54 <OLED_Printf>
 	for(;;){
- 8007220:	e7c1      	b.n	80071a6 <testTemp+0xe>
+ 8007224:	e7c1      	b.n	80071aa <testTemp+0xe>
 		if(sw) break;
- 8007222:	bf00      	nop
+ 8007226:	bf00      	nop
 //			printf("temp: %f\r\n", temp1->read(temp1));
 		}
 	}
 }
- 8007224:	bf00      	nop
- 8007226:	3710      	adds	r7, #16
- 8007228:	46bd      	mov	sp, r7
- 800722a:	bd80      	pop	{r7, pc}
- 800722c:	2000073c 	.word	0x2000073c
- 8007230:	200005c4 	.word	0x200005c4
- 8007234:	0800b1ac 	.word	0x0800b1ac
- 8007238:	0800b1c0 	.word	0x0800b1c0
+ 8007228:	bf00      	nop
+ 800722a:	3710      	adds	r7, #16
+ 800722c:	46bd      	mov	sp, r7
+ 800722e:	bd80      	pop	{r7, pc}
+ 8007230:	2000073c 	.word	0x2000073c
+ 8007234:	200005c4 	.word	0x200005c4
+ 8007238:	0800b1ac 	.word	0x0800b1ac
+ 800723c:	0800b1c0 	.word	0x0800b1c0
 
-0800723c <profile>:
+08007240 <profile>:
 void testHeat();
 
 
 
 
 void profile(){}
- 800723c:	b480      	push	{r7}
- 800723e:	af00      	add	r7, sp, #0
- 8007240:	bf00      	nop
- 8007242:	46bd      	mov	sp, r7
- 8007244:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8007248:	4770      	bx	lr
+ 8007240:	b480      	push	{r7}
+ 8007242:	af00      	add	r7, sp, #0
+ 8007244:	bf00      	nop
+ 8007246:	46bd      	mov	sp, r7
+ 8007248:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800724c:	4770      	bx	lr
 	...
 
-0800724c <GraphUITest>:
+08007250 <GraphUITest>:
 void test();
 void DCFan_Set(uint8_t level);
 void GraphUITest(){
- 800724c:	b5b0      	push	{r4, r5, r7, lr}
- 800724e:	b098      	sub	sp, #96	; 0x60
- 8007250:	af02      	add	r7, sp, #8
+ 8007250:	b5b0      	push	{r4, r5, r7, lr}
+ 8007252:	b098      	sub	sp, #96	; 0x60
+ 8007254:	af02      	add	r7, sp, #8
 	float xData[10] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
- 8007252:	4b17      	ldr	r3, [pc, #92]	; (80072b0 <GraphUITest+0x64>)
- 8007254:	f107 042c 	add.w	r4, r7, #44	; 0x2c
- 8007258:	461d      	mov	r5, r3
- 800725a:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
- 800725c:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 8007256:	4b17      	ldr	r3, [pc, #92]	; (80072b4 <GraphUITest+0x64>)
+ 8007258:	f107 042c 	add.w	r4, r7, #44	; 0x2c
+ 800725c:	461d      	mov	r5, r3
  800725e:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
  8007260:	c40f      	stmia	r4!, {r0, r1, r2, r3}
- 8007262:	e895 0003 	ldmia.w	r5, {r0, r1}
- 8007266:	e884 0003 	stmia.w	r4, {r0, r1}
+ 8007262:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
+ 8007264:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 8007266:	e895 0003 	ldmia.w	r5, {r0, r1}
+ 800726a:	e884 0003 	stmia.w	r4, {r0, r1}
 	float yData[10] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 60.0};
- 800726a:	4b12      	ldr	r3, [pc, #72]	; (80072b4 <GraphUITest+0x68>)
- 800726c:	1d3c      	adds	r4, r7, #4
- 800726e:	461d      	mov	r5, r3
- 8007270:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
- 8007272:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 800726e:	4b12      	ldr	r3, [pc, #72]	; (80072b8 <GraphUITest+0x68>)
+ 8007270:	1d3c      	adds	r4, r7, #4
+ 8007272:	461d      	mov	r5, r3
  8007274:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
  8007276:	c40f      	stmia	r4!, {r0, r1, r2, r3}
- 8007278:	e895 0003 	ldmia.w	r5, {r0, r1}
- 800727c:	e884 0003 	stmia.w	r4, {r0, r1}
+ 8007278:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
+ 800727a:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 800727c:	e895 0003 	ldmia.w	r5, {r0, r1}
+ 8007280:	e884 0003 	stmia.w	r4, {r0, r1}
 	graph_t * g = Graph_InitEdge(xData, yData, 0.1, 6.0);
- 8007280:	1d39      	adds	r1, r7, #4
- 8007282:	f107 002c 	add.w	r0, r7, #44	; 0x2c
- 8007286:	2334      	movs	r3, #52	; 0x34
- 8007288:	9300      	str	r3, [sp, #0]
- 800728a:	eef1 0a08 	vmov.f32	s1, #24	; 0x40c00000  6.0
- 800728e:	ed9f 0a0a 	vldr	s0, [pc, #40]	; 80072b8 <GraphUITest+0x6c>
- 8007292:	2301      	movs	r3, #1
- 8007294:	220a      	movs	r2, #10
- 8007296:	f7fd ffc1 	bl	800521c <_Graph_Init>
- 800729a:	6578      	str	r0, [r7, #84]	; 0x54
+ 8007284:	1d39      	adds	r1, r7, #4
+ 8007286:	f107 002c 	add.w	r0, r7, #44	; 0x2c
+ 800728a:	2334      	movs	r3, #52	; 0x34
+ 800728c:	9300      	str	r3, [sp, #0]
+ 800728e:	eef1 0a08 	vmov.f32	s1, #24	; 0x40c00000  6.0
+ 8007292:	ed9f 0a0a 	vldr	s0, [pc, #40]	; 80072bc <GraphUITest+0x6c>
+ 8007296:	2301      	movs	r3, #1
+ 8007298:	220a      	movs	r2, #10
+ 800729a:	f7fd ffbf 	bl	800521c <_Graph_Init>
+ 800729e:	6578      	str	r0, [r7, #84]	; 0x54
 	Graph_UI(g);
- 800729c:	6d78      	ldr	r0, [r7, #84]	; 0x54
- 800729e:	f7fe f847 	bl	8005330 <Graph_UI>
+ 80072a0:	6d78      	ldr	r0, [r7, #84]	; 0x54
+ 80072a2:	f7fe f845 	bl	8005330 <Graph_UI>
 	Graph_Delete(g);
- 80072a2:	6d78      	ldr	r0, [r7, #84]	; 0x54
- 80072a4:	f7fe f82e 	bl	8005304 <Graph_Delete>
+ 80072a6:	6d78      	ldr	r0, [r7, #84]	; 0x54
+ 80072a8:	f7fe f82c 	bl	8005304 <Graph_Delete>
 }
- 80072a8:	bf00      	nop
- 80072aa:	3758      	adds	r7, #88	; 0x58
- 80072ac:	46bd      	mov	sp, r7
- 80072ae:	bdb0      	pop	{r4, r5, r7, pc}
- 80072b0:	0800b1d4 	.word	0x0800b1d4
- 80072b4:	0800b1fc 	.word	0x0800b1fc
- 80072b8:	3dcccccd 	.word	0x3dcccccd
+ 80072ac:	bf00      	nop
+ 80072ae:	3758      	adds	r7, #88	; 0x58
+ 80072b0:	46bd      	mov	sp, r7
+ 80072b2:	bdb0      	pop	{r4, r5, r7, pc}
+ 80072b4:	0800b1d4 	.word	0x0800b1d4
+ 80072b8:	0800b1fc 	.word	0x0800b1fc
+ 80072bc:	3dcccccd 	.word	0x3dcccccd
 
-080072bc <Menu_Setup>:
+080072c0 <Menu_Setup>:
 
 };
 
 const uint8_t menuCnt = sizeof(menuList) / sizeof(Menu_t);
 
 void Menu_Setup(){
- 80072bc:	b580      	push	{r7, lr}
- 80072be:	b082      	sub	sp, #8
- 80072c0:	af02      	add	r7, sp, #8
+ 80072c0:	b580      	push	{r7, lr}
+ 80072c2:	b082      	sub	sp, #8
+ 80072c4:	af02      	add	r7, sp, #8
 	OLED_Begin();
- 80072c2:	f7fe fa99 	bl	80057f8 <OLED_Begin>
+ 80072c6:	f7fe fa97 	bl	80057f8 <OLED_Begin>
 	OLED_MenuUI("STM32 OVEN", 0xFF8800, 0x000000, menuList, menuCnt > 6 ? 6 : menuCnt, 0xFFFF00);
- 80072c6:	2305      	movs	r3, #5
- 80072c8:	2b06      	cmp	r3, #6
- 80072ca:	bf28      	it	cs
- 80072cc:	2306      	movcs	r3, #6
- 80072ce:	b2db      	uxtb	r3, r3
- 80072d0:	461a      	mov	r2, r3
- 80072d2:	4b12      	ldr	r3, [pc, #72]	; (800731c <Menu_Setup+0x60>)
- 80072d4:	9301      	str	r3, [sp, #4]
- 80072d6:	9200      	str	r2, [sp, #0]
- 80072d8:	4b11      	ldr	r3, [pc, #68]	; (8007320 <Menu_Setup+0x64>)
- 80072da:	2200      	movs	r2, #0
- 80072dc:	4911      	ldr	r1, [pc, #68]	; (8007324 <Menu_Setup+0x68>)
- 80072de:	4812      	ldr	r0, [pc, #72]	; (8007328 <Menu_Setup+0x6c>)
- 80072e0:	f7ff f8b4 	bl	800644c <OLED_MenuUI>
+ 80072ca:	2305      	movs	r3, #5
+ 80072cc:	2b06      	cmp	r3, #6
+ 80072ce:	bf28      	it	cs
+ 80072d0:	2306      	movcs	r3, #6
+ 80072d2:	b2db      	uxtb	r3, r3
+ 80072d4:	461a      	mov	r2, r3
+ 80072d6:	4b12      	ldr	r3, [pc, #72]	; (8007320 <Menu_Setup+0x60>)
+ 80072d8:	9301      	str	r3, [sp, #4]
+ 80072da:	9200      	str	r2, [sp, #0]
+ 80072dc:	4b11      	ldr	r3, [pc, #68]	; (8007324 <Menu_Setup+0x64>)
+ 80072de:	2200      	movs	r2, #0
+ 80072e0:	4911      	ldr	r1, [pc, #68]	; (8007328 <Menu_Setup+0x68>)
+ 80072e2:	4812      	ldr	r0, [pc, #72]	; (800732c <Menu_Setup+0x6c>)
+ 80072e4:	f7ff f8b2 	bl	800644c <OLED_MenuUI>
 	OLED_Cursor(0, 0xFF0000);
- 80072e4:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 80072e8:	2000      	movs	r0, #0
- 80072ea:	f7ff f8fb 	bl	80064e4 <OLED_Cursor>
+ 80072e8:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 80072ec:	2000      	movs	r0, #0
+ 80072ee:	f7ff f8f9 	bl	80064e4 <OLED_Cursor>
 	SwitchLED(menuList[0].color);
- 80072ee:	4b0c      	ldr	r3, [pc, #48]	; (8007320 <Menu_Setup+0x64>)
- 80072f0:	891b      	ldrh	r3, [r3, #8]
- 80072f2:	0a1b      	lsrs	r3, r3, #8
- 80072f4:	b29b      	uxth	r3, r3
- 80072f6:	009b      	lsls	r3, r3, #2
+ 80072f2:	4b0c      	ldr	r3, [pc, #48]	; (8007324 <Menu_Setup+0x64>)
+ 80072f4:	891b      	ldrh	r3, [r3, #8]
+ 80072f6:	0a1b      	lsrs	r3, r3, #8
  80072f8:	b29b      	uxth	r3, r3
- 80072fa:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 80072fe:	b29a      	uxth	r2, r3
- 8007300:	4b07      	ldr	r3, [pc, #28]	; (8007320 <Menu_Setup+0x64>)
- 8007302:	891b      	ldrh	r3, [r3, #8]
- 8007304:	009b      	lsls	r3, r3, #2
- 8007306:	b29b      	uxth	r3, r3
- 8007308:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 800730c:	b29b      	uxth	r3, r3
- 800730e:	4619      	mov	r1, r3
- 8007310:	4610      	mov	r0, r2
- 8007312:	f7ff f967 	bl	80065e4 <Switch_LED>
+ 80072fa:	009b      	lsls	r3, r3, #2
+ 80072fc:	b29b      	uxth	r3, r3
+ 80072fe:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007302:	b29a      	uxth	r2, r3
+ 8007304:	4b07      	ldr	r3, [pc, #28]	; (8007324 <Menu_Setup+0x64>)
+ 8007306:	891b      	ldrh	r3, [r3, #8]
+ 8007308:	009b      	lsls	r3, r3, #2
+ 800730a:	b29b      	uxth	r3, r3
+ 800730c:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007310:	b29b      	uxth	r3, r3
+ 8007312:	4619      	mov	r1, r3
+ 8007314:	4610      	mov	r0, r2
+ 8007316:	f7ff f965 	bl	80065e4 <Switch_LED>
 }
- 8007316:	bf00      	nop
- 8007318:	46bd      	mov	sp, r7
- 800731a:	bd80      	pop	{r7, pc}
- 800731c:	00ffff00 	.word	0x00ffff00
- 8007320:	20000234 	.word	0x20000234
- 8007324:	00ff8800 	.word	0x00ff8800
- 8007328:	0800b258 	.word	0x0800b258
+ 800731a:	bf00      	nop
+ 800731c:	46bd      	mov	sp, r7
+ 800731e:	bd80      	pop	{r7, pc}
+ 8007320:	00ffff00 	.word	0x00ffff00
+ 8007324:	20000234 	.word	0x20000234
+ 8007328:	00ff8800 	.word	0x00ff8800
+ 800732c:	0800b258 	.word	0x0800b258
 
-0800732c <Menu>:
+08007330 <Menu>:
 
 void Menu(){
- 800732c:	b580      	push	{r7, lr}
- 800732e:	b084      	sub	sp, #16
- 8007330:	af02      	add	r7, sp, #8
+ 8007330:	b580      	push	{r7, lr}
+ 8007332:	b084      	sub	sp, #16
+ 8007334:	af02      	add	r7, sp, #8
 	Menu_Setup();
- 8007332:	f7ff ffc3 	bl	80072bc <Menu_Setup>
+ 8007336:	f7ff ffc3 	bl	80072c0 <Menu_Setup>
 	uint8_t idx = 0;
- 8007336:	2300      	movs	r3, #0
- 8007338:	71fb      	strb	r3, [r7, #7]
+ 800733a:	2300      	movs	r3, #0
+ 800733c:	71fb      	strb	r3, [r7, #7]
 	for(;;){
 		uint16_t sw = Switch_Read();
- 800733a:	f7ff fa29 	bl	8006790 <Switch_Read>
- 800733e:	4603      	mov	r3, r0
- 8007340:	80bb      	strh	r3, [r7, #4]
+ 800733e:	f7ff fa27 	bl	8006790 <Switch_Read>
+ 8007342:	4603      	mov	r3, r0
+ 8007344:	80bb      	strh	r3, [r7, #4]
 		if(sw == SW_TOP || sw == SW_TOP_LONG){
- 8007342:	88bb      	ldrh	r3, [r7, #4]
- 8007344:	2b02      	cmp	r3, #2
- 8007346:	d002      	beq.n	800734e <Menu+0x22>
- 8007348:	88bb      	ldrh	r3, [r7, #4]
- 800734a:	2b22      	cmp	r3, #34	; 0x22
- 800734c:	d17f      	bne.n	800744e <Menu+0x122>
+ 8007346:	88bb      	ldrh	r3, [r7, #4]
+ 8007348:	2b02      	cmp	r3, #2
+ 800734a:	d002      	beq.n	8007352 <Menu+0x22>
+ 800734c:	88bb      	ldrh	r3, [r7, #4]
+ 800734e:	2b22      	cmp	r3, #34	; 0x22
+ 8007350:	d17f      	bne.n	8007452 <Menu+0x122>
 			idx+=menuCnt - 1;
- 800734e:	2205      	movs	r2, #5
- 8007350:	79fb      	ldrb	r3, [r7, #7]
- 8007352:	4413      	add	r3, r2
- 8007354:	b2db      	uxtb	r3, r3
- 8007356:	3b01      	subs	r3, #1
- 8007358:	71fb      	strb	r3, [r7, #7]
+ 8007352:	2205      	movs	r2, #5
+ 8007354:	79fb      	ldrb	r3, [r7, #7]
+ 8007356:	4413      	add	r3, r2
+ 8007358:	b2db      	uxtb	r3, r3
+ 800735a:	3b01      	subs	r3, #1
+ 800735c:	71fb      	strb	r3, [r7, #7]
 			idx %= menuCnt;
- 800735a:	2205      	movs	r2, #5
- 800735c:	79fb      	ldrb	r3, [r7, #7]
- 800735e:	fbb3 f1f2 	udiv	r1, r3, r2
- 8007362:	fb02 f201 	mul.w	r2, r2, r1
- 8007366:	1a9b      	subs	r3, r3, r2
- 8007368:	71fb      	strb	r3, [r7, #7]
+ 800735e:	2205      	movs	r2, #5
+ 8007360:	79fb      	ldrb	r3, [r7, #7]
+ 8007362:	fbb3 f1f2 	udiv	r1, r3, r2
+ 8007366:	fb02 f201 	mul.w	r2, r2, r1
+ 800736a:	1a9b      	subs	r3, r3, r2
+ 800736c:	71fb      	strb	r3, [r7, #7]
 			if(menuCnt > 6 && (idx % 6 == 5 || idx == menuCnt - 1)){
- 800736a:	2305      	movs	r3, #5
- 800736c:	2b06      	cmp	r3, #6
- 800736e:	d93c      	bls.n	80073ea <Menu+0xbe>
- 8007370:	79fa      	ldrb	r2, [r7, #7]
- 8007372:	4b95      	ldr	r3, [pc, #596]	; (80075c8 <Menu+0x29c>)
- 8007374:	fba3 1302 	umull	r1, r3, r3, r2
- 8007378:	0899      	lsrs	r1, r3, #2
- 800737a:	460b      	mov	r3, r1
- 800737c:	005b      	lsls	r3, r3, #1
- 800737e:	440b      	add	r3, r1
+ 800736e:	2305      	movs	r3, #5
+ 8007370:	2b06      	cmp	r3, #6
+ 8007372:	d93c      	bls.n	80073ee <Menu+0xbe>
+ 8007374:	79fa      	ldrb	r2, [r7, #7]
+ 8007376:	4b95      	ldr	r3, [pc, #596]	; (80075cc <Menu+0x29c>)
+ 8007378:	fba3 1302 	umull	r1, r3, r3, r2
+ 800737c:	0899      	lsrs	r1, r3, #2
+ 800737e:	460b      	mov	r3, r1
  8007380:	005b      	lsls	r3, r3, #1
- 8007382:	1ad3      	subs	r3, r2, r3
- 8007384:	b2db      	uxtb	r3, r3
- 8007386:	2b05      	cmp	r3, #5
- 8007388:	d004      	beq.n	8007394 <Menu+0x68>
- 800738a:	79fa      	ldrb	r2, [r7, #7]
- 800738c:	2305      	movs	r3, #5
- 800738e:	3b01      	subs	r3, #1
- 8007390:	429a      	cmp	r2, r3
- 8007392:	d12a      	bne.n	80073ea <Menu+0xbe>
+ 8007382:	440b      	add	r3, r1
+ 8007384:	005b      	lsls	r3, r3, #1
+ 8007386:	1ad3      	subs	r3, r2, r3
+ 8007388:	b2db      	uxtb	r3, r3
+ 800738a:	2b05      	cmp	r3, #5
+ 800738c:	d004      	beq.n	8007398 <Menu+0x68>
+ 800738e:	79fa      	ldrb	r2, [r7, #7]
+ 8007390:	2305      	movs	r3, #5
+ 8007392:	3b01      	subs	r3, #1
+ 8007394:	429a      	cmp	r2, r3
+ 8007396:	d12a      	bne.n	80073ee <Menu+0xbe>
 				OLED_Clear();
- 8007394:	f7fe fa00 	bl	8005798 <OLED_Clear>
+ 8007398:	f7fe f9fe 	bl	8005798 <OLED_Clear>
 				OLED_MenuUI("STM32 OVEN", 0xFF8800, 0x000000, menuList + (idx / 6) * 6, menuCnt - (idx / 6) * 6 > 6 ? 6 : menuCnt - (idx / 6) * 6, 0xFFFF00);
- 8007398:	79fb      	ldrb	r3, [r7, #7]
- 800739a:	4a8b      	ldr	r2, [pc, #556]	; (80075c8 <Menu+0x29c>)
- 800739c:	fba2 2303 	umull	r2, r3, r2, r3
- 80073a0:	089b      	lsrs	r3, r3, #2
- 80073a2:	b2db      	uxtb	r3, r3
- 80073a4:	461a      	mov	r2, r3
- 80073a6:	4613      	mov	r3, r2
- 80073a8:	00db      	lsls	r3, r3, #3
- 80073aa:	4413      	add	r3, r2
+ 800739c:	79fb      	ldrb	r3, [r7, #7]
+ 800739e:	4a8b      	ldr	r2, [pc, #556]	; (80075cc <Menu+0x29c>)
+ 80073a0:	fba2 2303 	umull	r2, r3, r2, r3
+ 80073a4:	089b      	lsrs	r3, r3, #2
+ 80073a6:	b2db      	uxtb	r3, r3
+ 80073a8:	461a      	mov	r2, r3
+ 80073aa:	4613      	mov	r3, r2
  80073ac:	00db      	lsls	r3, r3, #3
- 80073ae:	461a      	mov	r2, r3
- 80073b0:	4b86      	ldr	r3, [pc, #536]	; (80075cc <Menu+0x2a0>)
- 80073b2:	18d1      	adds	r1, r2, r3
- 80073b4:	2305      	movs	r3, #5
- 80073b6:	4618      	mov	r0, r3
- 80073b8:	79fb      	ldrb	r3, [r7, #7]
- 80073ba:	4a83      	ldr	r2, [pc, #524]	; (80075c8 <Menu+0x29c>)
- 80073bc:	fba2 2303 	umull	r2, r3, r2, r3
- 80073c0:	089b      	lsrs	r3, r3, #2
- 80073c2:	b2db      	uxtb	r3, r3
- 80073c4:	461a      	mov	r2, r3
- 80073c6:	4613      	mov	r3, r2
- 80073c8:	0092      	lsls	r2, r2, #2
- 80073ca:	1a9b      	subs	r3, r3, r2
- 80073cc:	005b      	lsls	r3, r3, #1
- 80073ce:	4403      	add	r3, r0
- 80073d0:	2b06      	cmp	r3, #6
- 80073d2:	bfa8      	it	ge
- 80073d4:	2306      	movge	r3, #6
- 80073d6:	461a      	mov	r2, r3
- 80073d8:	4b7d      	ldr	r3, [pc, #500]	; (80075d0 <Menu+0x2a4>)
- 80073da:	9301      	str	r3, [sp, #4]
- 80073dc:	9200      	str	r2, [sp, #0]
- 80073de:	460b      	mov	r3, r1
- 80073e0:	2200      	movs	r2, #0
- 80073e2:	497c      	ldr	r1, [pc, #496]	; (80075d4 <Menu+0x2a8>)
- 80073e4:	487c      	ldr	r0, [pc, #496]	; (80075d8 <Menu+0x2ac>)
- 80073e6:	f7ff f831 	bl	800644c <OLED_MenuUI>
+ 80073ae:	4413      	add	r3, r2
+ 80073b0:	00db      	lsls	r3, r3, #3
+ 80073b2:	461a      	mov	r2, r3
+ 80073b4:	4b86      	ldr	r3, [pc, #536]	; (80075d0 <Menu+0x2a0>)
+ 80073b6:	18d1      	adds	r1, r2, r3
+ 80073b8:	2305      	movs	r3, #5
+ 80073ba:	4618      	mov	r0, r3
+ 80073bc:	79fb      	ldrb	r3, [r7, #7]
+ 80073be:	4a83      	ldr	r2, [pc, #524]	; (80075cc <Menu+0x29c>)
+ 80073c0:	fba2 2303 	umull	r2, r3, r2, r3
+ 80073c4:	089b      	lsrs	r3, r3, #2
+ 80073c6:	b2db      	uxtb	r3, r3
+ 80073c8:	461a      	mov	r2, r3
+ 80073ca:	4613      	mov	r3, r2
+ 80073cc:	0092      	lsls	r2, r2, #2
+ 80073ce:	1a9b      	subs	r3, r3, r2
+ 80073d0:	005b      	lsls	r3, r3, #1
+ 80073d2:	4403      	add	r3, r0
+ 80073d4:	2b06      	cmp	r3, #6
+ 80073d6:	bfa8      	it	ge
+ 80073d8:	2306      	movge	r3, #6
+ 80073da:	461a      	mov	r2, r3
+ 80073dc:	4b7d      	ldr	r3, [pc, #500]	; (80075d4 <Menu+0x2a4>)
+ 80073de:	9301      	str	r3, [sp, #4]
+ 80073e0:	9200      	str	r2, [sp, #0]
+ 80073e2:	460b      	mov	r3, r1
+ 80073e4:	2200      	movs	r2, #0
+ 80073e6:	497c      	ldr	r1, [pc, #496]	; (80075d8 <Menu+0x2a8>)
+ 80073e8:	487c      	ldr	r0, [pc, #496]	; (80075dc <Menu+0x2ac>)
+ 80073ea:	f7ff f82f 	bl	800644c <OLED_MenuUI>
 			}
 			OLED_Cursor(idx%6, 0xFF0000);
- 80073ea:	79fa      	ldrb	r2, [r7, #7]
- 80073ec:	4b76      	ldr	r3, [pc, #472]	; (80075c8 <Menu+0x29c>)
- 80073ee:	fba3 1302 	umull	r1, r3, r3, r2
- 80073f2:	0899      	lsrs	r1, r3, #2
- 80073f4:	460b      	mov	r3, r1
- 80073f6:	005b      	lsls	r3, r3, #1
- 80073f8:	440b      	add	r3, r1
+ 80073ee:	79fa      	ldrb	r2, [r7, #7]
+ 80073f0:	4b76      	ldr	r3, [pc, #472]	; (80075cc <Menu+0x29c>)
+ 80073f2:	fba3 1302 	umull	r1, r3, r3, r2
+ 80073f6:	0899      	lsrs	r1, r3, #2
+ 80073f8:	460b      	mov	r3, r1
  80073fa:	005b      	lsls	r3, r3, #1
- 80073fc:	1ad3      	subs	r3, r2, r3
- 80073fe:	b2db      	uxtb	r3, r3
- 8007400:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 8007404:	4618      	mov	r0, r3
- 8007406:	f7ff f86d 	bl	80064e4 <OLED_Cursor>
+ 80073fc:	440b      	add	r3, r1
+ 80073fe:	005b      	lsls	r3, r3, #1
+ 8007400:	1ad3      	subs	r3, r2, r3
+ 8007402:	b2db      	uxtb	r3, r3
+ 8007404:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 8007408:	4618      	mov	r0, r3
+ 800740a:	f7ff f86b 	bl	80064e4 <OLED_Cursor>
 			SwitchLED(menuList[idx].color);
- 800740a:	79fa      	ldrb	r2, [r7, #7]
- 800740c:	496f      	ldr	r1, [pc, #444]	; (80075cc <Menu+0x2a0>)
- 800740e:	4613      	mov	r3, r2
- 8007410:	005b      	lsls	r3, r3, #1
- 8007412:	4413      	add	r3, r2
- 8007414:	009b      	lsls	r3, r3, #2
- 8007416:	440b      	add	r3, r1
- 8007418:	3308      	adds	r3, #8
- 800741a:	881b      	ldrh	r3, [r3, #0]
- 800741c:	0a1b      	lsrs	r3, r3, #8
- 800741e:	b29b      	uxth	r3, r3
- 8007420:	009b      	lsls	r3, r3, #2
+ 800740e:	79fa      	ldrb	r2, [r7, #7]
+ 8007410:	496f      	ldr	r1, [pc, #444]	; (80075d0 <Menu+0x2a0>)
+ 8007412:	4613      	mov	r3, r2
+ 8007414:	005b      	lsls	r3, r3, #1
+ 8007416:	4413      	add	r3, r2
+ 8007418:	009b      	lsls	r3, r3, #2
+ 800741a:	440b      	add	r3, r1
+ 800741c:	3308      	adds	r3, #8
+ 800741e:	881b      	ldrh	r3, [r3, #0]
+ 8007420:	0a1b      	lsrs	r3, r3, #8
  8007422:	b29b      	uxth	r3, r3
- 8007424:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007428:	b298      	uxth	r0, r3
- 800742a:	79fa      	ldrb	r2, [r7, #7]
- 800742c:	4967      	ldr	r1, [pc, #412]	; (80075cc <Menu+0x2a0>)
- 800742e:	4613      	mov	r3, r2
- 8007430:	005b      	lsls	r3, r3, #1
- 8007432:	4413      	add	r3, r2
- 8007434:	009b      	lsls	r3, r3, #2
- 8007436:	440b      	add	r3, r1
- 8007438:	3308      	adds	r3, #8
- 800743a:	881b      	ldrh	r3, [r3, #0]
- 800743c:	009b      	lsls	r3, r3, #2
- 800743e:	b29b      	uxth	r3, r3
- 8007440:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007444:	b29b      	uxth	r3, r3
- 8007446:	4619      	mov	r1, r3
- 8007448:	f7ff f8cc 	bl	80065e4 <Switch_LED>
- 800744c:	e0ba      	b.n	80075c4 <Menu+0x298>
+ 8007424:	009b      	lsls	r3, r3, #2
+ 8007426:	b29b      	uxth	r3, r3
+ 8007428:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 800742c:	b298      	uxth	r0, r3
+ 800742e:	79fa      	ldrb	r2, [r7, #7]
+ 8007430:	4967      	ldr	r1, [pc, #412]	; (80075d0 <Menu+0x2a0>)
+ 8007432:	4613      	mov	r3, r2
+ 8007434:	005b      	lsls	r3, r3, #1
+ 8007436:	4413      	add	r3, r2
+ 8007438:	009b      	lsls	r3, r3, #2
+ 800743a:	440b      	add	r3, r1
+ 800743c:	3308      	adds	r3, #8
+ 800743e:	881b      	ldrh	r3, [r3, #0]
+ 8007440:	009b      	lsls	r3, r3, #2
+ 8007442:	b29b      	uxth	r3, r3
+ 8007444:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007448:	b29b      	uxth	r3, r3
+ 800744a:	4619      	mov	r1, r3
+ 800744c:	f7ff f8ca 	bl	80065e4 <Switch_LED>
+ 8007450:	e0ba      	b.n	80075c8 <Menu+0x298>
 		}
 		else if(sw == SW_BOTTOM || sw == SW_BOTTOM_LONG){
- 800744e:	88bb      	ldrh	r3, [r7, #4]
- 8007450:	2b08      	cmp	r3, #8
- 8007452:	d002      	beq.n	800745a <Menu+0x12e>
- 8007454:	88bb      	ldrh	r3, [r7, #4]
- 8007456:	2b28      	cmp	r3, #40	; 0x28
- 8007458:	d167      	bne.n	800752a <Menu+0x1fe>
+ 8007452:	88bb      	ldrh	r3, [r7, #4]
+ 8007454:	2b08      	cmp	r3, #8
+ 8007456:	d002      	beq.n	800745e <Menu+0x12e>
+ 8007458:	88bb      	ldrh	r3, [r7, #4]
+ 800745a:	2b28      	cmp	r3, #40	; 0x28
+ 800745c:	d167      	bne.n	800752e <Menu+0x1fe>
 			idx+=1;
- 800745a:	79fb      	ldrb	r3, [r7, #7]
- 800745c:	3301      	adds	r3, #1
- 800745e:	71fb      	strb	r3, [r7, #7]
+ 800745e:	79fb      	ldrb	r3, [r7, #7]
+ 8007460:	3301      	adds	r3, #1
+ 8007462:	71fb      	strb	r3, [r7, #7]
 			idx %= menuCnt;
- 8007460:	2205      	movs	r2, #5
- 8007462:	79fb      	ldrb	r3, [r7, #7]
- 8007464:	fbb3 f1f2 	udiv	r1, r3, r2
- 8007468:	fb02 f201 	mul.w	r2, r2, r1
- 800746c:	1a9b      	subs	r3, r3, r2
- 800746e:	71fb      	strb	r3, [r7, #7]
+ 8007464:	2205      	movs	r2, #5
+ 8007466:	79fb      	ldrb	r3, [r7, #7]
+ 8007468:	fbb3 f1f2 	udiv	r1, r3, r2
+ 800746c:	fb02 f201 	mul.w	r2, r2, r1
+ 8007470:	1a9b      	subs	r3, r3, r2
+ 8007472:	71fb      	strb	r3, [r7, #7]
 			if(menuCnt > 6 && idx % 6 == 0){
- 8007470:	2305      	movs	r3, #5
- 8007472:	2b06      	cmp	r3, #6
- 8007474:	d927      	bls.n	80074c6 <Menu+0x19a>
- 8007476:	79fa      	ldrb	r2, [r7, #7]
- 8007478:	4b53      	ldr	r3, [pc, #332]	; (80075c8 <Menu+0x29c>)
- 800747a:	fba3 1302 	umull	r1, r3, r3, r2
- 800747e:	0899      	lsrs	r1, r3, #2
- 8007480:	460b      	mov	r3, r1
- 8007482:	005b      	lsls	r3, r3, #1
- 8007484:	440b      	add	r3, r1
+ 8007474:	2305      	movs	r3, #5
+ 8007476:	2b06      	cmp	r3, #6
+ 8007478:	d927      	bls.n	80074ca <Menu+0x19a>
+ 800747a:	79fa      	ldrb	r2, [r7, #7]
+ 800747c:	4b53      	ldr	r3, [pc, #332]	; (80075cc <Menu+0x29c>)
+ 800747e:	fba3 1302 	umull	r1, r3, r3, r2
+ 8007482:	0899      	lsrs	r1, r3, #2
+ 8007484:	460b      	mov	r3, r1
  8007486:	005b      	lsls	r3, r3, #1
- 8007488:	1ad3      	subs	r3, r2, r3
- 800748a:	b2db      	uxtb	r3, r3
- 800748c:	2b00      	cmp	r3, #0
- 800748e:	d11a      	bne.n	80074c6 <Menu+0x19a>
+ 8007488:	440b      	add	r3, r1
+ 800748a:	005b      	lsls	r3, r3, #1
+ 800748c:	1ad3      	subs	r3, r2, r3
+ 800748e:	b2db      	uxtb	r3, r3
+ 8007490:	2b00      	cmp	r3, #0
+ 8007492:	d11a      	bne.n	80074ca <Menu+0x19a>
 				OLED_Clear();
- 8007490:	f7fe f982 	bl	8005798 <OLED_Clear>
+ 8007494:	f7fe f980 	bl	8005798 <OLED_Clear>
 				OLED_MenuUI("STM32 OVEN", 0xFF8800, 0x000000, menuList + idx, menuCnt - idx > 6 ? 6 : menuCnt - idx, 0xFFFF00);
- 8007494:	79fa      	ldrb	r2, [r7, #7]
- 8007496:	4613      	mov	r3, r2
- 8007498:	005b      	lsls	r3, r3, #1
- 800749a:	4413      	add	r3, r2
- 800749c:	009b      	lsls	r3, r3, #2
- 800749e:	461a      	mov	r2, r3
- 80074a0:	4b4a      	ldr	r3, [pc, #296]	; (80075cc <Menu+0x2a0>)
- 80074a2:	441a      	add	r2, r3
- 80074a4:	2305      	movs	r3, #5
- 80074a6:	4619      	mov	r1, r3
- 80074a8:	79fb      	ldrb	r3, [r7, #7]
- 80074aa:	1acb      	subs	r3, r1, r3
- 80074ac:	2b06      	cmp	r3, #6
- 80074ae:	bfa8      	it	ge
- 80074b0:	2306      	movge	r3, #6
- 80074b2:	4619      	mov	r1, r3
- 80074b4:	4b46      	ldr	r3, [pc, #280]	; (80075d0 <Menu+0x2a4>)
- 80074b6:	9301      	str	r3, [sp, #4]
- 80074b8:	9100      	str	r1, [sp, #0]
- 80074ba:	4613      	mov	r3, r2
- 80074bc:	2200      	movs	r2, #0
- 80074be:	4945      	ldr	r1, [pc, #276]	; (80075d4 <Menu+0x2a8>)
- 80074c0:	4845      	ldr	r0, [pc, #276]	; (80075d8 <Menu+0x2ac>)
- 80074c2:	f7fe ffc3 	bl	800644c <OLED_MenuUI>
+ 8007498:	79fa      	ldrb	r2, [r7, #7]
+ 800749a:	4613      	mov	r3, r2
+ 800749c:	005b      	lsls	r3, r3, #1
+ 800749e:	4413      	add	r3, r2
+ 80074a0:	009b      	lsls	r3, r3, #2
+ 80074a2:	461a      	mov	r2, r3
+ 80074a4:	4b4a      	ldr	r3, [pc, #296]	; (80075d0 <Menu+0x2a0>)
+ 80074a6:	441a      	add	r2, r3
+ 80074a8:	2305      	movs	r3, #5
+ 80074aa:	4619      	mov	r1, r3
+ 80074ac:	79fb      	ldrb	r3, [r7, #7]
+ 80074ae:	1acb      	subs	r3, r1, r3
+ 80074b0:	2b06      	cmp	r3, #6
+ 80074b2:	bfa8      	it	ge
+ 80074b4:	2306      	movge	r3, #6
+ 80074b6:	4619      	mov	r1, r3
+ 80074b8:	4b46      	ldr	r3, [pc, #280]	; (80075d4 <Menu+0x2a4>)
+ 80074ba:	9301      	str	r3, [sp, #4]
+ 80074bc:	9100      	str	r1, [sp, #0]
+ 80074be:	4613      	mov	r3, r2
+ 80074c0:	2200      	movs	r2, #0
+ 80074c2:	4945      	ldr	r1, [pc, #276]	; (80075d8 <Menu+0x2a8>)
+ 80074c4:	4845      	ldr	r0, [pc, #276]	; (80075dc <Menu+0x2ac>)
+ 80074c6:	f7fe ffc1 	bl	800644c <OLED_MenuUI>
 			}
 			OLED_Cursor(idx%6, 0xFF0000);
- 80074c6:	79fa      	ldrb	r2, [r7, #7]
- 80074c8:	4b3f      	ldr	r3, [pc, #252]	; (80075c8 <Menu+0x29c>)
- 80074ca:	fba3 1302 	umull	r1, r3, r3, r2
- 80074ce:	0899      	lsrs	r1, r3, #2
- 80074d0:	460b      	mov	r3, r1
- 80074d2:	005b      	lsls	r3, r3, #1
- 80074d4:	440b      	add	r3, r1
+ 80074ca:	79fa      	ldrb	r2, [r7, #7]
+ 80074cc:	4b3f      	ldr	r3, [pc, #252]	; (80075cc <Menu+0x29c>)
+ 80074ce:	fba3 1302 	umull	r1, r3, r3, r2
+ 80074d2:	0899      	lsrs	r1, r3, #2
+ 80074d4:	460b      	mov	r3, r1
  80074d6:	005b      	lsls	r3, r3, #1
- 80074d8:	1ad3      	subs	r3, r2, r3
- 80074da:	b2db      	uxtb	r3, r3
- 80074dc:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 80074e0:	4618      	mov	r0, r3
- 80074e2:	f7fe ffff 	bl	80064e4 <OLED_Cursor>
+ 80074d8:	440b      	add	r3, r1
+ 80074da:	005b      	lsls	r3, r3, #1
+ 80074dc:	1ad3      	subs	r3, r2, r3
+ 80074de:	b2db      	uxtb	r3, r3
+ 80074e0:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 80074e4:	4618      	mov	r0, r3
+ 80074e6:	f7fe fffd 	bl	80064e4 <OLED_Cursor>
 			SwitchLED(menuList[idx].color);
- 80074e6:	79fa      	ldrb	r2, [r7, #7]
- 80074e8:	4938      	ldr	r1, [pc, #224]	; (80075cc <Menu+0x2a0>)
- 80074ea:	4613      	mov	r3, r2
- 80074ec:	005b      	lsls	r3, r3, #1
- 80074ee:	4413      	add	r3, r2
- 80074f0:	009b      	lsls	r3, r3, #2
- 80074f2:	440b      	add	r3, r1
- 80074f4:	3308      	adds	r3, #8
- 80074f6:	881b      	ldrh	r3, [r3, #0]
- 80074f8:	0a1b      	lsrs	r3, r3, #8
- 80074fa:	b29b      	uxth	r3, r3
- 80074fc:	009b      	lsls	r3, r3, #2
+ 80074ea:	79fa      	ldrb	r2, [r7, #7]
+ 80074ec:	4938      	ldr	r1, [pc, #224]	; (80075d0 <Menu+0x2a0>)
+ 80074ee:	4613      	mov	r3, r2
+ 80074f0:	005b      	lsls	r3, r3, #1
+ 80074f2:	4413      	add	r3, r2
+ 80074f4:	009b      	lsls	r3, r3, #2
+ 80074f6:	440b      	add	r3, r1
+ 80074f8:	3308      	adds	r3, #8
+ 80074fa:	881b      	ldrh	r3, [r3, #0]
+ 80074fc:	0a1b      	lsrs	r3, r3, #8
  80074fe:	b29b      	uxth	r3, r3
- 8007500:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007504:	b298      	uxth	r0, r3
- 8007506:	79fa      	ldrb	r2, [r7, #7]
- 8007508:	4930      	ldr	r1, [pc, #192]	; (80075cc <Menu+0x2a0>)
- 800750a:	4613      	mov	r3, r2
- 800750c:	005b      	lsls	r3, r3, #1
- 800750e:	4413      	add	r3, r2
- 8007510:	009b      	lsls	r3, r3, #2
- 8007512:	440b      	add	r3, r1
- 8007514:	3308      	adds	r3, #8
- 8007516:	881b      	ldrh	r3, [r3, #0]
- 8007518:	009b      	lsls	r3, r3, #2
- 800751a:	b29b      	uxth	r3, r3
- 800751c:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007520:	b29b      	uxth	r3, r3
- 8007522:	4619      	mov	r1, r3
- 8007524:	f7ff f85e 	bl	80065e4 <Switch_LED>
- 8007528:	e04c      	b.n	80075c4 <Menu+0x298>
+ 8007500:	009b      	lsls	r3, r3, #2
+ 8007502:	b29b      	uxth	r3, r3
+ 8007504:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007508:	b298      	uxth	r0, r3
+ 800750a:	79fa      	ldrb	r2, [r7, #7]
+ 800750c:	4930      	ldr	r1, [pc, #192]	; (80075d0 <Menu+0x2a0>)
+ 800750e:	4613      	mov	r3, r2
+ 8007510:	005b      	lsls	r3, r3, #1
+ 8007512:	4413      	add	r3, r2
+ 8007514:	009b      	lsls	r3, r3, #2
+ 8007516:	440b      	add	r3, r1
+ 8007518:	3308      	adds	r3, #8
+ 800751a:	881b      	ldrh	r3, [r3, #0]
+ 800751c:	009b      	lsls	r3, r3, #2
+ 800751e:	b29b      	uxth	r3, r3
+ 8007520:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007524:	b29b      	uxth	r3, r3
+ 8007526:	4619      	mov	r1, r3
+ 8007528:	f7ff f85c 	bl	80065e4 <Switch_LED>
+ 800752c:	e04c      	b.n	80075c8 <Menu+0x298>
 		}
 		else if(sw == SW_ENTER){
- 800752a:	88bb      	ldrh	r3, [r7, #4]
- 800752c:	2b04      	cmp	r3, #4
- 800752e:	f47f af04 	bne.w	800733a <Menu+0xe>
+ 800752e:	88bb      	ldrh	r3, [r7, #4]
+ 8007530:	2b04      	cmp	r3, #4
+ 8007532:	f47f af04 	bne.w	800733e <Menu+0xe>
 			OLED_Clear();//OLED를 지웁니다.
- 8007532:	f7fe f931 	bl	8005798 <OLED_Clear>
+ 8007536:	f7fe f92f 	bl	8005798 <OLED_Clear>
 			menuList[idx].function();
- 8007536:	79fa      	ldrb	r2, [r7, #7]
- 8007538:	4924      	ldr	r1, [pc, #144]	; (80075cc <Menu+0x2a0>)
- 800753a:	4613      	mov	r3, r2
- 800753c:	005b      	lsls	r3, r3, #1
- 800753e:	4413      	add	r3, r2
- 8007540:	009b      	lsls	r3, r3, #2
- 8007542:	440b      	add	r3, r1
- 8007544:	681b      	ldr	r3, [r3, #0]
- 8007546:	4798      	blx	r3
+ 800753a:	79fa      	ldrb	r2, [r7, #7]
+ 800753c:	4924      	ldr	r1, [pc, #144]	; (80075d0 <Menu+0x2a0>)
+ 800753e:	4613      	mov	r3, r2
+ 8007540:	005b      	lsls	r3, r3, #1
+ 8007542:	4413      	add	r3, r2
+ 8007544:	009b      	lsls	r3, r3, #2
+ 8007546:	440b      	add	r3, r1
+ 8007548:	681b      	ldr	r3, [r3, #0]
+ 800754a:	4798      	blx	r3
 			OLED_Clear();//OLED를 지웁니다.
- 8007548:	f7fe f926 	bl	8005798 <OLED_Clear>
+ 800754c:	f7fe f924 	bl	8005798 <OLED_Clear>
 			OLED_MenuUI("STM32 OVEN", 0xFF8800, 0x000000, menuList, menuCnt, 0xFFFF00);
- 800754c:	2305      	movs	r3, #5
- 800754e:	461a      	mov	r2, r3
- 8007550:	4b1f      	ldr	r3, [pc, #124]	; (80075d0 <Menu+0x2a4>)
- 8007552:	9301      	str	r3, [sp, #4]
- 8007554:	9200      	str	r2, [sp, #0]
- 8007556:	4b1d      	ldr	r3, [pc, #116]	; (80075cc <Menu+0x2a0>)
- 8007558:	2200      	movs	r2, #0
- 800755a:	491e      	ldr	r1, [pc, #120]	; (80075d4 <Menu+0x2a8>)
- 800755c:	481e      	ldr	r0, [pc, #120]	; (80075d8 <Menu+0x2ac>)
- 800755e:	f7fe ff75 	bl	800644c <OLED_MenuUI>
+ 8007550:	2305      	movs	r3, #5
+ 8007552:	461a      	mov	r2, r3
+ 8007554:	4b1f      	ldr	r3, [pc, #124]	; (80075d4 <Menu+0x2a4>)
+ 8007556:	9301      	str	r3, [sp, #4]
+ 8007558:	9200      	str	r2, [sp, #0]
+ 800755a:	4b1d      	ldr	r3, [pc, #116]	; (80075d0 <Menu+0x2a0>)
+ 800755c:	2200      	movs	r2, #0
+ 800755e:	491e      	ldr	r1, [pc, #120]	; (80075d8 <Menu+0x2a8>)
+ 8007560:	481e      	ldr	r0, [pc, #120]	; (80075dc <Menu+0x2ac>)
+ 8007562:	f7fe ff73 	bl	800644c <OLED_MenuUI>
 			OLED_Cursor(idx % 6, 0xFF0000);
- 8007562:	79fa      	ldrb	r2, [r7, #7]
- 8007564:	4b18      	ldr	r3, [pc, #96]	; (80075c8 <Menu+0x29c>)
- 8007566:	fba3 1302 	umull	r1, r3, r3, r2
- 800756a:	0899      	lsrs	r1, r3, #2
- 800756c:	460b      	mov	r3, r1
- 800756e:	005b      	lsls	r3, r3, #1
- 8007570:	440b      	add	r3, r1
+ 8007566:	79fa      	ldrb	r2, [r7, #7]
+ 8007568:	4b18      	ldr	r3, [pc, #96]	; (80075cc <Menu+0x29c>)
+ 800756a:	fba3 1302 	umull	r1, r3, r3, r2
+ 800756e:	0899      	lsrs	r1, r3, #2
+ 8007570:	460b      	mov	r3, r1
  8007572:	005b      	lsls	r3, r3, #1
- 8007574:	1ad3      	subs	r3, r2, r3
- 8007576:	b2db      	uxtb	r3, r3
- 8007578:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 800757c:	4618      	mov	r0, r3
- 800757e:	f7fe ffb1 	bl	80064e4 <OLED_Cursor>
+ 8007574:	440b      	add	r3, r1
+ 8007576:	005b      	lsls	r3, r3, #1
+ 8007578:	1ad3      	subs	r3, r2, r3
+ 800757a:	b2db      	uxtb	r3, r3
+ 800757c:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 8007580:	4618      	mov	r0, r3
+ 8007582:	f7fe ffaf 	bl	80064e4 <OLED_Cursor>
 			SwitchLED(menuList[idx].color);
- 8007582:	79fa      	ldrb	r2, [r7, #7]
- 8007584:	4911      	ldr	r1, [pc, #68]	; (80075cc <Menu+0x2a0>)
- 8007586:	4613      	mov	r3, r2
- 8007588:	005b      	lsls	r3, r3, #1
- 800758a:	4413      	add	r3, r2
- 800758c:	009b      	lsls	r3, r3, #2
- 800758e:	440b      	add	r3, r1
- 8007590:	3308      	adds	r3, #8
- 8007592:	881b      	ldrh	r3, [r3, #0]
- 8007594:	0a1b      	lsrs	r3, r3, #8
- 8007596:	b29b      	uxth	r3, r3
- 8007598:	009b      	lsls	r3, r3, #2
+ 8007586:	79fa      	ldrb	r2, [r7, #7]
+ 8007588:	4911      	ldr	r1, [pc, #68]	; (80075d0 <Menu+0x2a0>)
+ 800758a:	4613      	mov	r3, r2
+ 800758c:	005b      	lsls	r3, r3, #1
+ 800758e:	4413      	add	r3, r2
+ 8007590:	009b      	lsls	r3, r3, #2
+ 8007592:	440b      	add	r3, r1
+ 8007594:	3308      	adds	r3, #8
+ 8007596:	881b      	ldrh	r3, [r3, #0]
+ 8007598:	0a1b      	lsrs	r3, r3, #8
  800759a:	b29b      	uxth	r3, r3
- 800759c:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 80075a0:	b298      	uxth	r0, r3
- 80075a2:	79fa      	ldrb	r2, [r7, #7]
- 80075a4:	4909      	ldr	r1, [pc, #36]	; (80075cc <Menu+0x2a0>)
- 80075a6:	4613      	mov	r3, r2
- 80075a8:	005b      	lsls	r3, r3, #1
- 80075aa:	4413      	add	r3, r2
- 80075ac:	009b      	lsls	r3, r3, #2
- 80075ae:	440b      	add	r3, r1
- 80075b0:	3308      	adds	r3, #8
- 80075b2:	881b      	ldrh	r3, [r3, #0]
- 80075b4:	009b      	lsls	r3, r3, #2
- 80075b6:	b29b      	uxth	r3, r3
- 80075b8:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 80075bc:	b29b      	uxth	r3, r3
- 80075be:	4619      	mov	r1, r3
- 80075c0:	f7ff f810 	bl	80065e4 <Switch_LED>
+ 800759c:	009b      	lsls	r3, r3, #2
+ 800759e:	b29b      	uxth	r3, r3
+ 80075a0:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 80075a4:	b298      	uxth	r0, r3
+ 80075a6:	79fa      	ldrb	r2, [r7, #7]
+ 80075a8:	4909      	ldr	r1, [pc, #36]	; (80075d0 <Menu+0x2a0>)
+ 80075aa:	4613      	mov	r3, r2
+ 80075ac:	005b      	lsls	r3, r3, #1
+ 80075ae:	4413      	add	r3, r2
+ 80075b0:	009b      	lsls	r3, r3, #2
+ 80075b2:	440b      	add	r3, r1
+ 80075b4:	3308      	adds	r3, #8
+ 80075b6:	881b      	ldrh	r3, [r3, #0]
+ 80075b8:	009b      	lsls	r3, r3, #2
+ 80075ba:	b29b      	uxth	r3, r3
+ 80075bc:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 80075c0:	b29b      	uxth	r3, r3
+ 80075c2:	4619      	mov	r1, r3
+ 80075c4:	f7ff f80e 	bl	80065e4 <Switch_LED>
 	for(;;){
- 80075c4:	e6b9      	b.n	800733a <Menu+0xe>
- 80075c6:	bf00      	nop
- 80075c8:	aaaaaaab 	.word	0xaaaaaaab
- 80075cc:	20000234 	.word	0x20000234
- 80075d0:	00ffff00 	.word	0x00ffff00
- 80075d4:	00ff8800 	.word	0x00ff8800
- 80075d8:	0800b258 	.word	0x0800b258
+ 80075c8:	e6b9      	b.n	800733e <Menu+0xe>
+ 80075ca:	bf00      	nop
+ 80075cc:	aaaaaaab 	.word	0xaaaaaaab
+ 80075d0:	20000234 	.word	0x20000234
+ 80075d4:	00ffff00 	.word	0x00ffff00
+ 80075d8:	00ff8800 	.word	0x00ff8800
+ 80075dc:	0800b258 	.word	0x0800b258
 
-080075dc <test>:
+080075e0 <test>:
 		{NULL, "HD    : OFF", COLOR_RED},
 		{NULL, "FAN   : OFF", COLOR_RED},
 };
 
 //출력 단자가 잘 동작하는지 테스트합니다.
 void test(){
- 80075dc:	b580      	push	{r7, lr}
- 80075de:	b084      	sub	sp, #16
- 80075e0:	af02      	add	r7, sp, #8
+ 80075e0:	b580      	push	{r7, lr}
+ 80075e2:	b084      	sub	sp, #16
+ 80075e4:	af02      	add	r7, sp, #8
 	uint8_t idx = 0;
- 80075e2:	2300      	movs	r3, #0
- 80075e4:	71fb      	strb	r3, [r7, #7]
+ 80075e6:	2300      	movs	r3, #0
+ 80075e8:	71fb      	strb	r3, [r7, #7]
 	OLED_MenuUI("TEST", 0xFF00FF, 0x000000, testList, 6, 0x6600FF);
- 80075e6:	4bbe      	ldr	r3, [pc, #760]	; (80078e0 <test+0x304>)
- 80075e8:	9301      	str	r3, [sp, #4]
- 80075ea:	2306      	movs	r3, #6
- 80075ec:	9300      	str	r3, [sp, #0]
- 80075ee:	4bbd      	ldr	r3, [pc, #756]	; (80078e4 <test+0x308>)
- 80075f0:	2200      	movs	r2, #0
- 80075f2:	f04f 11ff 	mov.w	r1, #16711935	; 0xff00ff
- 80075f6:	48bc      	ldr	r0, [pc, #752]	; (80078e8 <test+0x30c>)
- 80075f8:	f7fe ff28 	bl	800644c <OLED_MenuUI>
+ 80075ea:	4bbe      	ldr	r3, [pc, #760]	; (80078e4 <test+0x304>)
+ 80075ec:	9301      	str	r3, [sp, #4]
+ 80075ee:	2306      	movs	r3, #6
+ 80075f0:	9300      	str	r3, [sp, #0]
+ 80075f2:	4bbd      	ldr	r3, [pc, #756]	; (80078e8 <test+0x308>)
+ 80075f4:	2200      	movs	r2, #0
+ 80075f6:	f04f 11ff 	mov.w	r1, #16711935	; 0xff00ff
+ 80075fa:	48bc      	ldr	r0, [pc, #752]	; (80078ec <test+0x30c>)
+ 80075fc:	f7fe ff26 	bl	800644c <OLED_MenuUI>
 	OLED_Cursor(0, 0xFF0000);
- 80075fc:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 8007600:	2000      	movs	r0, #0
- 8007602:	f7fe ff6f 	bl	80064e4 <OLED_Cursor>
+ 8007600:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 8007604:	2000      	movs	r0, #0
+ 8007606:	f7fe ff6d 	bl	80064e4 <OLED_Cursor>
 	SwitchLED(testList[0].color);
- 8007606:	4bb7      	ldr	r3, [pc, #732]	; (80078e4 <test+0x308>)
- 8007608:	891b      	ldrh	r3, [r3, #8]
- 800760a:	0a1b      	lsrs	r3, r3, #8
- 800760c:	b29b      	uxth	r3, r3
- 800760e:	009b      	lsls	r3, r3, #2
+ 800760a:	4bb7      	ldr	r3, [pc, #732]	; (80078e8 <test+0x308>)
+ 800760c:	891b      	ldrh	r3, [r3, #8]
+ 800760e:	0a1b      	lsrs	r3, r3, #8
  8007610:	b29b      	uxth	r3, r3
- 8007612:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007616:	b29a      	uxth	r2, r3
- 8007618:	4bb2      	ldr	r3, [pc, #712]	; (80078e4 <test+0x308>)
- 800761a:	891b      	ldrh	r3, [r3, #8]
- 800761c:	009b      	lsls	r3, r3, #2
- 800761e:	b29b      	uxth	r3, r3
- 8007620:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007624:	b29b      	uxth	r3, r3
- 8007626:	4619      	mov	r1, r3
- 8007628:	4610      	mov	r0, r2
- 800762a:	f7fe ffdb 	bl	80065e4 <Switch_LED>
+ 8007612:	009b      	lsls	r3, r3, #2
+ 8007614:	b29b      	uxth	r3, r3
+ 8007616:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 800761a:	b29a      	uxth	r2, r3
+ 800761c:	4bb2      	ldr	r3, [pc, #712]	; (80078e8 <test+0x308>)
+ 800761e:	891b      	ldrh	r3, [r3, #8]
+ 8007620:	009b      	lsls	r3, r3, #2
+ 8007622:	b29b      	uxth	r3, r3
+ 8007624:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007628:	b29b      	uxth	r3, r3
+ 800762a:	4619      	mov	r1, r3
+ 800762c:	4610      	mov	r0, r2
+ 800762e:	f7fe ffd9 	bl	80065e4 <Switch_LED>
 	testList[0].color = COLOR_RED;
- 800762e:	4bad      	ldr	r3, [pc, #692]	; (80078e4 <test+0x308>)
- 8007630:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 8007634:	811a      	strh	r2, [r3, #8]
+ 8007632:	4bad      	ldr	r3, [pc, #692]	; (80078e8 <test+0x308>)
+ 8007634:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 8007638:	811a      	strh	r2, [r3, #8]
 	testList[1].color = COLOR_RED;
- 8007636:	4bab      	ldr	r3, [pc, #684]	; (80078e4 <test+0x308>)
- 8007638:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 800763c:	829a      	strh	r2, [r3, #20]
+ 800763a:	4bab      	ldr	r3, [pc, #684]	; (80078e8 <test+0x308>)
+ 800763c:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 8007640:	829a      	strh	r2, [r3, #20]
 	testList[2].color = COLOR_RED;
- 800763e:	4ba9      	ldr	r3, [pc, #676]	; (80078e4 <test+0x308>)
- 8007640:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 8007644:	841a      	strh	r2, [r3, #32]
+ 8007642:	4ba9      	ldr	r3, [pc, #676]	; (80078e8 <test+0x308>)
+ 8007644:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 8007648:	841a      	strh	r2, [r3, #32]
 	testList[3].color = COLOR_RED;
- 8007646:	4ba7      	ldr	r3, [pc, #668]	; (80078e4 <test+0x308>)
- 8007648:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 800764c:	859a      	strh	r2, [r3, #44]	; 0x2c
+ 800764a:	4ba7      	ldr	r3, [pc, #668]	; (80078e8 <test+0x308>)
+ 800764c:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 8007650:	859a      	strh	r2, [r3, #44]	; 0x2c
 	testList[4].color = COLOR_RED;
- 800764e:	4ba5      	ldr	r3, [pc, #660]	; (80078e4 <test+0x308>)
- 8007650:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 8007654:	871a      	strh	r2, [r3, #56]	; 0x38
+ 8007652:	4ba5      	ldr	r3, [pc, #660]	; (80078e8 <test+0x308>)
+ 8007654:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 8007658:	871a      	strh	r2, [r3, #56]	; 0x38
 	testList[5].color = COLOR_RED;
- 8007656:	4ba3      	ldr	r3, [pc, #652]	; (80078e4 <test+0x308>)
- 8007658:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 800765c:	f8a3 2044 	strh.w	r2, [r3, #68]	; 0x44
+ 800765a:	4ba3      	ldr	r3, [pc, #652]	; (80078e8 <test+0x308>)
+ 800765c:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 8007660:	f8a3 2044 	strh.w	r2, [r3, #68]	; 0x44
 	for(;;){
 		uint16_t sw = Switch_Read();
- 8007660:	f7ff f896 	bl	8006790 <Switch_Read>
- 8007664:	4603      	mov	r3, r0
- 8007666:	80bb      	strh	r3, [r7, #4]
+ 8007664:	f7ff f894 	bl	8006790 <Switch_Read>
+ 8007668:	4603      	mov	r3, r0
+ 800766a:	80bb      	strh	r3, [r7, #4]
 		if(sw == SW_TOP || sw == SW_TOP_LONG){
- 8007668:	88bb      	ldrh	r3, [r7, #4]
- 800766a:	2b02      	cmp	r3, #2
- 800766c:	d002      	beq.n	8007674 <test+0x98>
- 800766e:	88bb      	ldrh	r3, [r7, #4]
- 8007670:	2b22      	cmp	r3, #34	; 0x22
- 8007672:	d135      	bne.n	80076e0 <test+0x104>
+ 800766c:	88bb      	ldrh	r3, [r7, #4]
+ 800766e:	2b02      	cmp	r3, #2
+ 8007670:	d002      	beq.n	8007678 <test+0x98>
+ 8007672:	88bb      	ldrh	r3, [r7, #4]
+ 8007674:	2b22      	cmp	r3, #34	; 0x22
+ 8007676:	d135      	bne.n	80076e4 <test+0x104>
 			idx+=5;
- 8007674:	79fb      	ldrb	r3, [r7, #7]
- 8007676:	3305      	adds	r3, #5
- 8007678:	71fb      	strb	r3, [r7, #7]
+ 8007678:	79fb      	ldrb	r3, [r7, #7]
+ 800767a:	3305      	adds	r3, #5
+ 800767c:	71fb      	strb	r3, [r7, #7]
 			idx %= 6;
- 800767a:	79fa      	ldrb	r2, [r7, #7]
- 800767c:	4b9b      	ldr	r3, [pc, #620]	; (80078ec <test+0x310>)
- 800767e:	fba3 1302 	umull	r1, r3, r3, r2
- 8007682:	0899      	lsrs	r1, r3, #2
- 8007684:	460b      	mov	r3, r1
- 8007686:	005b      	lsls	r3, r3, #1
- 8007688:	440b      	add	r3, r1
+ 800767e:	79fa      	ldrb	r2, [r7, #7]
+ 8007680:	4b9b      	ldr	r3, [pc, #620]	; (80078f0 <test+0x310>)
+ 8007682:	fba3 1302 	umull	r1, r3, r3, r2
+ 8007686:	0899      	lsrs	r1, r3, #2
+ 8007688:	460b      	mov	r3, r1
  800768a:	005b      	lsls	r3, r3, #1
- 800768c:	1ad3      	subs	r3, r2, r3
- 800768e:	71fb      	strb	r3, [r7, #7]
+ 800768c:	440b      	add	r3, r1
+ 800768e:	005b      	lsls	r3, r3, #1
+ 8007690:	1ad3      	subs	r3, r2, r3
+ 8007692:	71fb      	strb	r3, [r7, #7]
 			OLED_Cursor(idx, 0xFF0000);
- 8007690:	79fb      	ldrb	r3, [r7, #7]
- 8007692:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 8007696:	4618      	mov	r0, r3
- 8007698:	f7fe ff24 	bl	80064e4 <OLED_Cursor>
+ 8007694:	79fb      	ldrb	r3, [r7, #7]
+ 8007696:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 800769a:	4618      	mov	r0, r3
+ 800769c:	f7fe ff22 	bl	80064e4 <OLED_Cursor>
 			SwitchLED(testList[idx].color);
- 800769c:	79fa      	ldrb	r2, [r7, #7]
- 800769e:	4991      	ldr	r1, [pc, #580]	; (80078e4 <test+0x308>)
- 80076a0:	4613      	mov	r3, r2
- 80076a2:	005b      	lsls	r3, r3, #1
- 80076a4:	4413      	add	r3, r2
- 80076a6:	009b      	lsls	r3, r3, #2
- 80076a8:	440b      	add	r3, r1
- 80076aa:	3308      	adds	r3, #8
- 80076ac:	881b      	ldrh	r3, [r3, #0]
- 80076ae:	0a1b      	lsrs	r3, r3, #8
- 80076b0:	b29b      	uxth	r3, r3
- 80076b2:	009b      	lsls	r3, r3, #2
+ 80076a0:	79fa      	ldrb	r2, [r7, #7]
+ 80076a2:	4991      	ldr	r1, [pc, #580]	; (80078e8 <test+0x308>)
+ 80076a4:	4613      	mov	r3, r2
+ 80076a6:	005b      	lsls	r3, r3, #1
+ 80076a8:	4413      	add	r3, r2
+ 80076aa:	009b      	lsls	r3, r3, #2
+ 80076ac:	440b      	add	r3, r1
+ 80076ae:	3308      	adds	r3, #8
+ 80076b0:	881b      	ldrh	r3, [r3, #0]
+ 80076b2:	0a1b      	lsrs	r3, r3, #8
  80076b4:	b29b      	uxth	r3, r3
- 80076b6:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 80076ba:	b298      	uxth	r0, r3
- 80076bc:	79fa      	ldrb	r2, [r7, #7]
- 80076be:	4989      	ldr	r1, [pc, #548]	; (80078e4 <test+0x308>)
- 80076c0:	4613      	mov	r3, r2
- 80076c2:	005b      	lsls	r3, r3, #1
- 80076c4:	4413      	add	r3, r2
- 80076c6:	009b      	lsls	r3, r3, #2
- 80076c8:	440b      	add	r3, r1
- 80076ca:	3308      	adds	r3, #8
- 80076cc:	881b      	ldrh	r3, [r3, #0]
- 80076ce:	009b      	lsls	r3, r3, #2
- 80076d0:	b29b      	uxth	r3, r3
- 80076d2:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 80076d6:	b29b      	uxth	r3, r3
- 80076d8:	4619      	mov	r1, r3
- 80076da:	f7fe ff83 	bl	80065e4 <Switch_LED>
- 80076de:	e154      	b.n	800798a <test+0x3ae>
+ 80076b6:	009b      	lsls	r3, r3, #2
+ 80076b8:	b29b      	uxth	r3, r3
+ 80076ba:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 80076be:	b298      	uxth	r0, r3
+ 80076c0:	79fa      	ldrb	r2, [r7, #7]
+ 80076c2:	4989      	ldr	r1, [pc, #548]	; (80078e8 <test+0x308>)
+ 80076c4:	4613      	mov	r3, r2
+ 80076c6:	005b      	lsls	r3, r3, #1
+ 80076c8:	4413      	add	r3, r2
+ 80076ca:	009b      	lsls	r3, r3, #2
+ 80076cc:	440b      	add	r3, r1
+ 80076ce:	3308      	adds	r3, #8
+ 80076d0:	881b      	ldrh	r3, [r3, #0]
+ 80076d2:	009b      	lsls	r3, r3, #2
+ 80076d4:	b29b      	uxth	r3, r3
+ 80076d6:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 80076da:	b29b      	uxth	r3, r3
+ 80076dc:	4619      	mov	r1, r3
+ 80076de:	f7fe ff81 	bl	80065e4 <Switch_LED>
+ 80076e2:	e154      	b.n	800798e <test+0x3ae>
 		}
 		else if(sw == SW_BOTTOM || sw == SW_BOTTOM_LONG){
- 80076e0:	88bb      	ldrh	r3, [r7, #4]
- 80076e2:	2b08      	cmp	r3, #8
- 80076e4:	d002      	beq.n	80076ec <test+0x110>
- 80076e6:	88bb      	ldrh	r3, [r7, #4]
- 80076e8:	2b28      	cmp	r3, #40	; 0x28
- 80076ea:	d135      	bne.n	8007758 <test+0x17c>
+ 80076e4:	88bb      	ldrh	r3, [r7, #4]
+ 80076e6:	2b08      	cmp	r3, #8
+ 80076e8:	d002      	beq.n	80076f0 <test+0x110>
+ 80076ea:	88bb      	ldrh	r3, [r7, #4]
+ 80076ec:	2b28      	cmp	r3, #40	; 0x28
+ 80076ee:	d135      	bne.n	800775c <test+0x17c>
 			idx+=1;
- 80076ec:	79fb      	ldrb	r3, [r7, #7]
- 80076ee:	3301      	adds	r3, #1
- 80076f0:	71fb      	strb	r3, [r7, #7]
+ 80076f0:	79fb      	ldrb	r3, [r7, #7]
+ 80076f2:	3301      	adds	r3, #1
+ 80076f4:	71fb      	strb	r3, [r7, #7]
 			idx %= 6;
- 80076f2:	79fa      	ldrb	r2, [r7, #7]
- 80076f4:	4b7d      	ldr	r3, [pc, #500]	; (80078ec <test+0x310>)
- 80076f6:	fba3 1302 	umull	r1, r3, r3, r2
- 80076fa:	0899      	lsrs	r1, r3, #2
- 80076fc:	460b      	mov	r3, r1
- 80076fe:	005b      	lsls	r3, r3, #1
- 8007700:	440b      	add	r3, r1
+ 80076f6:	79fa      	ldrb	r2, [r7, #7]
+ 80076f8:	4b7d      	ldr	r3, [pc, #500]	; (80078f0 <test+0x310>)
+ 80076fa:	fba3 1302 	umull	r1, r3, r3, r2
+ 80076fe:	0899      	lsrs	r1, r3, #2
+ 8007700:	460b      	mov	r3, r1
  8007702:	005b      	lsls	r3, r3, #1
- 8007704:	1ad3      	subs	r3, r2, r3
- 8007706:	71fb      	strb	r3, [r7, #7]
+ 8007704:	440b      	add	r3, r1
+ 8007706:	005b      	lsls	r3, r3, #1
+ 8007708:	1ad3      	subs	r3, r2, r3
+ 800770a:	71fb      	strb	r3, [r7, #7]
 			OLED_Cursor(idx, 0xFF0000);
- 8007708:	79fb      	ldrb	r3, [r7, #7]
- 800770a:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 800770e:	4618      	mov	r0, r3
- 8007710:	f7fe fee8 	bl	80064e4 <OLED_Cursor>
+ 800770c:	79fb      	ldrb	r3, [r7, #7]
+ 800770e:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 8007712:	4618      	mov	r0, r3
+ 8007714:	f7fe fee6 	bl	80064e4 <OLED_Cursor>
 			SwitchLED(testList[idx].color);
- 8007714:	79fa      	ldrb	r2, [r7, #7]
- 8007716:	4973      	ldr	r1, [pc, #460]	; (80078e4 <test+0x308>)
- 8007718:	4613      	mov	r3, r2
- 800771a:	005b      	lsls	r3, r3, #1
- 800771c:	4413      	add	r3, r2
- 800771e:	009b      	lsls	r3, r3, #2
- 8007720:	440b      	add	r3, r1
- 8007722:	3308      	adds	r3, #8
- 8007724:	881b      	ldrh	r3, [r3, #0]
- 8007726:	0a1b      	lsrs	r3, r3, #8
- 8007728:	b29b      	uxth	r3, r3
- 800772a:	009b      	lsls	r3, r3, #2
+ 8007718:	79fa      	ldrb	r2, [r7, #7]
+ 800771a:	4973      	ldr	r1, [pc, #460]	; (80078e8 <test+0x308>)
+ 800771c:	4613      	mov	r3, r2
+ 800771e:	005b      	lsls	r3, r3, #1
+ 8007720:	4413      	add	r3, r2
+ 8007722:	009b      	lsls	r3, r3, #2
+ 8007724:	440b      	add	r3, r1
+ 8007726:	3308      	adds	r3, #8
+ 8007728:	881b      	ldrh	r3, [r3, #0]
+ 800772a:	0a1b      	lsrs	r3, r3, #8
  800772c:	b29b      	uxth	r3, r3
- 800772e:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007732:	b298      	uxth	r0, r3
- 8007734:	79fa      	ldrb	r2, [r7, #7]
- 8007736:	496b      	ldr	r1, [pc, #428]	; (80078e4 <test+0x308>)
- 8007738:	4613      	mov	r3, r2
- 800773a:	005b      	lsls	r3, r3, #1
- 800773c:	4413      	add	r3, r2
- 800773e:	009b      	lsls	r3, r3, #2
- 8007740:	440b      	add	r3, r1
- 8007742:	3308      	adds	r3, #8
- 8007744:	881b      	ldrh	r3, [r3, #0]
- 8007746:	009b      	lsls	r3, r3, #2
- 8007748:	b29b      	uxth	r3, r3
- 800774a:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 800774e:	b29b      	uxth	r3, r3
- 8007750:	4619      	mov	r1, r3
- 8007752:	f7fe ff47 	bl	80065e4 <Switch_LED>
- 8007756:	e118      	b.n	800798a <test+0x3ae>
+ 800772e:	009b      	lsls	r3, r3, #2
+ 8007730:	b29b      	uxth	r3, r3
+ 8007732:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007736:	b298      	uxth	r0, r3
+ 8007738:	79fa      	ldrb	r2, [r7, #7]
+ 800773a:	496b      	ldr	r1, [pc, #428]	; (80078e8 <test+0x308>)
+ 800773c:	4613      	mov	r3, r2
+ 800773e:	005b      	lsls	r3, r3, #1
+ 8007740:	4413      	add	r3, r2
+ 8007742:	009b      	lsls	r3, r3, #2
+ 8007744:	440b      	add	r3, r1
+ 8007746:	3308      	adds	r3, #8
+ 8007748:	881b      	ldrh	r3, [r3, #0]
+ 800774a:	009b      	lsls	r3, r3, #2
+ 800774c:	b29b      	uxth	r3, r3
+ 800774e:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007752:	b29b      	uxth	r3, r3
+ 8007754:	4619      	mov	r1, r3
+ 8007756:	f7fe ff45 	bl	80065e4 <Switch_LED>
+ 800775a:	e118      	b.n	800798e <test+0x3ae>
 		}
 		else if(sw == SW_ENTER){
- 8007758:	88bb      	ldrh	r3, [r7, #4]
- 800775a:	2b04      	cmp	r3, #4
- 800775c:	f000 8116 	beq.w	800798c <test+0x3b0>
+ 800775c:	88bb      	ldrh	r3, [r7, #4]
+ 800775e:	2b04      	cmp	r3, #4
+ 8007760:	f000 8116 	beq.w	8007990 <test+0x3b0>
 			break;
 		}
 		else if(sw == SW_LEFT || sw == SW_RIGHT){
- 8007760:	88bb      	ldrh	r3, [r7, #4]
- 8007762:	2b10      	cmp	r3, #16
- 8007764:	d003      	beq.n	800776e <test+0x192>
- 8007766:	88bb      	ldrh	r3, [r7, #4]
- 8007768:	2b01      	cmp	r3, #1
- 800776a:	f47f af79 	bne.w	8007660 <test+0x84>
+ 8007764:	88bb      	ldrh	r3, [r7, #4]
+ 8007766:	2b10      	cmp	r3, #16
+ 8007768:	d003      	beq.n	8007772 <test+0x192>
+ 800776a:	88bb      	ldrh	r3, [r7, #4]
+ 800776c:	2b01      	cmp	r3, #1
+ 800776e:	f47f af79 	bne.w	8007664 <test+0x84>
 			if(testList[idx].color == COLOR_RED){
- 800776e:	79fa      	ldrb	r2, [r7, #7]
- 8007770:	495c      	ldr	r1, [pc, #368]	; (80078e4 <test+0x308>)
- 8007772:	4613      	mov	r3, r2
- 8007774:	005b      	lsls	r3, r3, #1
- 8007776:	4413      	add	r3, r2
- 8007778:	009b      	lsls	r3, r3, #2
- 800777a:	440b      	add	r3, r1
- 800777c:	3308      	adds	r3, #8
- 800777e:	881b      	ldrh	r3, [r3, #0]
- 8007780:	f5b3 4f20 	cmp.w	r3, #40960	; 0xa000
- 8007784:	d159      	bne.n	800783a <test+0x25e>
+ 8007772:	79fa      	ldrb	r2, [r7, #7]
+ 8007774:	495c      	ldr	r1, [pc, #368]	; (80078e8 <test+0x308>)
+ 8007776:	4613      	mov	r3, r2
+ 8007778:	005b      	lsls	r3, r3, #1
+ 800777a:	4413      	add	r3, r2
+ 800777c:	009b      	lsls	r3, r3, #2
+ 800777e:	440b      	add	r3, r1
+ 8007780:	3308      	adds	r3, #8
+ 8007782:	881b      	ldrh	r3, [r3, #0]
+ 8007784:	f5b3 4f20 	cmp.w	r3, #40960	; 0xa000
+ 8007788:	d159      	bne.n	800783e <test+0x25e>
 				testList[idx].color = COLOR_WHITE;
- 8007786:	79fa      	ldrb	r2, [r7, #7]
- 8007788:	4956      	ldr	r1, [pc, #344]	; (80078e4 <test+0x308>)
- 800778a:	4613      	mov	r3, r2
- 800778c:	005b      	lsls	r3, r3, #1
- 800778e:	4413      	add	r3, r2
- 8007790:	009b      	lsls	r3, r3, #2
- 8007792:	440b      	add	r3, r1
- 8007794:	3308      	adds	r3, #8
- 8007796:	f24a 02a0 	movw	r2, #41120	; 0xa0a0
- 800779a:	801a      	strh	r2, [r3, #0]
+ 800778a:	79fa      	ldrb	r2, [r7, #7]
+ 800778c:	4956      	ldr	r1, [pc, #344]	; (80078e8 <test+0x308>)
+ 800778e:	4613      	mov	r3, r2
+ 8007790:	005b      	lsls	r3, r3, #1
+ 8007792:	4413      	add	r3, r2
+ 8007794:	009b      	lsls	r3, r3, #2
+ 8007796:	440b      	add	r3, r1
+ 8007798:	3308      	adds	r3, #8
+ 800779a:	f24a 02a0 	movw	r2, #41120	; 0xa0a0
+ 800779e:	801a      	strh	r2, [r3, #0]
 				switch(idx){
- 800779c:	79fb      	ldrb	r3, [r7, #7]
- 800779e:	2b05      	cmp	r3, #5
- 80077a0:	f200 80d2 	bhi.w	8007948 <test+0x36c>
- 80077a4:	a201      	add	r2, pc, #4	; (adr r2, 80077ac <test+0x1d0>)
- 80077a6:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
- 80077aa:	bf00      	nop
- 80077ac:	080077c5 	.word	0x080077c5
- 80077b0:	080077d9 	.word	0x080077d9
- 80077b4:	080077ed 	.word	0x080077ed
- 80077b8:	08007801 	.word	0x08007801
- 80077bc:	08007815 	.word	0x08007815
- 80077c0:	08007827 	.word	0x08007827
+ 80077a0:	79fb      	ldrb	r3, [r7, #7]
+ 80077a2:	2b05      	cmp	r3, #5
+ 80077a4:	f200 80d2 	bhi.w	800794c <test+0x36c>
+ 80077a8:	a201      	add	r2, pc, #4	; (adr r2, 80077b0 <test+0x1d0>)
+ 80077aa:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80077ae:	bf00      	nop
+ 80077b0:	080077c9 	.word	0x080077c9
+ 80077b4:	080077dd 	.word	0x080077dd
+ 80077b8:	080077f1 	.word	0x080077f1
+ 80077bc:	08007805 	.word	0x08007805
+ 80077c0:	08007819 	.word	0x08007819
+ 80077c4:	0800782b 	.word	0x0800782b
 				case 0:
 					// Convection Fan
 					HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, 0);
- 80077c4:	2200      	movs	r2, #0
- 80077c6:	f44f 7100 	mov.w	r1, #512	; 0x200
- 80077ca:	4849      	ldr	r0, [pc, #292]	; (80078f0 <test+0x314>)
- 80077cc:	f7fa fdd2 	bl	8002374 <HAL_GPIO_WritePin>
+ 80077c8:	2200      	movs	r2, #0
+ 80077ca:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80077ce:	4849      	ldr	r0, [pc, #292]	; (80078f4 <test+0x314>)
+ 80077d0:	f7fa fdd0 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/1Motor1: ON ");
- 80077d0:	4848      	ldr	r0, [pc, #288]	; (80078f4 <test+0x318>)
- 80077d2:	f7fe fa3f 	bl	8005c54 <OLED_Printf>
+ 80077d4:	4848      	ldr	r0, [pc, #288]	; (80078f8 <test+0x318>)
+ 80077d6:	f7fe fa3d 	bl	8005c54 <OLED_Printf>
 					break;
- 80077d6:	e0b7      	b.n	8007948 <test+0x36c>
+ 80077da:	e0b7      	b.n	800794c <test+0x36c>
 				case 1:
 					// Rotisserie Motor
 					HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, 0);
- 80077d8:	2200      	movs	r2, #0
- 80077da:	f44f 7180 	mov.w	r1, #256	; 0x100
- 80077de:	4844      	ldr	r0, [pc, #272]	; (80078f0 <test+0x314>)
- 80077e0:	f7fa fdc8 	bl	8002374 <HAL_GPIO_WritePin>
+ 80077dc:	2200      	movs	r2, #0
+ 80077de:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 80077e2:	4844      	ldr	r0, [pc, #272]	; (80078f4 <test+0x314>)
+ 80077e4:	f7fa fdc6 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/2Motor2: ON ");
- 80077e4:	4844      	ldr	r0, [pc, #272]	; (80078f8 <test+0x31c>)
- 80077e6:	f7fe fa35 	bl	8005c54 <OLED_Printf>
+ 80077e8:	4844      	ldr	r0, [pc, #272]	; (80078fc <test+0x31c>)
+ 80077ea:	f7fe fa33 	bl	8005c54 <OLED_Printf>
 					break;
- 80077ea:	e0ad      	b.n	8007948 <test+0x36c>
+ 80077ee:	e0ad      	b.n	800794c <test+0x36c>
 				case 2:
 					// Lamp
 					HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
- 80077ec:	2200      	movs	r2, #0
- 80077ee:	f44f 6100 	mov.w	r1, #2048	; 0x800
- 80077f2:	483f      	ldr	r0, [pc, #252]	; (80078f0 <test+0x314>)
- 80077f4:	f7fa fdbe 	bl	8002374 <HAL_GPIO_WritePin>
+ 80077f0:	2200      	movs	r2, #0
+ 80077f2:	f44f 6100 	mov.w	r1, #2048	; 0x800
+ 80077f6:	483f      	ldr	r0, [pc, #252]	; (80078f4 <test+0x314>)
+ 80077f8:	f7fa fdbc 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/3LAMP  : ON ");
- 80077f8:	4840      	ldr	r0, [pc, #256]	; (80078fc <test+0x320>)
- 80077fa:	f7fe fa2b 	bl	8005c54 <OLED_Printf>
+ 80077fc:	4840      	ldr	r0, [pc, #256]	; (8007900 <test+0x320>)
+ 80077fe:	f7fe fa29 	bl	8005c54 <OLED_Printf>
 					break;
- 80077fe:	e0a3      	b.n	8007948 <test+0x36c>
+ 8007802:	e0a3      	b.n	800794c <test+0x36c>
 				case 3:
 					// Heater Top
 					HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 0);
- 8007800:	2200      	movs	r2, #0
- 8007802:	f44f 7180 	mov.w	r1, #256	; 0x100
- 8007806:	483e      	ldr	r0, [pc, #248]	; (8007900 <test+0x324>)
- 8007808:	f7fa fdb4 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007804:	2200      	movs	r2, #0
+ 8007806:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 800780a:	483e      	ldr	r0, [pc, #248]	; (8007904 <test+0x324>)
+ 800780c:	f7fa fdb2 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/4HU    : ON ");
- 800780c:	483d      	ldr	r0, [pc, #244]	; (8007904 <test+0x328>)
- 800780e:	f7fe fa21 	bl	8005c54 <OLED_Printf>
+ 8007810:	483d      	ldr	r0, [pc, #244]	; (8007908 <test+0x328>)
+ 8007812:	f7fe fa1f 	bl	8005c54 <OLED_Printf>
 					break;
- 8007812:	e099      	b.n	8007948 <test+0x36c>
+ 8007816:	e099      	b.n	800794c <test+0x36c>
 				case 4:
 					// Heater Bottom
 					HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 0);
- 8007814:	2200      	movs	r2, #0
- 8007816:	2180      	movs	r1, #128	; 0x80
- 8007818:	4839      	ldr	r0, [pc, #228]	; (8007900 <test+0x324>)
- 800781a:	f7fa fdab 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007818:	2200      	movs	r2, #0
+ 800781a:	2180      	movs	r1, #128	; 0x80
+ 800781c:	4839      	ldr	r0, [pc, #228]	; (8007904 <test+0x324>)
+ 800781e:	f7fa fda9 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/5HD    : ON ");
- 800781e:	483a      	ldr	r0, [pc, #232]	; (8007908 <test+0x32c>)
- 8007820:	f7fe fa18 	bl	8005c54 <OLED_Printf>
+ 8007822:	483a      	ldr	r0, [pc, #232]	; (800790c <test+0x32c>)
+ 8007824:	f7fe fa16 	bl	8005c54 <OLED_Printf>
 					break;
- 8007824:	e090      	b.n	8007948 <test+0x36c>
+ 8007828:	e090      	b.n	800794c <test+0x36c>
 				case 5:
 					// Mainboard Fan
 					HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 1);
- 8007826:	2201      	movs	r2, #1
- 8007828:	f44f 7100 	mov.w	r1, #512	; 0x200
- 800782c:	4834      	ldr	r0, [pc, #208]	; (8007900 <test+0x324>)
- 800782e:	f7fa fda1 	bl	8002374 <HAL_GPIO_WritePin>
+ 800782a:	2201      	movs	r2, #1
+ 800782c:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 8007830:	4834      	ldr	r0, [pc, #208]	; (8007904 <test+0x324>)
+ 8007832:	f7fa fd9f 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/6FAN   : ON ");
- 8007832:	4836      	ldr	r0, [pc, #216]	; (800790c <test+0x330>)
- 8007834:	f7fe fa0e 	bl	8005c54 <OLED_Printf>
+ 8007836:	4836      	ldr	r0, [pc, #216]	; (8007910 <test+0x330>)
+ 8007838:	f7fe fa0c 	bl	8005c54 <OLED_Printf>
 					break;
- 8007838:	e086      	b.n	8007948 <test+0x36c>
+ 800783c:	e086      	b.n	800794c <test+0x36c>
 				}
 			}
 			else if(testList[idx].color == COLOR_WHITE){
- 800783a:	79fa      	ldrb	r2, [r7, #7]
- 800783c:	4929      	ldr	r1, [pc, #164]	; (80078e4 <test+0x308>)
- 800783e:	4613      	mov	r3, r2
- 8007840:	005b      	lsls	r3, r3, #1
- 8007842:	4413      	add	r3, r2
- 8007844:	009b      	lsls	r3, r3, #2
- 8007846:	440b      	add	r3, r1
- 8007848:	3308      	adds	r3, #8
- 800784a:	881b      	ldrh	r3, [r3, #0]
- 800784c:	f24a 02a0 	movw	r2, #41120	; 0xa0a0
- 8007850:	4293      	cmp	r3, r2
- 8007852:	d178      	bne.n	8007946 <test+0x36a>
+ 800783e:	79fa      	ldrb	r2, [r7, #7]
+ 8007840:	4929      	ldr	r1, [pc, #164]	; (80078e8 <test+0x308>)
+ 8007842:	4613      	mov	r3, r2
+ 8007844:	005b      	lsls	r3, r3, #1
+ 8007846:	4413      	add	r3, r2
+ 8007848:	009b      	lsls	r3, r3, #2
+ 800784a:	440b      	add	r3, r1
+ 800784c:	3308      	adds	r3, #8
+ 800784e:	881b      	ldrh	r3, [r3, #0]
+ 8007850:	f24a 02a0 	movw	r2, #41120	; 0xa0a0
+ 8007854:	4293      	cmp	r3, r2
+ 8007856:	d178      	bne.n	800794a <test+0x36a>
 				testList[idx].color = COLOR_RED;
- 8007854:	79fa      	ldrb	r2, [r7, #7]
- 8007856:	4923      	ldr	r1, [pc, #140]	; (80078e4 <test+0x308>)
- 8007858:	4613      	mov	r3, r2
- 800785a:	005b      	lsls	r3, r3, #1
- 800785c:	4413      	add	r3, r2
- 800785e:	009b      	lsls	r3, r3, #2
- 8007860:	440b      	add	r3, r1
- 8007862:	3308      	adds	r3, #8
- 8007864:	f44f 4220 	mov.w	r2, #40960	; 0xa000
- 8007868:	801a      	strh	r2, [r3, #0]
+ 8007858:	79fa      	ldrb	r2, [r7, #7]
+ 800785a:	4923      	ldr	r1, [pc, #140]	; (80078e8 <test+0x308>)
+ 800785c:	4613      	mov	r3, r2
+ 800785e:	005b      	lsls	r3, r3, #1
+ 8007860:	4413      	add	r3, r2
+ 8007862:	009b      	lsls	r3, r3, #2
+ 8007864:	440b      	add	r3, r1
+ 8007866:	3308      	adds	r3, #8
+ 8007868:	f44f 4220 	mov.w	r2, #40960	; 0xa000
+ 800786c:	801a      	strh	r2, [r3, #0]
 				switch(idx){
- 800786a:	79fb      	ldrb	r3, [r7, #7]
- 800786c:	2b05      	cmp	r3, #5
- 800786e:	d86b      	bhi.n	8007948 <test+0x36c>
- 8007870:	a201      	add	r2, pc, #4	; (adr r2, 8007878 <test+0x29c>)
- 8007872:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
- 8007876:	bf00      	nop
- 8007878:	08007891 	.word	0x08007891
- 800787c:	080078a5 	.word	0x080078a5
- 8007880:	080078b9 	.word	0x080078b9
- 8007884:	080078cd 	.word	0x080078cd
- 8007888:	08007921 	.word	0x08007921
- 800788c:	08007933 	.word	0x08007933
+ 800786e:	79fb      	ldrb	r3, [r7, #7]
+ 8007870:	2b05      	cmp	r3, #5
+ 8007872:	d86b      	bhi.n	800794c <test+0x36c>
+ 8007874:	a201      	add	r2, pc, #4	; (adr r2, 800787c <test+0x29c>)
+ 8007876:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 800787a:	bf00      	nop
+ 800787c:	08007895 	.word	0x08007895
+ 8007880:	080078a9 	.word	0x080078a9
+ 8007884:	080078bd 	.word	0x080078bd
+ 8007888:	080078d1 	.word	0x080078d1
+ 800788c:	08007925 	.word	0x08007925
+ 8007890:	08007937 	.word	0x08007937
 				case 0:
 					HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, 1);
- 8007890:	2201      	movs	r2, #1
- 8007892:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007896:	4816      	ldr	r0, [pc, #88]	; (80078f0 <test+0x314>)
- 8007898:	f7fa fd6c 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007894:	2201      	movs	r2, #1
+ 8007896:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 800789a:	4816      	ldr	r0, [pc, #88]	; (80078f4 <test+0x314>)
+ 800789c:	f7fa fd6a 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/1Motor1: OFF");
- 800789c:	481c      	ldr	r0, [pc, #112]	; (8007910 <test+0x334>)
- 800789e:	f7fe f9d9 	bl	8005c54 <OLED_Printf>
+ 80078a0:	481c      	ldr	r0, [pc, #112]	; (8007914 <test+0x334>)
+ 80078a2:	f7fe f9d7 	bl	8005c54 <OLED_Printf>
 					break;
- 80078a2:	e051      	b.n	8007948 <test+0x36c>
+ 80078a6:	e051      	b.n	800794c <test+0x36c>
 				case 1:
 					HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, 1);
- 80078a4:	2201      	movs	r2, #1
- 80078a6:	f44f 7180 	mov.w	r1, #256	; 0x100
- 80078aa:	4811      	ldr	r0, [pc, #68]	; (80078f0 <test+0x314>)
- 80078ac:	f7fa fd62 	bl	8002374 <HAL_GPIO_WritePin>
+ 80078a8:	2201      	movs	r2, #1
+ 80078aa:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 80078ae:	4811      	ldr	r0, [pc, #68]	; (80078f4 <test+0x314>)
+ 80078b0:	f7fa fd60 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/2Motor2: OFF");
- 80078b0:	4818      	ldr	r0, [pc, #96]	; (8007914 <test+0x338>)
- 80078b2:	f7fe f9cf 	bl	8005c54 <OLED_Printf>
+ 80078b4:	4818      	ldr	r0, [pc, #96]	; (8007918 <test+0x338>)
+ 80078b6:	f7fe f9cd 	bl	8005c54 <OLED_Printf>
 					break;
- 80078b6:	e047      	b.n	8007948 <test+0x36c>
+ 80078ba:	e047      	b.n	800794c <test+0x36c>
 				case 2:
 					HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
- 80078b8:	2201      	movs	r2, #1
- 80078ba:	f44f 6100 	mov.w	r1, #2048	; 0x800
- 80078be:	480c      	ldr	r0, [pc, #48]	; (80078f0 <test+0x314>)
- 80078c0:	f7fa fd58 	bl	8002374 <HAL_GPIO_WritePin>
+ 80078bc:	2201      	movs	r2, #1
+ 80078be:	f44f 6100 	mov.w	r1, #2048	; 0x800
+ 80078c2:	480c      	ldr	r0, [pc, #48]	; (80078f4 <test+0x314>)
+ 80078c4:	f7fa fd56 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/3LAMP  : OFF");
- 80078c4:	4814      	ldr	r0, [pc, #80]	; (8007918 <test+0x33c>)
- 80078c6:	f7fe f9c5 	bl	8005c54 <OLED_Printf>
+ 80078c8:	4814      	ldr	r0, [pc, #80]	; (800791c <test+0x33c>)
+ 80078ca:	f7fe f9c3 	bl	8005c54 <OLED_Printf>
 					break;
- 80078ca:	e03d      	b.n	8007948 <test+0x36c>
+ 80078ce:	e03d      	b.n	800794c <test+0x36c>
 				case 3:
 					HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 1);
- 80078cc:	2201      	movs	r2, #1
- 80078ce:	f44f 7180 	mov.w	r1, #256	; 0x100
- 80078d2:	480b      	ldr	r0, [pc, #44]	; (8007900 <test+0x324>)
- 80078d4:	f7fa fd4e 	bl	8002374 <HAL_GPIO_WritePin>
+ 80078d0:	2201      	movs	r2, #1
+ 80078d2:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 80078d6:	480b      	ldr	r0, [pc, #44]	; (8007904 <test+0x324>)
+ 80078d8:	f7fa fd4c 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/4HU    : OFF");
- 80078d8:	4810      	ldr	r0, [pc, #64]	; (800791c <test+0x340>)
- 80078da:	f7fe f9bb 	bl	8005c54 <OLED_Printf>
+ 80078dc:	4810      	ldr	r0, [pc, #64]	; (8007920 <test+0x340>)
+ 80078de:	f7fe f9b9 	bl	8005c54 <OLED_Printf>
 					break;
- 80078de:	e033      	b.n	8007948 <test+0x36c>
- 80078e0:	006600ff 	.word	0x006600ff
- 80078e4:	20000270 	.word	0x20000270
- 80078e8:	0800b2ac 	.word	0x0800b2ac
- 80078ec:	aaaaaaab 	.word	0xaaaaaaab
- 80078f0:	40020000 	.word	0x40020000
- 80078f4:	0800b2b4 	.word	0x0800b2b4
- 80078f8:	0800b2c4 	.word	0x0800b2c4
- 80078fc:	0800b2d4 	.word	0x0800b2d4
- 8007900:	40020800 	.word	0x40020800
- 8007904:	0800b2e4 	.word	0x0800b2e4
- 8007908:	0800b2f4 	.word	0x0800b2f4
- 800790c:	0800b304 	.word	0x0800b304
- 8007910:	0800b314 	.word	0x0800b314
- 8007914:	0800b324 	.word	0x0800b324
- 8007918:	0800b334 	.word	0x0800b334
- 800791c:	0800b344 	.word	0x0800b344
+ 80078e2:	e033      	b.n	800794c <test+0x36c>
+ 80078e4:	006600ff 	.word	0x006600ff
+ 80078e8:	20000270 	.word	0x20000270
+ 80078ec:	0800b2ac 	.word	0x0800b2ac
+ 80078f0:	aaaaaaab 	.word	0xaaaaaaab
+ 80078f4:	40020000 	.word	0x40020000
+ 80078f8:	0800b2b4 	.word	0x0800b2b4
+ 80078fc:	0800b2c4 	.word	0x0800b2c4
+ 8007900:	0800b2d4 	.word	0x0800b2d4
+ 8007904:	40020800 	.word	0x40020800
+ 8007908:	0800b2e4 	.word	0x0800b2e4
+ 800790c:	0800b2f4 	.word	0x0800b2f4
+ 8007910:	0800b304 	.word	0x0800b304
+ 8007914:	0800b314 	.word	0x0800b314
+ 8007918:	0800b324 	.word	0x0800b324
+ 800791c:	0800b334 	.word	0x0800b334
+ 8007920:	0800b344 	.word	0x0800b344
 				case 4:
 					HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 1);
- 8007920:	2201      	movs	r2, #1
- 8007922:	2180      	movs	r1, #128	; 0x80
- 8007924:	482d      	ldr	r0, [pc, #180]	; (80079dc <test+0x400>)
- 8007926:	f7fa fd25 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007924:	2201      	movs	r2, #1
+ 8007926:	2180      	movs	r1, #128	; 0x80
+ 8007928:	482d      	ldr	r0, [pc, #180]	; (80079e0 <test+0x400>)
+ 800792a:	f7fa fd23 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/5HD    : OFF");
- 800792a:	482d      	ldr	r0, [pc, #180]	; (80079e0 <test+0x404>)
- 800792c:	f7fe f992 	bl	8005c54 <OLED_Printf>
+ 800792e:	482d      	ldr	r0, [pc, #180]	; (80079e4 <test+0x404>)
+ 8007930:	f7fe f990 	bl	8005c54 <OLED_Printf>
 					break;
- 8007930:	e00a      	b.n	8007948 <test+0x36c>
+ 8007934:	e00a      	b.n	800794c <test+0x36c>
 				case 5:
 					HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
- 8007932:	2200      	movs	r2, #0
- 8007934:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007938:	4828      	ldr	r0, [pc, #160]	; (80079dc <test+0x400>)
- 800793a:	f7fa fd1b 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007936:	2200      	movs	r2, #0
+ 8007938:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 800793c:	4828      	ldr	r0, [pc, #160]	; (80079e0 <test+0x400>)
+ 800793e:	f7fa fd19 	bl	8002374 <HAL_GPIO_WritePin>
 					OLED_Printf("/6FAN   : OFF");
- 800793e:	4829      	ldr	r0, [pc, #164]	; (80079e4 <test+0x408>)
- 8007940:	f7fe f988 	bl	8005c54 <OLED_Printf>
+ 8007942:	4829      	ldr	r0, [pc, #164]	; (80079e8 <test+0x408>)
+ 8007944:	f7fe f986 	bl	8005c54 <OLED_Printf>
 					break;
- 8007944:	e000      	b.n	8007948 <test+0x36c>
+ 8007948:	e000      	b.n	800794c <test+0x36c>
 				}
 			}
- 8007946:	bf00      	nop
+ 800794a:	bf00      	nop
 
 			SwitchLED(testList[idx].color);
- 8007948:	79fa      	ldrb	r2, [r7, #7]
- 800794a:	4927      	ldr	r1, [pc, #156]	; (80079e8 <test+0x40c>)
- 800794c:	4613      	mov	r3, r2
- 800794e:	005b      	lsls	r3, r3, #1
- 8007950:	4413      	add	r3, r2
- 8007952:	009b      	lsls	r3, r3, #2
- 8007954:	440b      	add	r3, r1
- 8007956:	3308      	adds	r3, #8
- 8007958:	881b      	ldrh	r3, [r3, #0]
- 800795a:	0a1b      	lsrs	r3, r3, #8
- 800795c:	b29b      	uxth	r3, r3
- 800795e:	009b      	lsls	r3, r3, #2
+ 800794c:	79fa      	ldrb	r2, [r7, #7]
+ 800794e:	4927      	ldr	r1, [pc, #156]	; (80079ec <test+0x40c>)
+ 8007950:	4613      	mov	r3, r2
+ 8007952:	005b      	lsls	r3, r3, #1
+ 8007954:	4413      	add	r3, r2
+ 8007956:	009b      	lsls	r3, r3, #2
+ 8007958:	440b      	add	r3, r1
+ 800795a:	3308      	adds	r3, #8
+ 800795c:	881b      	ldrh	r3, [r3, #0]
+ 800795e:	0a1b      	lsrs	r3, r3, #8
  8007960:	b29b      	uxth	r3, r3
- 8007962:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007966:	b298      	uxth	r0, r3
- 8007968:	79fa      	ldrb	r2, [r7, #7]
- 800796a:	491f      	ldr	r1, [pc, #124]	; (80079e8 <test+0x40c>)
- 800796c:	4613      	mov	r3, r2
- 800796e:	005b      	lsls	r3, r3, #1
- 8007970:	4413      	add	r3, r2
- 8007972:	009b      	lsls	r3, r3, #2
- 8007974:	440b      	add	r3, r1
- 8007976:	3308      	adds	r3, #8
- 8007978:	881b      	ldrh	r3, [r3, #0]
- 800797a:	009b      	lsls	r3, r3, #2
- 800797c:	b29b      	uxth	r3, r3
- 800797e:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
- 8007982:	b29b      	uxth	r3, r3
- 8007984:	4619      	mov	r1, r3
- 8007986:	f7fe fe2d 	bl	80065e4 <Switch_LED>
+ 8007962:	009b      	lsls	r3, r3, #2
+ 8007964:	b29b      	uxth	r3, r3
+ 8007966:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 800796a:	b298      	uxth	r0, r3
+ 800796c:	79fa      	ldrb	r2, [r7, #7]
+ 800796e:	491f      	ldr	r1, [pc, #124]	; (80079ec <test+0x40c>)
+ 8007970:	4613      	mov	r3, r2
+ 8007972:	005b      	lsls	r3, r3, #1
+ 8007974:	4413      	add	r3, r2
+ 8007976:	009b      	lsls	r3, r3, #2
+ 8007978:	440b      	add	r3, r1
+ 800797a:	3308      	adds	r3, #8
+ 800797c:	881b      	ldrh	r3, [r3, #0]
+ 800797e:	009b      	lsls	r3, r3, #2
+ 8007980:	b29b      	uxth	r3, r3
+ 8007982:	f403 737f 	and.w	r3, r3, #1020	; 0x3fc
+ 8007986:	b29b      	uxth	r3, r3
+ 8007988:	4619      	mov	r1, r3
+ 800798a:	f7fe fe2b 	bl	80065e4 <Switch_LED>
 	for(;;){
- 800798a:	e669      	b.n	8007660 <test+0x84>
+ 800798e:	e669      	b.n	8007664 <test+0x84>
 			break;
- 800798c:	bf00      	nop
+ 8007990:	bf00      	nop
 		}
 	}
 
 	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, 1);
- 800798e:	2201      	movs	r2, #1
- 8007990:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007994:	4815      	ldr	r0, [pc, #84]	; (80079ec <test+0x410>)
- 8007996:	f7fa fced 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007992:	2201      	movs	r2, #1
+ 8007994:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 8007998:	4815      	ldr	r0, [pc, #84]	; (80079f0 <test+0x410>)
+ 800799a:	f7fa fceb 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, 1);
- 800799a:	2201      	movs	r2, #1
- 800799c:	f44f 7180 	mov.w	r1, #256	; 0x100
- 80079a0:	4812      	ldr	r0, [pc, #72]	; (80079ec <test+0x410>)
- 80079a2:	f7fa fce7 	bl	8002374 <HAL_GPIO_WritePin>
+ 800799e:	2201      	movs	r2, #1
+ 80079a0:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 80079a4:	4812      	ldr	r0, [pc, #72]	; (80079f0 <test+0x410>)
+ 80079a6:	f7fa fce5 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
- 80079a6:	2201      	movs	r2, #1
- 80079a8:	f44f 6100 	mov.w	r1, #2048	; 0x800
- 80079ac:	480f      	ldr	r0, [pc, #60]	; (80079ec <test+0x410>)
- 80079ae:	f7fa fce1 	bl	8002374 <HAL_GPIO_WritePin>
+ 80079aa:	2201      	movs	r2, #1
+ 80079ac:	f44f 6100 	mov.w	r1, #2048	; 0x800
+ 80079b0:	480f      	ldr	r0, [pc, #60]	; (80079f0 <test+0x410>)
+ 80079b2:	f7fa fcdf 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 1);
- 80079b2:	2201      	movs	r2, #1
- 80079b4:	f44f 7180 	mov.w	r1, #256	; 0x100
- 80079b8:	4808      	ldr	r0, [pc, #32]	; (80079dc <test+0x400>)
- 80079ba:	f7fa fcdb 	bl	8002374 <HAL_GPIO_WritePin>
+ 80079b6:	2201      	movs	r2, #1
+ 80079b8:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 80079bc:	4808      	ldr	r0, [pc, #32]	; (80079e0 <test+0x400>)
+ 80079be:	f7fa fcd9 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 1);
- 80079be:	2201      	movs	r2, #1
- 80079c0:	2180      	movs	r1, #128	; 0x80
- 80079c2:	4806      	ldr	r0, [pc, #24]	; (80079dc <test+0x400>)
- 80079c4:	f7fa fcd6 	bl	8002374 <HAL_GPIO_WritePin>
+ 80079c2:	2201      	movs	r2, #1
+ 80079c4:	2180      	movs	r1, #128	; 0x80
+ 80079c6:	4806      	ldr	r0, [pc, #24]	; (80079e0 <test+0x400>)
+ 80079c8:	f7fa fcd4 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
- 80079c8:	2200      	movs	r2, #0
- 80079ca:	f44f 7100 	mov.w	r1, #512	; 0x200
- 80079ce:	4803      	ldr	r0, [pc, #12]	; (80079dc <test+0x400>)
- 80079d0:	f7fa fcd0 	bl	8002374 <HAL_GPIO_WritePin>
+ 80079cc:	2200      	movs	r2, #0
+ 80079ce:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80079d2:	4803      	ldr	r0, [pc, #12]	; (80079e0 <test+0x400>)
+ 80079d4:	f7fa fcce 	bl	8002374 <HAL_GPIO_WritePin>
 
 }
- 80079d4:	bf00      	nop
- 80079d6:	3708      	adds	r7, #8
- 80079d8:	46bd      	mov	sp, r7
- 80079da:	bd80      	pop	{r7, pc}
- 80079dc:	40020800 	.word	0x40020800
- 80079e0:	0800b354 	.word	0x0800b354
- 80079e4:	0800b364 	.word	0x0800b364
- 80079e8:	20000270 	.word	0x20000270
- 80079ec:	40020000 	.word	0x40020000
+ 80079d8:	bf00      	nop
+ 80079da:	3708      	adds	r7, #8
+ 80079dc:	46bd      	mov	sp, r7
+ 80079de:	bd80      	pop	{r7, pc}
+ 80079e0:	40020800 	.word	0x40020800
+ 80079e4:	0800b354 	.word	0x0800b354
+ 80079e8:	0800b364 	.word	0x0800b364
+ 80079ec:	20000270 	.word	0x20000270
+ 80079f0:	40020000 	.word	0x40020000
 
-080079f0 <testHeat>:
+080079f4 <testHeat>:
 };
 
 // FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있음.
 // 디버깅을 위한 state to string 저장소
 char *heaterStateStr[] = {"OFF", "PREHEATING", "TRANSIENT", "STEADY"};
 void testHeat(){
- 80079f0:	b580      	push	{r7, lr}
- 80079f2:	b086      	sub	sp, #24
- 80079f4:	af02      	add	r7, sp, #8
+ 80079f4:	b580      	push	{r7, lr}
+ 80079f6:	b086      	sub	sp, #24
+ 80079f8:	af02      	add	r7, sp, #8
 	SwitchLED(COLOR_SKY);
- 80079f6:	f44f 7120 	mov.w	r1, #640	; 0x280
- 80079fa:	20d4      	movs	r0, #212	; 0xd4
- 80079fc:	f7fe fdf2 	bl	80065e4 <Switch_LED>
+ 80079fa:	f44f 7120 	mov.w	r1, #640	; 0x280
+ 80079fe:	20d4      	movs	r0, #212	; 0xd4
+ 8007a00:	f7fe fdf0 	bl	80065e4 <Switch_LED>
 	OLED_MenuUI("TEST HEAT", 0xFF0000, 0x000000, testHeatList, 6, 0xFFFF00);
- 8007a00:	4b97      	ldr	r3, [pc, #604]	; (8007c60 <testHeat+0x270>)
- 8007a02:	9301      	str	r3, [sp, #4]
- 8007a04:	2306      	movs	r3, #6
- 8007a06:	9300      	str	r3, [sp, #0]
- 8007a08:	4b96      	ldr	r3, [pc, #600]	; (8007c64 <testHeat+0x274>)
- 8007a0a:	2200      	movs	r2, #0
- 8007a0c:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
- 8007a10:	4895      	ldr	r0, [pc, #596]	; (8007c68 <testHeat+0x278>)
- 8007a12:	f7fe fd1b 	bl	800644c <OLED_MenuUI>
+ 8007a04:	4b97      	ldr	r3, [pc, #604]	; (8007c64 <testHeat+0x270>)
+ 8007a06:	9301      	str	r3, [sp, #4]
+ 8007a08:	2306      	movs	r3, #6
+ 8007a0a:	9300      	str	r3, [sp, #0]
+ 8007a0c:	4b96      	ldr	r3, [pc, #600]	; (8007c68 <testHeat+0x274>)
+ 8007a0e:	2200      	movs	r2, #0
+ 8007a10:	f44f 017f 	mov.w	r1, #16711680	; 0xff0000
+ 8007a14:	4895      	ldr	r0, [pc, #596]	; (8007c6c <testHeat+0x278>)
+ 8007a16:	f7fe fd19 	bl	800644c <OLED_MenuUI>
 	OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
- 8007a16:	4b95      	ldr	r3, [pc, #596]	; (8007c6c <testHeat+0x27c>)
- 8007a18:	681b      	ldr	r3, [r3, #0]
- 8007a1a:	691b      	ldr	r3, [r3, #16]
- 8007a1c:	4618      	mov	r0, r3
- 8007a1e:	f7f8 fd9b 	bl	8000558 <__aeabi_f2d>
- 8007a22:	4602      	mov	r2, r0
- 8007a24:	460b      	mov	r3, r1
- 8007a26:	4892      	ldr	r0, [pc, #584]	; (8007c70 <testHeat+0x280>)
- 8007a28:	f7fe f914 	bl	8005c54 <OLED_Printf>
+ 8007a1a:	4b95      	ldr	r3, [pc, #596]	; (8007c70 <testHeat+0x27c>)
+ 8007a1c:	681b      	ldr	r3, [r3, #0]
+ 8007a1e:	691b      	ldr	r3, [r3, #16]
+ 8007a20:	4618      	mov	r0, r3
+ 8007a22:	f7f8 fd99 	bl	8000558 <__aeabi_f2d>
+ 8007a26:	4602      	mov	r2, r0
+ 8007a28:	460b      	mov	r3, r1
+ 8007a2a:	4892      	ldr	r0, [pc, #584]	; (8007c74 <testHeat+0x280>)
+ 8007a2c:	f7fe f912 	bl	8005c54 <OLED_Printf>
 	OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
- 8007a2c:	4b91      	ldr	r3, [pc, #580]	; (8007c74 <testHeat+0x284>)
- 8007a2e:	695b      	ldr	r3, [r3, #20]
- 8007a30:	f403 7300 	and.w	r3, r3, #512	; 0x200
- 8007a34:	2b00      	cmp	r3, #0
- 8007a36:	d001      	beq.n	8007a3c <testHeat+0x4c>
- 8007a38:	4b8f      	ldr	r3, [pc, #572]	; (8007c78 <testHeat+0x288>)
- 8007a3a:	e000      	b.n	8007a3e <testHeat+0x4e>
- 8007a3c:	4b8f      	ldr	r3, [pc, #572]	; (8007c7c <testHeat+0x28c>)
- 8007a3e:	4619      	mov	r1, r3
- 8007a40:	488f      	ldr	r0, [pc, #572]	; (8007c80 <testHeat+0x290>)
- 8007a42:	f7fe f907 	bl	8005c54 <OLED_Printf>
+ 8007a30:	4b91      	ldr	r3, [pc, #580]	; (8007c78 <testHeat+0x284>)
+ 8007a32:	695b      	ldr	r3, [r3, #20]
+ 8007a34:	f403 7300 	and.w	r3, r3, #512	; 0x200
+ 8007a38:	2b00      	cmp	r3, #0
+ 8007a3a:	d001      	beq.n	8007a40 <testHeat+0x4c>
+ 8007a3c:	4b8f      	ldr	r3, [pc, #572]	; (8007c7c <testHeat+0x288>)
+ 8007a3e:	e000      	b.n	8007a42 <testHeat+0x4e>
+ 8007a40:	4b8f      	ldr	r3, [pc, #572]	; (8007c80 <testHeat+0x28c>)
+ 8007a42:	4619      	mov	r1, r3
+ 8007a44:	488f      	ldr	r0, [pc, #572]	; (8007c84 <testHeat+0x290>)
+ 8007a46:	f7fe f905 	bl	8005c54 <OLED_Printf>
 	OLED_Cursor(0, 0xFF6600);
- 8007a46:	498f      	ldr	r1, [pc, #572]	; (8007c84 <testHeat+0x294>)
- 8007a48:	2000      	movs	r0, #0
- 8007a4a:	f7fe fd4b 	bl	80064e4 <OLED_Cursor>
+ 8007a4a:	498f      	ldr	r1, [pc, #572]	; (8007c88 <testHeat+0x294>)
+ 8007a4c:	2000      	movs	r0, #0
+ 8007a4e:	f7fe fd49 	bl	80064e4 <OLED_Cursor>
 	int idx = 0;
- 8007a4e:	2300      	movs	r3, #0
- 8007a50:	60fb      	str	r3, [r7, #12]
+ 8007a52:	2300      	movs	r3, #0
+ 8007a54:	60fb      	str	r3, [r7, #12]
 	heaterTop->start(heaterTop);
- 8007a52:	4b86      	ldr	r3, [pc, #536]	; (8007c6c <testHeat+0x27c>)
- 8007a54:	681b      	ldr	r3, [r3, #0]
- 8007a56:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8007a58:	4a84      	ldr	r2, [pc, #528]	; (8007c6c <testHeat+0x27c>)
- 8007a5a:	6812      	ldr	r2, [r2, #0]
- 8007a5c:	4610      	mov	r0, r2
- 8007a5e:	4798      	blx	r3
+ 8007a56:	4b86      	ldr	r3, [pc, #536]	; (8007c70 <testHeat+0x27c>)
+ 8007a58:	681b      	ldr	r3, [r3, #0]
+ 8007a5a:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 8007a5c:	4a84      	ldr	r2, [pc, #528]	; (8007c70 <testHeat+0x27c>)
+ 8007a5e:	6812      	ldr	r2, [r2, #0]
+ 8007a60:	4610      	mov	r0, r2
+ 8007a62:	4798      	blx	r3
 	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
- 8007a60:	2201      	movs	r2, #1
- 8007a62:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007a66:	4883      	ldr	r0, [pc, #524]	; (8007c74 <testHeat+0x284>)
- 8007a68:	f7fa fc84 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007a64:	2201      	movs	r2, #1
+ 8007a66:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 8007a6a:	4883      	ldr	r0, [pc, #524]	; (8007c78 <testHeat+0x284>)
+ 8007a6c:	f7fa fc82 	bl	8002374 <HAL_GPIO_WritePin>
 	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
- 8007a6c:	2201      	movs	r2, #1
- 8007a6e:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007a72:	4885      	ldr	r0, [pc, #532]	; (8007c88 <testHeat+0x298>)
- 8007a74:	f7fa fc7e 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007a70:	2201      	movs	r2, #1
+ 8007a72:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 8007a76:	4885      	ldr	r0, [pc, #532]	; (8007c8c <testHeat+0x298>)
+ 8007a78:	f7fa fc7c 	bl	8002374 <HAL_GPIO_WritePin>
 	uint32_t pTime = HAL_GetTick();
- 8007a78:	f7fa f99e 	bl	8001db8 <HAL_GetTick>
- 8007a7c:	60b8      	str	r0, [r7, #8]
+ 8007a7c:	f7fa f99c 	bl	8001db8 <HAL_GetTick>
+ 8007a80:	60b8      	str	r0, [r7, #8]
 	for(;;){
 		uint16_t sw = Switch_Read();
- 8007a7e:	f7fe fe87 	bl	8006790 <Switch_Read>
- 8007a82:	4603      	mov	r3, r0
- 8007a84:	80fb      	strh	r3, [r7, #6]
+ 8007a82:	f7fe fe85 	bl	8006790 <Switch_Read>
+ 8007a86:	4603      	mov	r3, r0
+ 8007a88:	80fb      	strh	r3, [r7, #6]
 
 		if(sw==SW_ENTER) break;
- 8007a86:	88fb      	ldrh	r3, [r7, #6]
- 8007a88:	2b04      	cmp	r3, #4
- 8007a8a:	f000 80dc 	beq.w	8007c46 <testHeat+0x256>
+ 8007a8a:	88fb      	ldrh	r3, [r7, #6]
+ 8007a8c:	2b04      	cmp	r3, #4
+ 8007a8e:	f000 80dc 	beq.w	8007c4a <testHeat+0x256>
 		else if (sw==SW_TOP) {
- 8007a8e:	88fb      	ldrh	r3, [r7, #6]
- 8007a90:	2b02      	cmp	r3, #2
- 8007a92:	d110      	bne.n	8007ab6 <testHeat+0xc6>
+ 8007a92:	88fb      	ldrh	r3, [r7, #6]
+ 8007a94:	2b02      	cmp	r3, #2
+ 8007a96:	d110      	bne.n	8007aba <testHeat+0xc6>
 			idx -= (idx>0)?1:0;
- 8007a94:	68fb      	ldr	r3, [r7, #12]
- 8007a96:	2b00      	cmp	r3, #0
- 8007a98:	bfcc      	ite	gt
- 8007a9a:	2301      	movgt	r3, #1
- 8007a9c:	2300      	movle	r3, #0
- 8007a9e:	b2db      	uxtb	r3, r3
- 8007aa0:	461a      	mov	r2, r3
- 8007aa2:	68fb      	ldr	r3, [r7, #12]
- 8007aa4:	1a9b      	subs	r3, r3, r2
- 8007aa6:	60fb      	str	r3, [r7, #12]
+ 8007a98:	68fb      	ldr	r3, [r7, #12]
+ 8007a9a:	2b00      	cmp	r3, #0
+ 8007a9c:	bfcc      	ite	gt
+ 8007a9e:	2301      	movgt	r3, #1
+ 8007aa0:	2300      	movle	r3, #0
+ 8007aa2:	b2db      	uxtb	r3, r3
+ 8007aa4:	461a      	mov	r2, r3
+ 8007aa6:	68fb      	ldr	r3, [r7, #12]
+ 8007aa8:	1a9b      	subs	r3, r3, r2
+ 8007aaa:	60fb      	str	r3, [r7, #12]
 			OLED_Cursor(idx, 0xFF6600);
- 8007aa8:	68fb      	ldr	r3, [r7, #12]
- 8007aaa:	b2db      	uxtb	r3, r3
- 8007aac:	4975      	ldr	r1, [pc, #468]	; (8007c84 <testHeat+0x294>)
- 8007aae:	4618      	mov	r0, r3
- 8007ab0:	f7fe fd18 	bl	80064e4 <OLED_Cursor>
- 8007ab4:	e087      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007aac:	68fb      	ldr	r3, [r7, #12]
+ 8007aae:	b2db      	uxtb	r3, r3
+ 8007ab0:	4975      	ldr	r1, [pc, #468]	; (8007c88 <testHeat+0x294>)
+ 8007ab2:	4618      	mov	r0, r3
+ 8007ab4:	f7fe fd16 	bl	80064e4 <OLED_Cursor>
+ 8007ab8:	e087      	b.n	8007bca <testHeat+0x1d6>
 		}
 		else if (sw==SW_BOTTOM) {
- 8007ab6:	88fb      	ldrh	r3, [r7, #6]
- 8007ab8:	2b08      	cmp	r3, #8
- 8007aba:	d110      	bne.n	8007ade <testHeat+0xee>
+ 8007aba:	88fb      	ldrh	r3, [r7, #6]
+ 8007abc:	2b08      	cmp	r3, #8
+ 8007abe:	d110      	bne.n	8007ae2 <testHeat+0xee>
 			idx += (idx<2)?1:0;
- 8007abc:	68fb      	ldr	r3, [r7, #12]
- 8007abe:	2b01      	cmp	r3, #1
- 8007ac0:	bfd4      	ite	le
- 8007ac2:	2301      	movle	r3, #1
- 8007ac4:	2300      	movgt	r3, #0
- 8007ac6:	b2db      	uxtb	r3, r3
- 8007ac8:	461a      	mov	r2, r3
- 8007aca:	68fb      	ldr	r3, [r7, #12]
- 8007acc:	4413      	add	r3, r2
- 8007ace:	60fb      	str	r3, [r7, #12]
+ 8007ac0:	68fb      	ldr	r3, [r7, #12]
+ 8007ac2:	2b01      	cmp	r3, #1
+ 8007ac4:	bfd4      	ite	le
+ 8007ac6:	2301      	movle	r3, #1
+ 8007ac8:	2300      	movgt	r3, #0
+ 8007aca:	b2db      	uxtb	r3, r3
+ 8007acc:	461a      	mov	r2, r3
+ 8007ace:	68fb      	ldr	r3, [r7, #12]
+ 8007ad0:	4413      	add	r3, r2
+ 8007ad2:	60fb      	str	r3, [r7, #12]
 			OLED_Cursor(idx, 0xFF6600);
- 8007ad0:	68fb      	ldr	r3, [r7, #12]
- 8007ad2:	b2db      	uxtb	r3, r3
- 8007ad4:	496b      	ldr	r1, [pc, #428]	; (8007c84 <testHeat+0x294>)
- 8007ad6:	4618      	mov	r0, r3
- 8007ad8:	f7fe fd04 	bl	80064e4 <OLED_Cursor>
- 8007adc:	e073      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007ad4:	68fb      	ldr	r3, [r7, #12]
+ 8007ad6:	b2db      	uxtb	r3, r3
+ 8007ad8:	496b      	ldr	r1, [pc, #428]	; (8007c88 <testHeat+0x294>)
+ 8007ada:	4618      	mov	r0, r3
+ 8007adc:	f7fe fd02 	bl	80064e4 <OLED_Cursor>
+ 8007ae0:	e073      	b.n	8007bca <testHeat+0x1d6>
 		}
 		else if (sw==SW_RIGHT || sw==SW_RIGHT_LONG) {
- 8007ade:	88fb      	ldrh	r3, [r7, #6]
- 8007ae0:	2b01      	cmp	r3, #1
- 8007ae2:	d002      	beq.n	8007aea <testHeat+0xfa>
- 8007ae4:	88fb      	ldrh	r3, [r7, #6]
- 8007ae6:	2b21      	cmp	r3, #33	; 0x21
- 8007ae8:	d133      	bne.n	8007b52 <testHeat+0x162>
+ 8007ae2:	88fb      	ldrh	r3, [r7, #6]
+ 8007ae4:	2b01      	cmp	r3, #1
+ 8007ae6:	d002      	beq.n	8007aee <testHeat+0xfa>
+ 8007ae8:	88fb      	ldrh	r3, [r7, #6]
+ 8007aea:	2b21      	cmp	r3, #33	; 0x21
+ 8007aec:	d133      	bne.n	8007b56 <testHeat+0x162>
 			switch(idx) {
- 8007aea:	68fb      	ldr	r3, [r7, #12]
- 8007aec:	2b01      	cmp	r3, #1
- 8007aee:	d003      	beq.n	8007af8 <testHeat+0x108>
- 8007af0:	68fb      	ldr	r3, [r7, #12]
- 8007af2:	2b02      	cmp	r3, #2
- 8007af4:	d018      	beq.n	8007b28 <testHeat+0x138>
- 8007af6:	e066      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007aee:	68fb      	ldr	r3, [r7, #12]
+ 8007af0:	2b01      	cmp	r3, #1
+ 8007af2:	d003      	beq.n	8007afc <testHeat+0x108>
+ 8007af4:	68fb      	ldr	r3, [r7, #12]
+ 8007af6:	2b02      	cmp	r3, #2
+ 8007af8:	d018      	beq.n	8007b2c <testHeat+0x138>
+ 8007afa:	e066      	b.n	8007bca <testHeat+0x1d6>
 			case 0:
 				tempTop->lastTemp += 10.0f;
 				break;
 #endif
 			case 1:
 				heaterTop->target += 1.0f;
- 8007af8:	4b5c      	ldr	r3, [pc, #368]	; (8007c6c <testHeat+0x27c>)
- 8007afa:	681b      	ldr	r3, [r3, #0]
- 8007afc:	edd3 7a04 	vldr	s15, [r3, #16]
- 8007b00:	4b5a      	ldr	r3, [pc, #360]	; (8007c6c <testHeat+0x27c>)
- 8007b02:	681b      	ldr	r3, [r3, #0]
- 8007b04:	eeb7 7a00 	vmov.f32	s14, #112	; 0x3f800000  1.0
- 8007b08:	ee77 7a87 	vadd.f32	s15, s15, s14
- 8007b0c:	edc3 7a04 	vstr	s15, [r3, #16]
+ 8007afc:	4b5c      	ldr	r3, [pc, #368]	; (8007c70 <testHeat+0x27c>)
+ 8007afe:	681b      	ldr	r3, [r3, #0]
+ 8007b00:	edd3 7a04 	vldr	s15, [r3, #16]
+ 8007b04:	4b5a      	ldr	r3, [pc, #360]	; (8007c70 <testHeat+0x27c>)
+ 8007b06:	681b      	ldr	r3, [r3, #0]
+ 8007b08:	eeb7 7a00 	vmov.f32	s14, #112	; 0x3f800000  1.0
+ 8007b0c:	ee77 7a87 	vadd.f32	s15, s15, s14
+ 8007b10:	edc3 7a04 	vstr	s15, [r3, #16]
 				OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
- 8007b10:	4b56      	ldr	r3, [pc, #344]	; (8007c6c <testHeat+0x27c>)
- 8007b12:	681b      	ldr	r3, [r3, #0]
- 8007b14:	691b      	ldr	r3, [r3, #16]
- 8007b16:	4618      	mov	r0, r3
- 8007b18:	f7f8 fd1e 	bl	8000558 <__aeabi_f2d>
- 8007b1c:	4602      	mov	r2, r0
- 8007b1e:	460b      	mov	r3, r1
- 8007b20:	4853      	ldr	r0, [pc, #332]	; (8007c70 <testHeat+0x280>)
- 8007b22:	f7fe f897 	bl	8005c54 <OLED_Printf>
+ 8007b14:	4b56      	ldr	r3, [pc, #344]	; (8007c70 <testHeat+0x27c>)
+ 8007b16:	681b      	ldr	r3, [r3, #0]
+ 8007b18:	691b      	ldr	r3, [r3, #16]
+ 8007b1a:	4618      	mov	r0, r3
+ 8007b1c:	f7f8 fd1c 	bl	8000558 <__aeabi_f2d>
+ 8007b20:	4602      	mov	r2, r0
+ 8007b22:	460b      	mov	r3, r1
+ 8007b24:	4853      	ldr	r0, [pc, #332]	; (8007c74 <testHeat+0x280>)
+ 8007b26:	f7fe f895 	bl	8005c54 <OLED_Printf>
 				break;
- 8007b26:	e013      	b.n	8007b50 <testHeat+0x160>
+ 8007b2a:	e013      	b.n	8007b54 <testHeat+0x160>
 			case 2:
 				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_RESET);
- 8007b28:	2200      	movs	r2, #0
- 8007b2a:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007b2e:	4851      	ldr	r0, [pc, #324]	; (8007c74 <testHeat+0x284>)
- 8007b30:	f7fa fc20 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007b2c:	2200      	movs	r2, #0
+ 8007b2e:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 8007b32:	4851      	ldr	r0, [pc, #324]	; (8007c78 <testHeat+0x284>)
+ 8007b34:	f7fa fc1e 	bl	8002374 <HAL_GPIO_WritePin>
 				OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
- 8007b34:	4b4f      	ldr	r3, [pc, #316]	; (8007c74 <testHeat+0x284>)
- 8007b36:	695b      	ldr	r3, [r3, #20]
- 8007b38:	f403 7300 	and.w	r3, r3, #512	; 0x200
- 8007b3c:	2b00      	cmp	r3, #0
- 8007b3e:	d001      	beq.n	8007b44 <testHeat+0x154>
- 8007b40:	4b4d      	ldr	r3, [pc, #308]	; (8007c78 <testHeat+0x288>)
- 8007b42:	e000      	b.n	8007b46 <testHeat+0x156>
- 8007b44:	4b4d      	ldr	r3, [pc, #308]	; (8007c7c <testHeat+0x28c>)
- 8007b46:	4619      	mov	r1, r3
- 8007b48:	484d      	ldr	r0, [pc, #308]	; (8007c80 <testHeat+0x290>)
- 8007b4a:	f7fe f883 	bl	8005c54 <OLED_Printf>
+ 8007b38:	4b4f      	ldr	r3, [pc, #316]	; (8007c78 <testHeat+0x284>)
+ 8007b3a:	695b      	ldr	r3, [r3, #20]
+ 8007b3c:	f403 7300 	and.w	r3, r3, #512	; 0x200
+ 8007b40:	2b00      	cmp	r3, #0
+ 8007b42:	d001      	beq.n	8007b48 <testHeat+0x154>
+ 8007b44:	4b4d      	ldr	r3, [pc, #308]	; (8007c7c <testHeat+0x288>)
+ 8007b46:	e000      	b.n	8007b4a <testHeat+0x156>
+ 8007b48:	4b4d      	ldr	r3, [pc, #308]	; (8007c80 <testHeat+0x28c>)
+ 8007b4a:	4619      	mov	r1, r3
+ 8007b4c:	484d      	ldr	r0, [pc, #308]	; (8007c84 <testHeat+0x290>)
+ 8007b4e:	f7fe f881 	bl	8005c54 <OLED_Printf>
 				break;
- 8007b4e:	bf00      	nop
+ 8007b52:	bf00      	nop
 			switch(idx) {
- 8007b50:	e039      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007b54:	e039      	b.n	8007bca <testHeat+0x1d6>
 			}
 		}
 		else if (sw==SW_LEFT || sw==SW_LEFT_LONG) {
- 8007b52:	88fb      	ldrh	r3, [r7, #6]
- 8007b54:	2b10      	cmp	r3, #16
- 8007b56:	d002      	beq.n	8007b5e <testHeat+0x16e>
- 8007b58:	88fb      	ldrh	r3, [r7, #6]
- 8007b5a:	2b30      	cmp	r3, #48	; 0x30
- 8007b5c:	d132      	bne.n	8007bc4 <testHeat+0x1d4>
+ 8007b56:	88fb      	ldrh	r3, [r7, #6]
+ 8007b58:	2b10      	cmp	r3, #16
+ 8007b5a:	d002      	beq.n	8007b62 <testHeat+0x16e>
+ 8007b5c:	88fb      	ldrh	r3, [r7, #6]
+ 8007b5e:	2b30      	cmp	r3, #48	; 0x30
+ 8007b60:	d132      	bne.n	8007bc8 <testHeat+0x1d4>
 			switch(idx) {
- 8007b5e:	68fb      	ldr	r3, [r7, #12]
- 8007b60:	2b01      	cmp	r3, #1
- 8007b62:	d003      	beq.n	8007b6c <testHeat+0x17c>
- 8007b64:	68fb      	ldr	r3, [r7, #12]
- 8007b66:	2b02      	cmp	r3, #2
- 8007b68:	d018      	beq.n	8007b9c <testHeat+0x1ac>
- 8007b6a:	e02c      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007b62:	68fb      	ldr	r3, [r7, #12]
+ 8007b64:	2b01      	cmp	r3, #1
+ 8007b66:	d003      	beq.n	8007b70 <testHeat+0x17c>
+ 8007b68:	68fb      	ldr	r3, [r7, #12]
+ 8007b6a:	2b02      	cmp	r3, #2
+ 8007b6c:	d018      	beq.n	8007ba0 <testHeat+0x1ac>
+ 8007b6e:	e02c      	b.n	8007bca <testHeat+0x1d6>
 			case 0:
 				tempTop->lastTemp -= 10.0f;
 				break;
 #endif
 			case 1:
 				heaterTop->target -= 1.0f;
- 8007b6c:	4b3f      	ldr	r3, [pc, #252]	; (8007c6c <testHeat+0x27c>)
- 8007b6e:	681b      	ldr	r3, [r3, #0]
- 8007b70:	edd3 7a04 	vldr	s15, [r3, #16]
- 8007b74:	4b3d      	ldr	r3, [pc, #244]	; (8007c6c <testHeat+0x27c>)
- 8007b76:	681b      	ldr	r3, [r3, #0]
- 8007b78:	eeb7 7a00 	vmov.f32	s14, #112	; 0x3f800000  1.0
- 8007b7c:	ee77 7ac7 	vsub.f32	s15, s15, s14
- 8007b80:	edc3 7a04 	vstr	s15, [r3, #16]
+ 8007b70:	4b3f      	ldr	r3, [pc, #252]	; (8007c70 <testHeat+0x27c>)
+ 8007b72:	681b      	ldr	r3, [r3, #0]
+ 8007b74:	edd3 7a04 	vldr	s15, [r3, #16]
+ 8007b78:	4b3d      	ldr	r3, [pc, #244]	; (8007c70 <testHeat+0x27c>)
+ 8007b7a:	681b      	ldr	r3, [r3, #0]
+ 8007b7c:	eeb7 7a00 	vmov.f32	s14, #112	; 0x3f800000  1.0
+ 8007b80:	ee77 7ac7 	vsub.f32	s15, s15, s14
+ 8007b84:	edc3 7a04 	vstr	s15, [r3, #16]
 				OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
- 8007b84:	4b39      	ldr	r3, [pc, #228]	; (8007c6c <testHeat+0x27c>)
- 8007b86:	681b      	ldr	r3, [r3, #0]
- 8007b88:	691b      	ldr	r3, [r3, #16]
- 8007b8a:	4618      	mov	r0, r3
- 8007b8c:	f7f8 fce4 	bl	8000558 <__aeabi_f2d>
- 8007b90:	4602      	mov	r2, r0
- 8007b92:	460b      	mov	r3, r1
- 8007b94:	4836      	ldr	r0, [pc, #216]	; (8007c70 <testHeat+0x280>)
- 8007b96:	f7fe f85d 	bl	8005c54 <OLED_Printf>
+ 8007b88:	4b39      	ldr	r3, [pc, #228]	; (8007c70 <testHeat+0x27c>)
+ 8007b8a:	681b      	ldr	r3, [r3, #0]
+ 8007b8c:	691b      	ldr	r3, [r3, #16]
+ 8007b8e:	4618      	mov	r0, r3
+ 8007b90:	f7f8 fce2 	bl	8000558 <__aeabi_f2d>
+ 8007b94:	4602      	mov	r2, r0
+ 8007b96:	460b      	mov	r3, r1
+ 8007b98:	4836      	ldr	r0, [pc, #216]	; (8007c74 <testHeat+0x280>)
+ 8007b9a:	f7fe f85b 	bl	8005c54 <OLED_Printf>
 				break;
- 8007b9a:	e014      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007b9e:	e014      	b.n	8007bca <testHeat+0x1d6>
 			case 2:
 				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);
- 8007b9c:	2201      	movs	r2, #1
- 8007b9e:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8007ba2:	4834      	ldr	r0, [pc, #208]	; (8007c74 <testHeat+0x284>)
- 8007ba4:	f7fa fbe6 	bl	8002374 <HAL_GPIO_WritePin>
+ 8007ba0:	2201      	movs	r2, #1
+ 8007ba2:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 8007ba6:	4834      	ldr	r0, [pc, #208]	; (8007c78 <testHeat+0x284>)
+ 8007ba8:	f7fa fbe4 	bl	8002374 <HAL_GPIO_WritePin>
 				OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
- 8007ba8:	4b32      	ldr	r3, [pc, #200]	; (8007c74 <testHeat+0x284>)
- 8007baa:	695b      	ldr	r3, [r3, #20]
- 8007bac:	f403 7300 	and.w	r3, r3, #512	; 0x200
- 8007bb0:	2b00      	cmp	r3, #0
- 8007bb2:	d001      	beq.n	8007bb8 <testHeat+0x1c8>
- 8007bb4:	4b30      	ldr	r3, [pc, #192]	; (8007c78 <testHeat+0x288>)
- 8007bb6:	e000      	b.n	8007bba <testHeat+0x1ca>
- 8007bb8:	4b30      	ldr	r3, [pc, #192]	; (8007c7c <testHeat+0x28c>)
- 8007bba:	4619      	mov	r1, r3
- 8007bbc:	4830      	ldr	r0, [pc, #192]	; (8007c80 <testHeat+0x290>)
- 8007bbe:	f7fe f849 	bl	8005c54 <OLED_Printf>
+ 8007bac:	4b32      	ldr	r3, [pc, #200]	; (8007c78 <testHeat+0x284>)
+ 8007bae:	695b      	ldr	r3, [r3, #20]
+ 8007bb0:	f403 7300 	and.w	r3, r3, #512	; 0x200
+ 8007bb4:	2b00      	cmp	r3, #0
+ 8007bb6:	d001      	beq.n	8007bbc <testHeat+0x1c8>
+ 8007bb8:	4b30      	ldr	r3, [pc, #192]	; (8007c7c <testHeat+0x288>)
+ 8007bba:	e000      	b.n	8007bbe <testHeat+0x1ca>
+ 8007bbc:	4b30      	ldr	r3, [pc, #192]	; (8007c80 <testHeat+0x28c>)
+ 8007bbe:	4619      	mov	r1, r3
+ 8007bc0:	4830      	ldr	r0, [pc, #192]	; (8007c84 <testHeat+0x290>)
+ 8007bc2:	f7fe f847 	bl	8005c54 <OLED_Printf>
 				break;
- 8007bc2:	e000      	b.n	8007bc6 <testHeat+0x1d6>
+ 8007bc6:	e000      	b.n	8007bca <testHeat+0x1d6>
 			}
 		}
- 8007bc4:	bf00      	nop
+ 8007bc8:	bf00      	nop
 		float temp = tempTop->read(tempTop);
- 8007bc6:	4b31      	ldr	r3, [pc, #196]	; (8007c8c <testHeat+0x29c>)
- 8007bc8:	681b      	ldr	r3, [r3, #0]
- 8007bca:	699b      	ldr	r3, [r3, #24]
- 8007bcc:	4a2f      	ldr	r2, [pc, #188]	; (8007c8c <testHeat+0x29c>)
- 8007bce:	6812      	ldr	r2, [r2, #0]
- 8007bd0:	4610      	mov	r0, r2
- 8007bd2:	4798      	blx	r3
- 8007bd4:	ed87 0a00 	vstr	s0, [r7]
+ 8007bca:	4b31      	ldr	r3, [pc, #196]	; (8007c90 <testHeat+0x29c>)
+ 8007bcc:	681b      	ldr	r3, [r3, #0]
+ 8007bce:	699b      	ldr	r3, [r3, #24]
+ 8007bd0:	4a2f      	ldr	r2, [pc, #188]	; (8007c90 <testHeat+0x29c>)
+ 8007bd2:	6812      	ldr	r2, [r2, #0]
+ 8007bd4:	4610      	mov	r0, r2
+ 8007bd6:	4798      	blx	r3
+ 8007bd8:	ed87 0a00 	vstr	s0, [r7]
 		if(HAL_GetTick() - pTime > 50){
- 8007bd8:	f7fa f8ee 	bl	8001db8 <HAL_GetTick>
- 8007bdc:	4602      	mov	r2, r0
- 8007bde:	68bb      	ldr	r3, [r7, #8]
- 8007be0:	1ad3      	subs	r3, r2, r3
- 8007be2:	2b32      	cmp	r3, #50	; 0x32
- 8007be4:	d906      	bls.n	8007bf4 <testHeat+0x204>
+ 8007bdc:	f7fa f8ec 	bl	8001db8 <HAL_GetTick>
+ 8007be0:	4602      	mov	r2, r0
+ 8007be2:	68bb      	ldr	r3, [r7, #8]
+ 8007be4:	1ad3      	subs	r3, r2, r3
+ 8007be6:	2b32      	cmp	r3, #50	; 0x32
+ 8007be8:	d906      	bls.n	8007bf8 <testHeat+0x204>
 			pTime += 50;
- 8007be6:	68bb      	ldr	r3, [r7, #8]
- 8007be8:	3332      	adds	r3, #50	; 0x32
- 8007bea:	60bb      	str	r3, [r7, #8]
+ 8007bea:	68bb      	ldr	r3, [r7, #8]
+ 8007bec:	3332      	adds	r3, #50	; 0x32
+ 8007bee:	60bb      	str	r3, [r7, #8]
 			Switch_LED_Temperature(temp);
- 8007bec:	ed97 0a00 	vldr	s0, [r7]
- 8007bf0:	f7fe fd10 	bl	8006614 <Switch_LED_Temperature>
+ 8007bf0:	ed97 0a00 	vldr	s0, [r7]
+ 8007bf4:	f7fe fd0e 	bl	8006614 <Switch_LED_Temperature>
 		}
 		OLED_Printf("/s$19/y%3.2f  \r\n", temp);
- 8007bf4:	6838      	ldr	r0, [r7, #0]
- 8007bf6:	f7f8 fcaf 	bl	8000558 <__aeabi_f2d>
- 8007bfa:	4602      	mov	r2, r0
- 8007bfc:	460b      	mov	r3, r1
- 8007bfe:	4824      	ldr	r0, [pc, #144]	; (8007c90 <testHeat+0x2a0>)
- 8007c00:	f7fe f828 	bl	8005c54 <OLED_Printf>
+ 8007bf8:	6838      	ldr	r0, [r7, #0]
+ 8007bfa:	f7f8 fcad 	bl	8000558 <__aeabi_f2d>
+ 8007bfe:	4602      	mov	r2, r0
+ 8007c00:	460b      	mov	r3, r1
+ 8007c02:	4824      	ldr	r0, [pc, #144]	; (8007c94 <testHeat+0x2a0>)
+ 8007c04:	f7fe f826 	bl	8005c54 <OLED_Printf>
 		OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
- 8007c04:	4b19      	ldr	r3, [pc, #100]	; (8007c6c <testHeat+0x27c>)
- 8007c06:	681b      	ldr	r3, [r3, #0]
- 8007c08:	68db      	ldr	r3, [r3, #12]
- 8007c0a:	4618      	mov	r0, r3
- 8007c0c:	f7f8 fca4 	bl	8000558 <__aeabi_f2d>
- 8007c10:	4602      	mov	r2, r0
- 8007c12:	460b      	mov	r3, r1
- 8007c14:	481f      	ldr	r0, [pc, #124]	; (8007c94 <testHeat+0x2a4>)
- 8007c16:	f7fe f81d 	bl	8005c54 <OLED_Printf>
+ 8007c08:	4b19      	ldr	r3, [pc, #100]	; (8007c70 <testHeat+0x27c>)
+ 8007c0a:	681b      	ldr	r3, [r3, #0]
+ 8007c0c:	68db      	ldr	r3, [r3, #12]
+ 8007c0e:	4618      	mov	r0, r3
+ 8007c10:	f7f8 fca2 	bl	8000558 <__aeabi_f2d>
+ 8007c14:	4602      	mov	r2, r0
+ 8007c16:	460b      	mov	r3, r1
+ 8007c18:	481f      	ldr	r0, [pc, #124]	; (8007c98 <testHeat+0x2a4>)
+ 8007c1a:	f7fe f81b 	bl	8005c54 <OLED_Printf>
 		OLED_Printf("/s$59/p%s     \r\n", heaterStateStr[heaterTop->state]);
- 8007c1a:	4b14      	ldr	r3, [pc, #80]	; (8007c6c <testHeat+0x27c>)
- 8007c1c:	681b      	ldr	r3, [r3, #0]
- 8007c1e:	689b      	ldr	r3, [r3, #8]
- 8007c20:	4a1d      	ldr	r2, [pc, #116]	; (8007c98 <testHeat+0x2a8>)
- 8007c22:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
- 8007c26:	4619      	mov	r1, r3
- 8007c28:	481c      	ldr	r0, [pc, #112]	; (8007c9c <testHeat+0x2ac>)
- 8007c2a:	f7fe f813 	bl	8005c54 <OLED_Printf>
+ 8007c1e:	4b14      	ldr	r3, [pc, #80]	; (8007c70 <testHeat+0x27c>)
+ 8007c20:	681b      	ldr	r3, [r3, #0]
+ 8007c22:	689b      	ldr	r3, [r3, #8]
+ 8007c24:	4a1d      	ldr	r2, [pc, #116]	; (8007c9c <testHeat+0x2a8>)
+ 8007c26:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
+ 8007c2a:	4619      	mov	r1, r3
+ 8007c2c:	481c      	ldr	r0, [pc, #112]	; (8007ca0 <testHeat+0x2ac>)
+ 8007c2e:	f7fe f811 	bl	8005c54 <OLED_Printf>
 		OLED_Printf("/s$69/p%3.2f  \r\n", heaterTop->errorSum);
- 8007c2e:	4b0f      	ldr	r3, [pc, #60]	; (8007c6c <testHeat+0x27c>)
- 8007c30:	681b      	ldr	r3, [r3, #0]
- 8007c32:	69db      	ldr	r3, [r3, #28]
- 8007c34:	4618      	mov	r0, r3
- 8007c36:	f7f8 fc8f 	bl	8000558 <__aeabi_f2d>
- 8007c3a:	4602      	mov	r2, r0
- 8007c3c:	460b      	mov	r3, r1
- 8007c3e:	4818      	ldr	r0, [pc, #96]	; (8007ca0 <testHeat+0x2b0>)
- 8007c40:	f7fe f808 	bl	8005c54 <OLED_Printf>
+ 8007c32:	4b0f      	ldr	r3, [pc, #60]	; (8007c70 <testHeat+0x27c>)
+ 8007c34:	681b      	ldr	r3, [r3, #0]
+ 8007c36:	69db      	ldr	r3, [r3, #28]
+ 8007c38:	4618      	mov	r0, r3
+ 8007c3a:	f7f8 fc8d 	bl	8000558 <__aeabi_f2d>
+ 8007c3e:	4602      	mov	r2, r0
+ 8007c40:	460b      	mov	r3, r1
+ 8007c42:	4818      	ldr	r0, [pc, #96]	; (8007ca4 <testHeat+0x2b0>)
+ 8007c44:	f7fe f806 	bl	8005c54 <OLED_Printf>
 	for(;;){
- 8007c44:	e71b      	b.n	8007a7e <testHeat+0x8e>
+ 8007c48:	e71b      	b.n	8007a82 <testHeat+0x8e>
 		if(sw==SW_ENTER) break;
- 8007c46:	bf00      	nop
+ 8007c4a:	bf00      	nop
 	}
 	heaterTop->stop(heaterTop);
- 8007c48:	4b08      	ldr	r3, [pc, #32]	; (8007c6c <testHeat+0x27c>)
- 8007c4a:	681b      	ldr	r3, [r3, #0]
- 8007c4c:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 8007c4e:	4a07      	ldr	r2, [pc, #28]	; (8007c6c <testHeat+0x27c>)
- 8007c50:	6812      	ldr	r2, [r2, #0]
- 8007c52:	4610      	mov	r0, r2
- 8007c54:	4798      	blx	r3
+ 8007c4c:	4b08      	ldr	r3, [pc, #32]	; (8007c70 <testHeat+0x27c>)
+ 8007c4e:	681b      	ldr	r3, [r3, #0]
+ 8007c50:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8007c52:	4a07      	ldr	r2, [pc, #28]	; (8007c70 <testHeat+0x27c>)
+ 8007c54:	6812      	ldr	r2, [r2, #0]
+ 8007c56:	4610      	mov	r0, r2
+ 8007c58:	4798      	blx	r3
 }
- 8007c56:	bf00      	nop
- 8007c58:	3710      	adds	r7, #16
- 8007c5a:	46bd      	mov	sp, r7
- 8007c5c:	bd80      	pop	{r7, pc}
- 8007c5e:	bf00      	nop
- 8007c60:	00ffff00 	.word	0x00ffff00
- 8007c64:	200002b8 	.word	0x200002b8
- 8007c68:	0800b3f8 	.word	0x0800b3f8
- 8007c6c:	200005c8 	.word	0x200005c8
- 8007c70:	0800b404 	.word	0x0800b404
- 8007c74:	40020000 	.word	0x40020000
- 8007c78:	0800b3d4 	.word	0x0800b3d4
- 8007c7c:	0800b418 	.word	0x0800b418
- 8007c80:	0800b41c 	.word	0x0800b41c
- 8007c84:	00ff6600 	.word	0x00ff6600
- 8007c88:	40020800 	.word	0x40020800
- 8007c8c:	2000073c 	.word	0x2000073c
- 8007c90:	0800b428 	.word	0x0800b428
- 8007c94:	0800b43c 	.word	0x0800b43c
- 8007c98:	20000300 	.word	0x20000300
- 8007c9c:	0800b450 	.word	0x0800b450
- 8007ca0:	0800b464 	.word	0x0800b464
- 8007ca4:	00000000 	.word	0x00000000
+ 8007c5a:	bf00      	nop
+ 8007c5c:	3710      	adds	r7, #16
+ 8007c5e:	46bd      	mov	sp, r7
+ 8007c60:	bd80      	pop	{r7, pc}
+ 8007c62:	bf00      	nop
+ 8007c64:	00ffff00 	.word	0x00ffff00
+ 8007c68:	200002b8 	.word	0x200002b8
+ 8007c6c:	0800b3f8 	.word	0x0800b3f8
+ 8007c70:	200005c8 	.word	0x200005c8
+ 8007c74:	0800b404 	.word	0x0800b404
+ 8007c78:	40020000 	.word	0x40020000
+ 8007c7c:	0800b3d4 	.word	0x0800b3d4
+ 8007c80:	0800b418 	.word	0x0800b418
+ 8007c84:	0800b41c 	.word	0x0800b41c
+ 8007c88:	00ff6600 	.word	0x00ff6600
+ 8007c8c:	40020800 	.word	0x40020800
+ 8007c90:	2000073c 	.word	0x2000073c
+ 8007c94:	0800b428 	.word	0x0800b428
+ 8007c98:	0800b43c 	.word	0x0800b43c
+ 8007c9c:	20000300 	.word	0x20000300
+ 8007ca0:	0800b450 	.word	0x0800b450
+ 8007ca4:	0800b464 	.word	0x0800b464
 
 08007ca8 <Heat>:
 		{NULL, "/s/3/rConvect:", COLOR_SKY},
