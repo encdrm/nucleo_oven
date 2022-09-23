@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -15,13 +15,13 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Main/Src/%.o Main/Src/%.su: ../Main/Src/%.c Main/Src/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/user01/OneDrive - UOS/Work/Zetin/Workspace_CubeIDE/Nucleo_Oven/Libraries/Inc" -I"C:/Users/user01/OneDrive - UOS/Work/Zetin/Workspace_CubeIDE/Nucleo_Oven/Main/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+Main/Src/%.o: ../Main/Src/%.c Main/Src/subdir.mk
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/apple/STM32CubeIDE/workspace_1.8.0/Nucleo_Oven/Libraries/Inc" -I"C:/Users/apple/STM32CubeIDE/workspace_1.8.0/Nucleo_Oven/Main/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 clean: clean-Main-2f-Src
 
 clean-Main-2f-Src:
-	-$(RM) ./Main/Src/menu.d ./Main/Src/menu.o ./Main/Src/menu.su
+	-$(RM) ./Main/Src/menu.d ./Main/Src/menu.o
 
 .PHONY: clean-Main-2f-Src
 
