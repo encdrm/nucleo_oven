@@ -31,6 +31,8 @@ graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float y
 #define Graph_InitEdge(xData, yData, xDen, yDen) \
 	_Graph_Init(xData, yData, sizeof(xData) / sizeof(float), 1, 52, xDen, yDen)
 
+
+void Graph_Reflect(graph_t * g, float * xData, float * yData);
 void Graph_Delete(graph_t * graph_var);
 
 void Graph_UI(graph_t * gr);

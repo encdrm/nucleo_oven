@@ -85,6 +85,14 @@ graph_t * _Graph_Init(float * xData, float * yData, uint16_t count, uint8_t xAxi
 	return graph_var;
 }
 
+void Graph_Reflect(graph_t * g, float * xData, float * yData){
+	for(uint16_t i = 0; i < g->count; i++){
+		xData[i] = g -> xData[i];
+		yData[i] = g -> yData[i];
+	}
+}
+
+
 graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen){
 	graph_t * graph_var = (graph_t *)malloc(sizeof(graph_t));
 	graph_var -> xData = (float *) malloc(0);
