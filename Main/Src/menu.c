@@ -53,8 +53,6 @@ Menu_t menuList[] = {
 		{test, "Test", COLOR_RED},
 		{GraphUITest, "TestGraph", COLOR_BLUE},
 		{testHeat, "TestHeat", COLOR_SKY},
-		{test, "Test4", COLOR_BLACK},
-		{test, "Test5", COLOR_RED},
 
 };
 
@@ -240,6 +238,7 @@ void testHeat(){
 	int idx = 0;
 	heaterTop->start(heaterTop);
 	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
+	uint32_t pTime = HAL_GetTick();
 	for(;;){
 		uint16_t sw = Switch_Read();
 
@@ -287,7 +286,10 @@ void testHeat(){
 			}
 		}
 		float temp = tempTop->read(tempTop);
-
+		if(HAL_GetTick() - pTime > 50){
+			pTime += 50;
+			Switch_LED_Temperature(temp);
+		}
 		OLED_Printf("/s$19/y%3.2f  \r\n", temp);
 		OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
 	}

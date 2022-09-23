@@ -19,6 +19,39 @@ void Switch_LED(uint16_t red, uint16_t blue){
 	htim4.Instance -> CCR2 = blue;
 }
 
+void Switch_LED_Temperature(float temp){
+	//250도일 때 빨강
+	//50도일 때 흰색
+	//0도일 때 파랑
+	static float temp_v;
+	if(temp_v < temp){
+		temp_v += 0.25f;
+		if(temp_v > temp){
+			temp_v = temp;
+		}
+	}
+	else if(temp_v > temp){
+		temp_v -= 0.25f;
+		if(temp_v < temp){
+			temp_v = temp;
+		}
+	}
+
+
+	if(temp_v > 250.00f){
+		Switch_LED(1023, 0);
+	}
+	else if(temp_v > 50.00f){
+		Switch_LED(1023, (250.00f - temp_v) * 1023.00f / 200.0f);
+	}
+	else if(temp_v > 0){
+		Switch_LED(temp_v * 1023.00f / 50.0f, 1023);
+	}
+	else{
+		Switch_LED(0, 1023);
+	}
+}
+
 uint16_t Switch_Read(){
 	static uint8_t Switch_state = 0;
 	static uint16_t Switch_sum = 0;

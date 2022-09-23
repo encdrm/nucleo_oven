@@ -55,6 +55,7 @@
 
 
 void Switch_LED(uint16_t red, uint16_t blue);
+void Switch_LED_Temperature(float temp);
 uint16_t Switch_Read();
 
 #endif
