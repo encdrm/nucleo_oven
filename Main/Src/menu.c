@@ -350,7 +350,7 @@ void Heat(graph_t * gr){//Graph에 따라 분 단위로 시간 경과에 따라 
 		}
 
 		float temp = tempTop->read(tempTop);
-		if(HAL_GetTick() - heatTime > gr->xData[idx + 1] && idx < gr->count - 2){
+		if(HAL_GetTick() - heatTime > (uint32_t)(gr->xData[idx + 1] * 60000.0) && idx < gr->count - 2){
 			idx++;
 			interval = (gr->xData[idx + 1] - gr->xData[idx]) * 60000.00;
 			target1 = gr->yData[idx];
@@ -360,13 +360,13 @@ void Heat(graph_t * gr){//Graph에 따라 분 단위로 시간 경과에 따라 
 			pTime += 50;
 			Switch_LED_Temperature(temp);
 			if(heaterTop->target < target2){
-				heaterTop->target += 100.0 * ((target2 - target1) > 0? (target2 - target1) : (target1 - target2)) / interval;
+				heaterTop->target += 50.0 * ((target2 - target1) > 0? (target2 - target1) : (target1 - target2)) / interval;
 				if(heaterTop -> target > target2){
 					heaterTop->target = target2;
 				}
 			}
 			else if(heaterTop->target > target2){
-				heaterTop->target -= 100.0 * ((target2 - target1) > 0? (target2 - target1) : (target1 - target2)) / interval;
+				heaterTop->target -= 50.0 * ((target2 - target1) > 0? (target2 - target1) : (target1 - target2)) / interval;
 				if(heaterTop -> target < target2){
 					heaterTop->target = target2;
 				}
