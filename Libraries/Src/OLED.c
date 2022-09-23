@@ -341,6 +341,15 @@ void OLED_Printf(const char * format, ...){
 			c += 1;
 			continue;
 		}
+		else if (*c == '$' && (*(c + 1) >= '0' && *(c + 1) <= '6') && ((*(c + 2) >= '0' && *(c + 2) <= '9')||(*(c + 2) >= 'A' && *(c + 2) <= 'F'))) {//작은글씨 최대 7줄 / 큰글씨 최대 3줄
+			OLED_row = 1 + 9 * OLED_charPoint * (*(c + 1) - '0');
+			OLED_col = 1 + 6 * OLED_charPoint * (*(c + 2) >= 'A' ? (*(c + 2) - 'A' + 10) :(*(c + 2) - '0'));
+			if(OLED_row > 60 || (OLED_row >= 54 && OLED_charPoint == 2)){
+				OLED_row = 18 * OLED_charPoint;
+			}
+			c += 2;
+			continue;
+		}
 		else if (*c == '/' && *(c + 1) == '#'){
 			char str[7] = {0,0,0,0,0,0,0};
 			strncpy(str, c+2, 6);
@@ -459,6 +468,10 @@ void OLED_Printf(const char * format, ...){
 		}
 
 		else if (*c == '/' && *(c + 1) == '/'){
+			c += 1;
+		}
+		else if (*c == '/' && *(c + 1) == '#'){
+			*c = '#';
 			c += 1;
 		}
 

@@ -16,7 +16,7 @@ extern tempsensor_t *tempBottom;
 extern heater_t *heaterTop;
 extern heater_t *heaterBottom;
 
-
+void testTemp();
 void testTemp(){
 	SwitchLED(COLOR_BLACK);
 	for(;;){
@@ -31,72 +31,26 @@ void testTemp(){
 		}
 	}
 }
+void testHeat();
 
-// FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있다.
-void testHeat(){
-	SwitchLED(COLOR_SKY);
-	int idx = 0;
-	heaterTop->start(heaterTop);
-	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
-	for(;;){
-		uint16_t sw = Switch_Read();
-
-		if(sw==SW_LEFT_LONG) break;
-		else if (sw==SW_LEFT) idx -= (idx>0)?1:0;
-		else if (sw==SW_RIGHT) idx += (idx<2)?1:0;
-		else if (sw==SW_TOP || sw==SW_TOP_LONG) {
-			switch(idx) {
-#ifdef FLAG_TEMPSENSOR_DEBUG
-			case 0:
-				tempTop->lastTemp += 10.0f;
-				break;
-#endif
-			case 1:
-				heaterTop->target += 1.0f;
-				break;
-			case 2:
-				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_RESET);
-				break;
-			}
-		}
-		else if (sw==SW_BOTTOM || sw==SW_BOTTOM_LONG) {
-			switch(idx) {
-#ifdef FLAG_TEMPSENSOR_DEBUG
-			case 0:
-				tempTop->lastTemp -= 10.0f;
-				break;
-#endif
-			case 1:
-				heaterTop->target -= 1.0f;
-				break;
-			case 2:
-				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);
-				break;
-			}
-		}
-		float temp = tempTop->read(tempTop);
-
-		OLED_Printf("/s/0/wSelect: /p%d\r\n", idx);
-		OLED_Printf("/s/1/rtempU: /y%f\r\n", temp);
-		OLED_Printf("/s/2/rtargetU: /y%f\r\n", heaterTop->target);
-		OLED_Printf("/s/3/rConvect: /y%s\r\n", HAL_GPIO_ReadPin(Motor1_GPIO_Port, Motor1_Pin)?"OFF":"ON");
-		OLED_Printf("/s/4/wdutyU: /p%f\r\n", heaterTop->duty);
-	}
-	heaterTop->stop(heaterTop);
-}
 
 
 
 void profile(){}
 void test();
 void DCFan_Set(uint8_t level);
-
+void GraphUITest(){
+	float xData[10] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
+	float yData[10] = {30.0, 100.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0};
+	graph_t * g = Graph_InitEdge(xData, yData, 1.0, 6.0);
+	Graph_UI(g);
+}
 
 Menu_t menuList[] = {
 		{profile, "Profile", COLOR_PINK},
 		{testTemp, "TestTemp", COLOR_WHITE},
 		{test, "Test", COLOR_RED},
-		{test, "Test2", COLOR_BLUE},
+		{GraphUITest, "TestGraph", COLOR_BLUE},
 		{testHeat, "TestHeat", COLOR_SKY},
 		{test, "Test4", COLOR_BLACK},
 		{test, "Test5", COLOR_RED},
@@ -158,7 +112,6 @@ Menu_t testList[] = {
 		{NULL, "HD    : OFF", COLOR_RED},
 		{NULL, "FAN   : OFF", COLOR_RED},
 };
-
 
 //출력 단자가 잘 동작하는지 테스트합니다.
 void test(){
@@ -268,6 +221,75 @@ void test(){
 
 }
 
+//출력 단자가 테스트 내용입니다.
+Menu_t testHeatList[] = {
+		{NULL, "/s/1/rtempU:", COLOR_SKY},
+		{NULL, "/s/2/rtargetU:", COLOR_SKY},
+		{NULL, "/s/3/rConvect:", COLOR_SKY},
+		{NULL, "/s/4/wdutyU:", COLOR_SKY},
+};
 
+// FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있다.
+void testHeat(){
+	SwitchLED(COLOR_SKY);
+	OLED_MenuUI("TEST HEAT", 0xFF0000, 0x000000, testHeatList, 4, 0xFFFF00);
+	OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
+	OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+	OLED_Cursor(0, 0xFF6600);
+	int idx = 0;
+	heaterTop->start(heaterTop);
+	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
+	for(;;){
+		uint16_t sw = Switch_Read();
 
+		if(sw==SW_ENTER) break;
+		else if (sw==SW_TOP) {
+			idx -= (idx>0)?1:0;
+			OLED_Cursor(idx, 0xFF6600);
+		}
+		else if (sw==SW_BOTTOM) {
+			idx += (idx<2)?1:0;
+			OLED_Cursor(idx, 0xFF6600);
+		}
+		else if (sw==SW_RIGHT || sw==SW_RIGHT_LONG) {
+			switch(idx) {
+#ifdef FLAG_TEMPSENSOR_DEBUG
+			case 0:
+				tempTop->lastTemp += 10.0f;
+				break;
+#endif
+			case 1:
+				heaterTop->target += 1.0f;
+				OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
+				break;
+			case 2:
+				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_RESET);
+				OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+				break;
+			}
+		}
+		else if (sw==SW_LEFT || sw==SW_LEFT_LONG) {
+			switch(idx) {
+#ifdef FLAG_TEMPSENSOR_DEBUG
+			case 0:
+				tempTop->lastTemp -= 10.0f;
+				break;
+#endif
+			case 1:
+				heaterTop->target -= 1.0f;
+				OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
+				break;
+			case 2:
+				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);
+				OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+				break;
+			}
+		}
+		float temp = tempTop->read(tempTop);
+
+		OLED_Printf("/s$19/y%3.2f  \r\n", temp);
+		OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
+	}
+	heaterTop->stop(heaterTop);
+}
 

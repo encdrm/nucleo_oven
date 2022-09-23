@@ -2,14 +2,14 @@
 #include "main.h"
 #include "OLED.h"
 #include "Graph.h"
+#include "Switch.h"
 #include <stdlib.h>
 #include <math.h>
 
 
 
 
-
-static void _Graph_Print(graph_t * graph_var, uint32_t color){
+void _Graph_Print(graph_t * graph_var, uint32_t color){
 	for(uint16_t i = 0; i < graph_var -> count - 1; i++){
 		int32_t x1 = graph_var -> xAxisPos + graph_var -> xData [i] / graph_var -> xDensity;
 		int32_t x2 = graph_var -> xAxisPos + graph_var -> xData [i + 1] / graph_var -> xDensity;
@@ -19,7 +19,17 @@ static void _Graph_Print(graph_t * graph_var, uint32_t color){
 	}
 }
 
-static void _Graph_Add(graph_t * graph_var, float xData, float yData){
+void _Graph_PrintPoint(graph_t * graph_var, uint16_t idx, uint32_t color){
+	int32_t x1 = graph_var -> xAxisPos + graph_var -> xData [idx] / graph_var -> xDensity;
+	int32_t y1 = graph_var -> yAxisPos - graph_var -> yData [idx] / graph_var -> yDensity;
+	OLED_Dot(x1, y1, 1, color);
+	OLED_Dot(x1+1, y1, 1, color);
+	OLED_Dot(x1, y1+1, 1, color);
+	OLED_Dot(x1-1, y1, 1, color);
+	OLED_Dot(x1, y1-1, 1, color);
+}
+
+void _Graph_Add(graph_t * graph_var, float xData, float yData){
 	graph_var -> xData = realloc(graph_var -> xData, (graph_var -> count + 1) * sizeof(float));
 	graph_var -> yData = realloc(graph_var -> yData, (graph_var -> count + 1) * sizeof(float));
 	graph_var -> xData[graph_var -> count] = xData;
@@ -27,7 +37,7 @@ static void _Graph_Add(graph_t * graph_var, float xData, float yData){
 	graph_var -> count += 1;
 }
 
-static void _Graph_Pop(graph_t * graph_var, float * xData, float * yData){
+void _Graph_Pop(graph_t * graph_var, float * xData, float * yData){
 	if(graph_var -> count > 0){
 		if(xData != NULL){
 			*xData = graph_var -> xData[graph_var -> count - 1];
@@ -107,6 +117,33 @@ graph_t * regularPolygon(uint8_t number, float radius, float angle, uint8_t xAxi
 	return _Graph_Init(xData, yData, number + 1, xAxisPos, yAxisPos, xDen, yDen);
 }
 
+void Graph_UI(graph_t * gr){
+	uint16_t idx = 0;
+	OLED_Line(0, 53, 95, 53, 0xFF00FF);
+	gr -> Print(gr, 0x0000FF);
+	_Graph_PrintPoint(gr, idx, 0xFF8800);
+	OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+	for(;;){
+		uint16_t sw = Switch_Read();
+		if(sw == SW_RIGHT && idx < gr->count - 1){
+			idx ++;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr -> Print(gr, 0x0000FF);
+			_Graph_PrintPoint(gr, idx, 0xFF8800);
+			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+		}
+		else if(sw == SW_LEFT && idx > 0){
+			idx --;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr -> Print(gr, 0x0000FF);
+			_Graph_PrintPoint(gr, idx, 0xFF8800);
+			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+		}
+	}
 
+
+}
 
 

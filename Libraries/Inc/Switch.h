@@ -51,7 +51,7 @@
 #define COLOR_BLUE 0x00A0
 #define COLOR_BLACK 0x0000
 
-#define SwitchLED(col) Switch_LED(((col)>>8)&0xFF, (col)&0xFF)
+#define SwitchLED(col) Switch_LED((((col)>>8)&0xFF)<<2, ((col)&0xFF)<<2)
 
 
 void Switch_LED(uint16_t red, uint16_t blue);

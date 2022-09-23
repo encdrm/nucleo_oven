@@ -25,13 +25,15 @@ graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float y
 
 //가운데 지점을 원점으로 하여 초기화하는 기법입니다.
 #define Graph_InitCenter(xData, yData, xDen, yDen) \
-	_Graph_Init(xData, yData, sizeof(xData), (OLED_SIZEX>>1), (OLED_SIZEY>>1), xDen, yDen)
+	_Graph_Init(xData, yData, sizeof(xData) / sizeof(float), (OLED_SIZEX>>1), (OLED_SIZEY>>1), xDen, yDen)
 
 //왼쪽 아래 지점을 원점으로 하여 초기화하는 기법입니다.
 #define Graph_InitEdge(xData, yData, xDen, yDen) \
-	_Graph_Init(xData, yData, sizeof(xData), 0, OLED_SIZEY, xDen, yDen)
+	_Graph_Init(xData, yData, sizeof(xData) / sizeof(float), 1, 52, xDen, yDen)
 
 void Graph_Delete(graph_t * graph_var);
+
+void Graph_UI(graph_t * gr);
 
 
 graph_t * regularPolygon(uint8_t number, float radius, float angle, uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen);
