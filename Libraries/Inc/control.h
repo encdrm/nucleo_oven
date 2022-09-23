@@ -29,7 +29,8 @@ typedef struct _heater_t {
 		bool onFlag;
 		void (*start)(heater_t *);
 		void (*stop)(heater_t *);
-}heater_t;
+		void (*set_target_temp)(heater_t *, float);
+} heater_t;
 
 typedef struct _PIDConst {
 		float kp;
