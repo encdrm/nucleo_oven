@@ -10,8 +10,8 @@ typedef struct _graphType{
 	float xDensity;
 	float yDensity;
 	void (* Print) (struct _graphType * graph_var, uint32_t color);
-	void (* Add) (struct _graphType * graph_var, float xData, float yData);
-	void (* Pop) (struct _graphType * graph_var, float * xData, float * yData);
+	void (* Add) (struct _graphType * graph_var, float xData, float);
+	void (* Pop) (struct _graphType * graph_var, float * xData, float *);
 	void (* ChangeDensity) (struct _graphType * graph_var, float xDen, float yDen);
 	void (* ChangeAxis) (struct _graphType * graph_var, uint8_t xAxisPos, uint8_t yAxisPos);
 }graph_t;
@@ -32,6 +32,7 @@ graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float y
 	_Graph_Init(xData, yData, sizeof(xData) / sizeof(float), 1, 52, xDen, yDen)
 
 
+void Graph_PrintPoint(graph_t * graph_var, float x, float y, uint32_t color);
 void Graph_Reflect(graph_t * g, float * xData, float * yData);
 void Graph_Delete(graph_t * graph_var);
 

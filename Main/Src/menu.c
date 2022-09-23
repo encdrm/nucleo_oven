@@ -40,9 +40,9 @@ void profile(){}
 void test();
 void DCFan_Set(uint8_t level);
 void GraphUITest(){
-	float xData[10] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
-	float yData[10] = {30.0, 100.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0};
-	graph_t * g = Graph_InitEdge(xData, yData, 1.0, 6.0);
+	float xData[10] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+	float yData[10] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 60.0};
+	graph_t * g = Graph_InitEdge(xData, yData, 0.1, 6.0);
 	Graph_UI(g);
 	Graph_Delete(g);
 }
@@ -235,7 +235,7 @@ Menu_t testHeatList[] = {
 char *heaterStateStr[] = {"OFF", "PREHEATING", "TRANSIENT", "STEADY"};
 void testHeat(){
 	SwitchLED(COLOR_SKY);
-	OLED_MenuUI("TEST HEAT", 0xFF0000, 0x000000, testHeatList, 4, 0xFFFF00);
+	OLED_MenuUI("TEST HEAT", 0xFF0000, 0x000000, testHeatList, 6, 0xFFFF00);
 	OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
 	OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
 	OLED_Cursor(0, 0xFF6600);
@@ -299,6 +299,95 @@ void testHeat(){
 		OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
 		OLED_Printf("/s$59/p%s     \r\n", heaterStateStr[heaterTop->state]);
 		OLED_Printf("/s$69/p%3.2f  \r\n", heaterTop->errorSum);
+	}
+	heaterTop->stop(heaterTop);
+}
+
+
+Menu_t HeatList[] = {
+		{NULL, "/s/1/rtempU:", COLOR_SKY},
+		{NULL, "/s/2/rtargetU:", COLOR_SKY},
+		{NULL, "/s/3/rConvect:", COLOR_SKY},
+		{NULL, "/s/4/wdutyU:", COLOR_SKY},
+		{NULL, "/s/5/wstateU:", COLOR_SKY},
+		{NULL, "/s/6/wEsumU:", COLOR_SKY}
+};
+void Heat(graph_t * gr){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
+	OLED_Clear();
+	OLED_MenuUI("HEAT", 0xFF0000, 0x000000, testHeatList, 6, 0xFFFF00);
+	heaterTop -> target = gr->yData[0];
+	OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
+	OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+	OLED_Cursor(2, 0xFF6600);
+	int idx = 0;
+	float interval = (gr->xData[idx + 1] - gr->xData[idx]) * 60000.00;
+	float target1 = gr->yData[idx];
+	float target2 = gr->yData[idx + 1];
+	heaterTop->start(heaterTop);
+	HAL_Delay(500);
+	heaterTop -> target = target1;
+	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
+	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
+	uint32_t heatTime = HAL_GetTick();
+	uint32_t pTime = HAL_GetTick();
+	uint32_t gTime = HAL_GetTick();
+	uint32_t graphmode = 0;
+	for(;;){
+		uint16_t sw = Switch_Read();
+		if(sw==SW_ENTER) break;
+		else if(sw == SW_LEFT && !graphmode){
+			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);
+			OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+		}
+		else if(sw == SW_RIGHT && !graphmode){
+			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_RESET);
+			OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+		}
+		else if(sw == SW_TOP){
+			graphmode = !graphmode;
+			OLED_Clear();
+			gTime = HAL_GetTick();
+		}
+
+		float temp = tempTop->read(tempTop);
+		if(HAL_GetTick() - heatTime > (uint32_t)(gr->xData[idx + 1] * 60000.0) && idx < gr->count - 2){
+			idx++;
+			interval = (gr->xData[idx + 1] - gr->xData[idx]) * 60000.00;
+			target1 = gr->yData[idx];
+			target2 = gr->yData[idx + 1];
+		}
+		if(HAL_GetTick() - pTime > 50){
+			pTime += 50;
+			Switch_LED_Temperature(temp);
+			if(heaterTop->target < target2){
+				heaterTop->target += 50.0 * ((target2 - target1) > 0? (target2 - target1) : (target1 - target2)) / interval;
+				if(heaterTop -> target > target2){
+					heaterTop->target = target2;
+				}
+			}
+			else if(heaterTop->target > target2){
+				heaterTop->target -= 50.0 * ((target2 - target1) > 0? (target2 - target1) : (target1 - target2)) / interval;
+				if(heaterTop -> target < target2){
+					heaterTop->target = target2;
+				}
+			}
+			if(!graphmode)
+			OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
+		}
+		if(!graphmode){
+			OLED_Printf("/s$19/y%3.2f  \r\n", temp);
+			OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
+			OLED_Printf("/s$59/p%s     \r\n", heaterStateStr[heaterTop->state]);
+			OLED_Printf("/s$69/p%3.2f  \r\n", heaterTop->errorSum);
+		}
+		else if(graphmode){
+			if(HAL_GetTick() - gTime > 500){
+				gTime += 500;
+				OLED_Clear();
+				gr ->Print(gr, 0xFF0000);
+				Graph_PrintPoint(gr, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0x00FF00);
+			}
+		}
 	}
 	heaterTop->stop(heaterTop);
 }
