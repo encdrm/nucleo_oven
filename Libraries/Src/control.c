@@ -35,8 +35,8 @@ float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
 	float temperatureDifferential = (heaterobj->current - heaterobj->prev) / PERIOD;
 
 	// Integral term
-	if (temperatureError < -PIDMode.deadBandConst) heaterobj->errorSum += temperatureError * PERIOD + PIDMode.deadBandConst;
-	else if (temperatureError > PIDMode.deadBandConst) heaterobj->errorSum += temperatureError * PERIOD - PIDMode.deadBandConst;
+	if (temperatureError < -PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError + PIDMode.deadBandConst) * PERIOD;
+	else if (temperatureError > PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError - PIDMode.deadBandConst) * PERIOD;
 
 
 	// anti wind-up

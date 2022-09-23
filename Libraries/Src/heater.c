@@ -17,7 +17,7 @@ enum {
 };
 
 // TRANSIENT <-> STEADY 전환 기준이 되는 온도 편차. 타겟 온도와 차이가 더 커지면 TRANSIENT, 작아지면 STEADY 상태로 전환
-#define DEVIATION		1.0f
+#define DEVIATION		3.0f
 
 //
 typedef struct{
@@ -129,7 +129,7 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 		case PREHEATING:
 			heaterobj->duty = 1.f;
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if (heaterobj->current > heaterobj->target - 5.f) heaterobj->state = TRANSIENT;
+			else if (abs(heaterobj->target - heaterobj->current) <= 5.f) heaterobj->state = TRANSIENT;
 
 			break;
 
@@ -137,13 +137,13 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 			heaterobj->errorSum = .0f;
 			heaterobj->duty = Control_PID(heaterobj, PIDTransient);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if ((heaterobj->current > heaterobj->prev - DEVIATION) && (heaterobj->current < heaterobj->prev + DEVIATION)) heaterobj->state = STEADY;
+			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
 			break;
 
 		case STEADY:
 			heaterobj->duty = Control_PID(heaterobj, PIDSteady);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if ((heaterobj->current <= heaterobj->prev - DEVIATION) || (heaterobj->current >= heaterobj->prev + DEVIATION)) heaterobj->state = TRANSIENT;
+			else if (abs(heaterobj->target - heaterobj->current) > DEVIATION) heaterobj->state = TRANSIENT;
 			break;
 
 		default:
