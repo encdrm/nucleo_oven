@@ -347,6 +347,13 @@ void Heat(graph_t * gr){//Graph에 따라 분 단위로 시간 경과에 따라 
 			graphmode = !graphmode;
 			OLED_Clear();
 			gTime = HAL_GetTick();
+			if(!graphmode){
+				OLED_Clear();
+				OLED_MenuUI("HEAT", 0xFF0000, 0x000000, testHeatList, 6, 0xFFFF00);
+				OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
+				OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
+				OLED_Cursor(2, 0xFF6600);
+			}
 		}
 
 		float temp = tempTop->read(tempTop);
