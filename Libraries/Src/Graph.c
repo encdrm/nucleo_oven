@@ -1,5 +1,6 @@
 
 #include "main.h"
+#include "menu.h"
 #include "OLED.h"
 #include "Graph.h"
 #include "Switch.h"
@@ -28,6 +29,17 @@ void _Graph_PrintPoint(graph_t * graph_var, uint16_t idx, uint32_t color){
 	OLED_Dot(x1-1, y1, 1, color);
 	OLED_Dot(x1, y1-1, 1, color);
 }
+
+void Graph_PrintPoint(graph_t * graph_var, float x, float y, uint32_t color){
+	int32_t x1 = graph_var -> xAxisPos + x / graph_var -> xDensity;
+	int32_t y1 = graph_var -> yAxisPos - y / graph_var -> yDensity;
+	OLED_Dot(x1, y1, 1, color);
+	OLED_Dot(x1+1, y1, 1, color);
+	OLED_Dot(x1, y1+1, 1, color);
+	OLED_Dot(x1-1, y1, 1, color);
+	OLED_Dot(x1, y1-1, 1, color);
+}
+
 
 void _Graph_Add(graph_t * graph_var, float xData, float yData){
 	graph_var -> xData = realloc(graph_var -> xData, (graph_var -> count + 1) * sizeof(float));
@@ -134,9 +146,10 @@ void Graph_UI(graph_t * gr){
 	_Graph_PrintPoint(gr, idx, 0xFF8800);
 	OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 	uint32_t pTime = HAL_GetTick();
+	uint32_t state = 0;
 	for(;;){
 		uint16_t sw = Switch_Read();
-		if((sw == SW_RIGHT || sw == SW_RIGHT_LONG) && idx < gr->count - 1){
+		if((sw == SW_TOP || sw == SW_TOP_LONG) && idx < gr->count - 1 && state == 0){
 			idx ++;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
@@ -145,7 +158,7 @@ void Graph_UI(graph_t * gr){
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 			pTime = HAL_GetTick();
 		}
-		else if((sw == SW_LEFT || sw == SW_LEFT_LONG) && idx > 0){
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && idx > 0 && state == 0){
 			idx --;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
@@ -154,26 +167,33 @@ void Graph_UI(graph_t * gr){
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 			pTime = HAL_GetTick();
 		}
-		else if((sw == SW_TOP || sw == SW_TOP_LONG) && gr->yData[idx] < 305.0f){
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && gr->yData[idx] < 305.0f && state == 1){
 			gr->yData[idx] += 5.0f;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
 			gr -> Print(gr, 0x0000FF);
-			_Graph_PrintPoint(gr, idx, 0xFF8800);
+			_Graph_PrintPoint(gr, idx, 0x00FFFF);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 			pTime = HAL_GetTick();
 		}
-		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr->yData[idx] > 5.0f){
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr->yData[idx] > 5.0f && state == 1){
 			gr->yData[idx] -= 5.0f;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
 			gr -> Print(gr, 0x0000FF);
-			_Graph_PrintPoint(gr, idx, 0xFF8800);
+			_Graph_PrintPoint(gr, idx, 0x00FFFF);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 			pTime = HAL_GetTick();
 		}
 		else if(sw == SW_ENTER){
+			state = !state;
+			_Graph_PrintPoint(gr, idx, state ? 0x00FFFF : 0xFF8800);
+		}
+		else if(sw == SW_LEFT){
 			break;
+		}
+		else if(sw == SW_RIGHT){
+			Heat(gr);
 		}
 		if(HAL_GetTick() - pTime > 10){
 			pTime += 10;
