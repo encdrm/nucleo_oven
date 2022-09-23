@@ -106,19 +106,16 @@ static void Heater_Set(heater_t *heaterobj){
 
 static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 	float sensorADCRead = tempsensorobj->read(tempsensorobj);
-
-
 	if (sensorADCRead == NAN)
 		return;
+	heaterobj->prev = heaterobj->current;
+	heaterobj->current = sensorADCRead;
 
 	switch (heaterobj->state){
 		case OFF:
 			heaterobj->duty = 0.f;
 			heaterobj->errorSum = 0.f;
-			heaterobj->prev = 0.f;
-			heaterobj->current = 0.f;
 			if (heaterobj->onFlag) {
-				heaterobj->start(heaterobj);
 				heaterobj->state = PREHEATING;
 			}
 			break;
@@ -132,13 +129,13 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 
 		case TRANSIENT:
 			heaterobj->errorSum = .0f;
-			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDTransient);
+			heaterobj->duty = Control_PID(heaterobj, PIDTransient);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
 			else if ((heaterobj->current > heaterobj->prev - DEVIATION) && (heaterobj->current < heaterobj->prev + DEVIATION)) heaterobj->state = STEADY;
 			break;
 
 		case STEADY:
-			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDSteady);
+			heaterobj->duty = Control_PID(heaterobj, PIDSteady);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
 			else if ((heaterobj->current <= heaterobj->prev - DEVIATION) || (heaterobj->current >= heaterobj->prev + DEVIATION)) heaterobj->state = TRANSIENT;
 			break;

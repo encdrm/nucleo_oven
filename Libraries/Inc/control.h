@@ -50,5 +50,5 @@ extern PIDConst PIDSteady;
 heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel);
 void HeaterControl_TIM9_IRQ();
 
-float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode);
+float Control_PID(heater_t *heaterobj, PIDConst PIDMode);
 #endif /* INC_CONTROL_H_ */

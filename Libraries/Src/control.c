@@ -25,11 +25,8 @@ PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 �
 		.5f			// deadBandConst
 };
 
-float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode){
-
+float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
 	float duty;
-	heaterobj->prev = heaterobj->current;
-	heaterobj->current = sensorADCRead;
 
 	// Proportional term
 	float temperatureError = heaterobj->target - heaterobj->current;
