@@ -394,6 +394,9 @@ void Heat(graph_t * gr){//Graph에 따라 분 단위로 시간 경과에 따라 
 				gr ->Print(gr, 0xFF0000);
 				Graph_PrintPoint(gr, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0x00FF00);
 			}
+
+			OLED_Line(0, 53, 95, 53, 0xFFFF00);
+			OLED_Printf("/s$70/g%d:$74/y%d/$78/r%d[\'c]", (HAL_GetTick() - heatTime) / 60000, (int)temp, (int)heaterTop->target);
 		}
 	}
 	heaterTop->stop(heaterTop);
