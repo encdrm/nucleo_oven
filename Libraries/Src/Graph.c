@@ -117,6 +117,8 @@ graph_t * regularPolygon(uint8_t number, float radius, float angle, uint8_t xAxi
 	return _Graph_Init(xData, yData, number + 1, xAxisPos, yAxisPos, xDen, yDen);
 }
 
+//Graph_UI로 데이터를 조작하면 데이터 값이 바뀝니다. 만약 바뀌질 않는다면 xData, yData 배열을 복제하시기 바랍니다.
+//일반적으로 이 UI는 온도 설정을 위한 목적으로 만들어졌습니다. 따라서 이걸로 설정하면 설정값이 바뀌니 유의하시기 바랍니다.
 void Graph_UI(graph_t * gr){
 	uint16_t idx = 0;
 	OLED_Line(0, 53, 95, 53, 0xFF00FF);
@@ -125,7 +127,7 @@ void Graph_UI(graph_t * gr){
 	OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 	for(;;){
 		uint16_t sw = Switch_Read();
-		if(sw == SW_RIGHT && idx < gr->count - 1){
+		if((sw == SW_RIGHT || sw == SW_RIGHT_LONG) && idx < gr->count - 1){
 			idx ++;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
@@ -133,13 +135,32 @@ void Graph_UI(graph_t * gr){
 			_Graph_PrintPoint(gr, idx, 0xFF8800);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
 		}
-		else if(sw == SW_LEFT && idx > 0){
+		else if((sw == SW_LEFT || sw == SW_LEFT_LONG) && idx > 0){
 			idx --;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
 			gr -> Print(gr, 0x0000FF);
 			_Graph_PrintPoint(gr, idx, 0xFF8800);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+		}
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && gr->yData[idx] < 305.0f){
+			gr->yData[idx] += 5.0f;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr -> Print(gr, 0x0000FF);
+			_Graph_PrintPoint(gr, idx, 0xFF8800);
+			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr->yData[idx] > 5.0f){
+			gr->yData[idx] -= 5.0f;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr -> Print(gr, 0x0000FF);
+			_Graph_PrintPoint(gr, idx, 0xFF8800);
+			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+		}
+		else if(sw == SW_ENTER){
+			break;
 		}
 	}
 
