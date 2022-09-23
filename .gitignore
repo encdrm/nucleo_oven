@@ -63,3 +63,5 @@ ctrlp.root
 
 #html
 *.html
+
+Debug/
