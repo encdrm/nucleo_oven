@@ -1,6 +1,0 @@
-../Main/Src/menu.c:16:6:testTemp	16	static
-../Main/Src/menu.c:29:6:testHeat	8	static
-../Main/Src/menu.c:35:6:profile	4	static
-../Main/Src/menu.c:53:6:Menu_Setup	16	static
-../Main/Src/menu.c:60:6:Menu	24	static
-../Main/Src/menu.c:109:6:test	24	static
