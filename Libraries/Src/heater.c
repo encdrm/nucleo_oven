@@ -149,3 +149,5 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 			heaterobj->state = OFF;
 	}
 }
+
+// 좆같은 기계
