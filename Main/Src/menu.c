@@ -44,6 +44,7 @@ void GraphUITest(){
 	float yData[10] = {30.0, 100.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0, 250.0};
 	graph_t * g = Graph_InitEdge(xData, yData, 1.0, 6.0);
 	Graph_UI(g);
+	Graph_Delete(g);
 }
 
 Menu_t menuList[] = {
