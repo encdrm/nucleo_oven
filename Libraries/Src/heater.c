@@ -114,7 +114,6 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 	switch (heaterobj->state){
 		case OFF:
 			heaterobj->duty = 0.f;
-			heaterobj->target = 0.f;
 			heaterobj->errorSum = 0.f;
 			heaterobj->prev = 0.f;
 			heaterobj->current = 0.f;
