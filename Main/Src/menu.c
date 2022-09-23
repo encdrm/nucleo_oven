@@ -297,7 +297,7 @@ void testHeat(){
 		}
 		OLED_Printf("/s$19/y%3.2f  \r\n", temp);
 		OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
-		OLED_Printf("/s$59/p%3.2f  \r\n", heaterStateStr[heaterTop->state]);
+		OLED_Printf("/s$59/p%s     \r\n", heaterStateStr[heaterTop->state]);
 		OLED_Printf("/s$69/p%3.2f  \r\n", heaterTop->errorSum);
 	}
 	heaterTop->stop(heaterTop);
