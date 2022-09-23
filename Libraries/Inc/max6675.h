@@ -16,6 +16,12 @@
 // 온도센서 출력으로 tempsensorobject->lastTemp를 내놓는 플래그
 //#define FLAG_TEMPSENSOR_DEBUG
 
+#ifdef FLAG_TEMPSENSOR_DEBUG
+float __sensor_read(tempsensor_t *sensorobj) {
+	return sensorobj->lastTemp;
+}
+#endif
+
 typedef enum {
 	SENSOR_HIGH,
 	SENSOR_LOW

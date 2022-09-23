@@ -40,7 +40,7 @@
 #define TEMPSENSOR_DOWN_CS_Port GPIOB
 #define TEMPSENSOR_DOWN_CS_Pin GPIO_PIN_13
 
-
+#define FLAG_USE_UART_AS_PRINTF
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -87,19 +87,15 @@ static void MX_TIM9_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#ifdef FLAG_USE_UART_AS_PRINTF
 int _write(int file, char *ptr, int len)
 {
 	if(HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, 10) == HAL_OK)
 		return len;
 	return -1;
 }
-
-
-#ifdef FLAG_TEMPSENSOR_DEBUG
-float __sensor_read(tempsensor_t *sensorobj) {
-	return sensorobj->lastTemp;
-}
 #endif
+
 /* USER CODE END 0 */
 
 /**
@@ -141,11 +137,11 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
 
-  /* Make temperature sensor object */
+  /* New temperature sensor object */
   tempBottom = Custom_Tempsensor(&hspi3, TEMPSENSOR_DOWN_CS_Port, TEMPSENSOR_DOWN_CS_Pin, 300);
   tempTop = Custom_Tempsensor(&hspi3, TEMPSENSOR_UP_CS_Port, TEMPSENSOR_UP_CS_Pin, 300);
 
-  /* Initialize heater struct */
+  /* New heater object */
   heaterTop = Custom_HeaterControl(&htim3, TIM_CHANNEL_3);	// HU
   heaterBottom = Custom_HeaterControl(&htim3, TIM_CHANNEL_2);	// HD
 

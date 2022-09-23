@@ -51,6 +51,5 @@ float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode){
 	// output limit
 	if (duty < 0.01f) duty = 0.f;
 	if (duty > 0.99f) duty = 1.f;
-	printf("Te: %f, Td: %f, ES: %f, duty: %f\r\n", temperatureError, temperatureDifferential, heaterobj->errorSum, duty);
 	return duty;
 }

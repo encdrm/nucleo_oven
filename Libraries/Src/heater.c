@@ -9,13 +9,15 @@
 #include "control.h"
 
 // heater 상태 상수
-#define OFF			0
-#define PREHEATING		1
-#define TRANSIENT		2
-#define STEADY			4
+enum {
+	OFF,
+	PREHEATING,
+	TRANSIENT,
+	STEADY
+};
 
 // TRANSIENT <-> STEADY 전환 기준이 되는 온도 편차. 타겟 온도와 차이가 더 커지면 TRANSIENT, 작아지면 STEADY 상태로 전환
-#define DEVIATION		0.2f
+#define DEVIATION		1.0f
 
 //
 typedef struct{
@@ -104,6 +106,8 @@ static void Heater_Set(heater_t *heaterobj){
 
 static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 	float sensorADCRead = tempsensorobj->read(tempsensorobj);
+
+
 	if (sensorADCRead == NAN)
 		return;
 
@@ -124,6 +128,7 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 			heaterobj->duty = 1.f;
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
 			else if (heaterobj->current > heaterobj->target - 5.f) heaterobj->state = TRANSIENT;
+
 			break;
 
 		case TRANSIENT:

@@ -226,9 +226,13 @@ Menu_t testHeatList[] = {
 		{NULL, "/s/2/rtargetU:", COLOR_SKY},
 		{NULL, "/s/3/rConvect:", COLOR_SKY},
 		{NULL, "/s/4/wdutyU:", COLOR_SKY},
+		{NULL, "/s/5/wstateU:", COLOR_SKY},
+		{NULL, "/s/6/wEsumU:", COLOR_SKY}
 };
 
-// FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있다.
+// FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있음.
+// 디버깅을 위한 state to string 저장소
+char *heaterStateStr[] = {"OFF", "PREHEATING", "TRANSIENT", "STEADY"};
 void testHeat(){
 	SwitchLED(COLOR_SKY);
 	OLED_MenuUI("TEST HEAT", 0xFF0000, 0x000000, testHeatList, 4, 0xFFFF00);
@@ -238,6 +242,7 @@ void testHeat(){
 	int idx = 0;
 	heaterTop->start(heaterTop);
 	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
+	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
 	uint32_t pTime = HAL_GetTick();
 	for(;;){
 		uint16_t sw = Switch_Read();
@@ -292,6 +297,8 @@ void testHeat(){
 		}
 		OLED_Printf("/s$19/y%3.2f  \r\n", temp);
 		OLED_Printf("/s$49/p%3.2f  \r\n", heaterTop->duty);
+		OLED_Printf("/s$59/p%3.2f  \r\n", heaterStateStr[heaterTop->state]);
+		OLED_Printf("/s$69/p%3.2f  \r\n", heaterTop->errorSum);
 	}
 	heaterTop->stop(heaterTop);
 }

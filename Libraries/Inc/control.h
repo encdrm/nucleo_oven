@@ -15,8 +15,8 @@
 
 #define PERIOD 1
 
-typedef struct _heater_t heater_t;
 
+typedef struct _heater_t heater_t;
 typedef struct _heater_t {
 		TIM_HandleTypeDef *htim;
 		uint32_t channel;
