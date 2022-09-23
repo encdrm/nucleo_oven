@@ -37,6 +37,7 @@ typedef struct _PIDConst {
 		float kd;
 		float filterConst;
 		float antiWindUpConst;
+		float deadBandConst;
 
 }PIDConst;
 
