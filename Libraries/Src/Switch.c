@@ -25,13 +25,13 @@ void Switch_LED_Temperature(float temp){
 	//0도일 때 파랑
 	static float temp_v;
 	if(temp_v < temp){
-		temp_v += 0.25f;
+		temp_v += 1.0f;
 		if(temp_v > temp){
 			temp_v = temp;
 		}
 	}
 	else if(temp_v > temp){
-		temp_v -= 0.25f;
+		temp_v -= 1.0f;
 		if(temp_v < temp){
 			temp_v = temp;
 		}
@@ -51,6 +51,9 @@ void Switch_LED_Temperature(float temp){
 		Switch_LED(0, 1023);
 	}
 }
+
+
+
 
 uint16_t Switch_Read(){
 	static uint8_t Switch_state = 0;

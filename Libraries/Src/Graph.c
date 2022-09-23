@@ -125,6 +125,7 @@ void Graph_UI(graph_t * gr){
 	gr -> Print(gr, 0x0000FF);
 	_Graph_PrintPoint(gr, idx, 0xFF8800);
 	OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+	uint32_t pTime = HAL_GetTick();
 	for(;;){
 		uint16_t sw = Switch_Read();
 		if((sw == SW_RIGHT || sw == SW_RIGHT_LONG) && idx < gr->count - 1){
@@ -134,6 +135,7 @@ void Graph_UI(graph_t * gr){
 			gr -> Print(gr, 0x0000FF);
 			_Graph_PrintPoint(gr, idx, 0xFF8800);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+			pTime = HAL_GetTick();
 		}
 		else if((sw == SW_LEFT || sw == SW_LEFT_LONG) && idx > 0){
 			idx --;
@@ -142,6 +144,7 @@ void Graph_UI(graph_t * gr){
 			gr -> Print(gr, 0x0000FF);
 			_Graph_PrintPoint(gr, idx, 0xFF8800);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+			pTime = HAL_GetTick();
 		}
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && gr->yData[idx] < 305.0f){
 			gr->yData[idx] += 5.0f;
@@ -150,6 +153,7 @@ void Graph_UI(graph_t * gr){
 			gr -> Print(gr, 0x0000FF);
 			_Graph_PrintPoint(gr, idx, 0xFF8800);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+			pTime = HAL_GetTick();
 		}
 		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr->yData[idx] > 5.0f){
 			gr->yData[idx] -= 5.0f;
@@ -158,10 +162,16 @@ void Graph_UI(graph_t * gr){
 			gr -> Print(gr, 0x0000FF);
 			_Graph_PrintPoint(gr, idx, 0xFF8800);
 			OLED_Printf("/s/6/rx:%d, /yy:%d", (int)gr->xData[idx], (int)gr->yData[idx]);
+			pTime = HAL_GetTick();
 		}
 		else if(sw == SW_ENTER){
 			break;
 		}
+		if(HAL_GetTick() - pTime > 10){
+			pTime += 10;
+			Switch_LED_Temperature(gr->yData[idx]);
+		}
+
 	}
 
 
