@@ -244,6 +244,7 @@ Menu_t testHeatList[] = {
 // FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있음.
 // 디버깅을 위한 state to string 저장소
 char *heaterStateStr[] = {"OFF", "PREHEATING", "TRANSIENT", "STEADY"};
+char *heaterStateStr2[] = {"OFF  ", "PREHT", "TRANS", "STEAD"};
 void testHeat(){
 	SwitchLED(COLOR_SKY);
 	OLED_MenuUI("< TEST HEAT", 0xFF0000, 0x000000, testHeatList, 6, 0xFFFF00);
@@ -413,4 +414,139 @@ void Heat(graph_t * gr){//Graph에 따라 분 단위로 시간 경과에 따라 
 	}
 	heaterTop->stop(heaterTop);
 }
+
+
+
+Menu_t HeatList2[] = {
+		{NULL, "/s/1/R       U     D  ", COLOR_SKY},
+		{NULL, "/s/2/wTEMP", COLOR_SKY},
+		{NULL, "/s/3/wTARG", COLOR_SKY},
+		{NULL, "/s/4/wDUTY", COLOR_SKY},
+		{NULL, "/s/5/wSTAT", COLOR_SKY},
+		{NULL, "/s/6/wESUM", COLOR_SKY}
+};
+extern uint32_t OLED_bgColor;
+void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
+	OLED_Clear();
+	OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
+	heaterTop -> target = gr1->yData[0];
+	heaterBottom -> target = gr2->yData[0];
+	OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
+	OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+	OLED_bgColor = 0xFF0000;
+	OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
+	OLED_bgColor = 0x000000;
+	int idx = 0;
+	float interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
+	float target1U = gr1->yData[idx];
+	float target2U = gr1->yData[idx + 1];
+	float target1D = gr2->yData[idx];
+	float target2D = gr2->yData[idx + 1];
+	heaterTop->start(heaterTop);
+	heaterBottom->start(heaterBottom);
+	HAL_Delay(500);
+	heaterTop -> target = target1U;
+	heaterBottom -> target = target1D;
+	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
+	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
+	uint32_t heatTime = HAL_GetTick();
+	uint32_t pTime = HAL_GetTick();
+	uint32_t gTime = HAL_GetTick();
+	uint32_t graphmode = 0;
+	for(;;){
+		uint16_t sw = Switch_Read();
+		if(sw==SW_LEFT) break;
+		else if(sw == SW_ENTER && !graphmode){//콘벡숀 모오터 돌리기!
+			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
+			OLED_bgColor = 0xFF0000;
+			OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
+			OLED_bgColor = 0x000000;
+		}
+		else if(sw == SW_RIGHT){//그래프 띄우기
+			graphmode = !graphmode;
+			OLED_Clear();
+			gTime = HAL_GetTick();
+			if(!graphmode){
+				OLED_Clear();
+				OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
+				OLED_bgColor = 0xFF0000;
+				OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
+				OLED_bgColor = 0x000000;
+
+				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
+				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+			}
+		}
+
+		float tempU = tempTop->read(tempTop);
+		float tempD = tempTop->read(tempTop);
+		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 2){
+			idx++;
+			interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
+			target1U = gr1->yData[idx];
+			target2U = gr1->yData[idx + 1];
+			target1D = gr2->yData[idx];
+			target2D = gr2->yData[idx + 1];
+		}
+		if(HAL_GetTick() - pTime > 100){
+			pTime += 100;
+			Switch_LED_Temperature((tempU + tempD) / 2.0);
+			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
+			if(heaterTop->target < target2U){
+				heaterTop->target += 200.0 * ((target2U - target1U) > 0? (target2U - target1U) : (target1U - target2U)) / interval;
+				if(heaterTop -> target > target2U){
+					heaterTop->target = target2U;
+				}
+			}
+			else if(heaterTop->target > target2U){
+				heaterTop->target -= 200.0 * ((target2U - target1U) > 0? (target2U - target1U) : (target1U - target2U)) / interval;
+				if(heaterTop -> target < target2U){
+					heaterTop->target = target2U;
+				}
+			}
+			if(heaterBottom->target < target2D){
+				heaterBottom->target += 200.0 * ((target2D - target1D) > 0? (target2D - target1D) : (target1D - target2D)) / interval;
+				if(heaterBottom -> target > target2D){
+					heaterBottom->target = target2D;
+				}
+			}
+			else if(heaterBottom->target > target2D){
+				heaterBottom->target -= 200.0 * ((target2D - target1D) > 0? (target2D - target1D) : (target1D - target2D)) / interval;
+				if(heaterBottom -> target < target2D){
+					heaterBottom->target = target2D;
+				}
+			}
+			if(!graphmode){
+				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
+				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
+				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
+				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
+				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
+				OLED_Printf("/s$4B/p%3.1f  \r\n", heaterBottom->duty);
+				OLED_Printf("/s$55/p%s\r\n", heaterStateStr2[heaterTop->state]);
+				OLED_Printf("/s$5B/p%s\r\n", heaterStateStr2[heaterBottom->state]);
+				OLED_Printf("/s$65/p%3.1f  \r\n", heaterTop->errorSum);
+				OLED_Printf("/s$6B/p%3.1f  \r\n", heaterBottom->errorSum);
+			}
+		}
+		else if(graphmode){
+			if(HAL_GetTick() - gTime > 500){
+				gTime += 500;
+				OLED_Clear();
+				gr1 ->Print(gr1, 0xFF0000);
+				gr2 ->Print(gr2, 0xFFFF00);
+				Graph_PrintPoint(gr1, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0xFF8000);
+				Graph_PrintPoint(gr2, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterBottom->target, 0xFF8000);
+			}
+
+			OLED_Line(0, 53, 95, 53, 0xFFFF00);
+//			OLED_Printf("/s$60/g%d:$64/y%d/$68/r%d[\'c]", (HAL_GetTick() - heatTime) / 60000, (int)temp, (int)heaterTop->target);
+		}
+	}
+	heaterTop->stop(heaterTop);
+	heaterBottom->stop(heaterBottom);
+}
+
+
+
 

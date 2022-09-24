@@ -405,7 +405,7 @@ void OLED_Printf(const char * format, ...){
 			continue;
 		}
 		else if (*c == '/' && *(c + 1) == 'k'){//key color는 단색 OLED에서도 지원
-			OLED_charColor = 0xFFFFFF;
+			OLED_charColor = 0x000000;
 			c += 1;
 			continue;
 		}

@@ -235,7 +235,7 @@ void Graph_UI2(graph_t * gr1, graph_t * gr2){
 	gr2 -> Print(gr2, 0x00FF00);
 	_Graph_PrintPoint(gr1, idx, 0xFF8800);
 	_Graph_PrintPoint(gr2, idx, 0xFF8800);
-	OLED_Printf("/s/p$60<$6F>");
+	OLED_Printf("/s/k$60<$6F>");
 	OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
 	uint32_t pTime = HAL_GetTick();
 	uint32_t state = 0;
@@ -249,7 +249,7 @@ void Graph_UI2(graph_t * gr1, graph_t * gr2){
 			gr2 -> Print(gr2, 0x00FF00);
 			_Graph_PrintPoint(gr1, idx, 0xFF8800);
 			_Graph_PrintPoint(gr2, idx, 0xFF8800);
-			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s/k$60<$6F>");
 			OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
 			pTime = HAL_GetTick();
 		}
@@ -330,7 +330,7 @@ void Graph_UI2(graph_t * gr1, graph_t * gr2){
 			break;
 		}
 		else if(sw == SW_RIGHT){
-			//Heat2(gr1, gr2);
+			Heat2(gr1, gr2);
 
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
