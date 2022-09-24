@@ -479,7 +479,7 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 		}
 
 		float tempU = tempTop->read(tempTop);
-		float tempD = tempTop->read(tempTop);
+		float tempD = tempBottom->read(tempBottom);
 		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 2){
 			idx++;
 			interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
