@@ -17,7 +17,7 @@ enum {
 };
 
 // TRANSIENT <-> STEADY 전환 기준이 되는 온도 편차. 타겟 온도와 차이가 더 커지면 TRANSIENT, 작아지면 STEADY 상태로 전환
-#define DEVIATION		1.0f
+#define DEVIATION		3.0f
 
 //
 typedef struct{
@@ -50,18 +50,19 @@ extern tempsensor_t *tempBottom;
 
 
 void HeaterControl_TIM9_IRQ();
-static void Heater_Start(heater_t *heaterobj);
-static void Heater_Stop(heater_t *heaterobj);
-static void Heater_Set(heater_t *heaterobj);
+static void heater_start(heater_t *heaterobj);
+static void heater_stop(heater_t *heaterobj);
+static void heater_set_target_temp(heater_t *heaterobj, float targetTemp);
+__STATIC_INLINE void __Heater_SetDuty(heater_t *heaterobj);
 static void Heater_Controller(tempsensor_t *tempsensor, heater_t *heaterobj);
 
 void HeaterControl_TIM9_IRQ(){
 	Heater_Controller(tempTop, heaterTop);
 	Heater_Controller(tempBottom, heaterBottom);
 	if(heaterTop->state)
-		Heater_Set(heaterTop);
+		__Heater_SetDuty(heaterTop);
 	if(heaterBottom->state)
-		Heater_Set(heaterBottom);
+		__Heater_SetDuty(heaterBottom);
 }
 
 heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel){
@@ -80,24 +81,29 @@ heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel){
 	heaterobj->target = .0f;
 
 	// Setting fields
-	heaterobj->start = Heater_Start;
-	heaterobj->stop = Heater_Stop;
+	heaterobj->start = heater_start;
+	heaterobj->stop = heater_stop;
+	heaterobj->set_target_temp = heater_set_target_temp;
 
 	return heaterobj;
 }
 
-static void Heater_Start(heater_t *heaterobj){
+static void heater_start(heater_t *heaterobj){
 	heaterobj->onFlag = true;
 	HAL_TIM_PWM_Start(heaterobj->htim, heaterobj->channel);
 }
 
-static void Heater_Stop(heater_t *heaterobj){
+static void heater_stop(heater_t *heaterobj){
 	heaterobj->onFlag = false;
 	while (heaterobj->state != OFF)	// Heater_Controller가 OFF 상태인지 확인
 	HAL_TIM_PWM_Stop(heaterobj->htim, heaterobj->channel);
 }
 
-static void Heater_Set(heater_t *heaterobj){
+static void heater_set_target_temp(heater_t *heaterobj, float targetTemp){
+	heaterobj->target = targetTemp;
+}
+
+__STATIC_INLINE void __Heater_SetDuty(heater_t *heaterobj){
 	// Duty ratio to duty cycle conversion
 	uint32_t dutycycle = heaterobj->duty * (__HAL_TIM_GET_AUTORELOAD(heaterobj->htim)+1) - 1;
 	// Set duty rate of PWM
@@ -106,19 +112,16 @@ static void Heater_Set(heater_t *heaterobj){
 
 static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 	float sensorADCRead = tempsensorobj->read(tempsensorobj);
-
-
 	if (sensorADCRead == NAN)
 		return;
+	heaterobj->prev = heaterobj->current;
+	heaterobj->current = sensorADCRead;
 
 	switch (heaterobj->state){
 		case OFF:
 			heaterobj->duty = 0.f;
 			heaterobj->errorSum = 0.f;
-			heaterobj->prev = 0.f;
-			heaterobj->current = 0.f;
 			if (heaterobj->onFlag) {
-				heaterobj->start(heaterobj);
 				heaterobj->state = PREHEATING;
 			}
 			break;
@@ -126,21 +129,21 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 		case PREHEATING:
 			heaterobj->duty = 1.f;
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if (heaterobj->current > heaterobj->target - 5.f) heaterobj->state = TRANSIENT;
+			else if (abs(heaterobj->target - heaterobj->current) <= 5.f) heaterobj->state = TRANSIENT;
 
 			break;
 
 		case TRANSIENT:
 			heaterobj->errorSum = .0f;
-			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDTransient);
+			heaterobj->duty = Control_PID(heaterobj, PIDTransient);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if ((heaterobj->current > heaterobj->prev - DEVIATION) && (heaterobj->current < heaterobj->prev + DEVIATION)) heaterobj->state = STEADY;
+			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
 			break;
 
 		case STEADY:
-			heaterobj->duty = Control_PID(sensorADCRead, heaterobj, PIDSteady);
+			heaterobj->duty = Control_PID(heaterobj, PIDSteady);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if ((heaterobj->current <= heaterobj->prev - DEVIATION) || (heaterobj->current >= heaterobj->prev + DEVIATION)) heaterobj->state = TRANSIENT;
+			else if (abs(heaterobj->target - heaterobj->current) > DEVIATION) heaterobj->state = TRANSIENT;
 			break;
 
 		default:

@@ -1,9 +1,0 @@
-../Libraries/Src/max6675.c:25:6:Systick_Sensor_IRQ	16	static
-../Libraries/Src/max6675.c:37:15:Custom_Tempsensor	32	static
-../Libraries/Src/max6675.c:68:6:Add_GlobalWaitCountNode	16	static
-../Libraries/Src/max6675.c:83:23:__sensor_read	24	static
-../Libraries/Src/max6675.c:98:7:read	24	static
-../Libraries/Src/max6675.c:109:6:is_readable	16	static
-../Libraries/Src/max6675.c:113:6:set_interval	16	static
-../Libraries/Src/max6675.c:116:10:get_interval	16	static
-../Libraries/Src/max6675.c:119:10:read_waitcount	16	static

@@ -1,9 +1,0 @@
-../Libraries/Src/Graph.c:12:13:_Graph_Print	56	static
-../Libraries/Src/Graph.c:22:13:_Graph_Add	24	static
-../Libraries/Src/Graph.c:30:13:_Graph_Pop	24	static
-../Libraries/Src/Graph.c:44:13:_Graph_ChangeDensity	24	static
-../Libraries/Src/Graph.c:49:13:_Graph_ChangeAxis	16	static
-../Libraries/Src/Graph.c:55:11:_Graph_Init	40	static
-../Libraries/Src/Graph.c:78:11:Graph_InitNull	32	static
-../Libraries/Src/Graph.c:94:6:Graph_Delete	16	static
-../Libraries/Src/Graph.c:100:11:regularPolygon	56	static

@@ -9,11 +9,11 @@
 
 static void Add_GlobalWaitCountNode(waitcount_node *waitCntNode);
 __weak float __sensor_read(tempsensor_t *sensorobj);
-static float read(tempsensor_t *sensorobj);
-static bool is_readable(tempsensor_t *sensorobj);
-static void set_interval(tempsensor_t *sensorobj, uint32_t interval);
-static uint32_t get_interval(tempsensor_t *sensorobj);
-static uint32_t read_waitcount(tempsensor_t *sensorobj);
+static float sensor_read(tempsensor_t *sensorobj);
+static bool sensor_is_readable(tempsensor_t *sensorobj);
+static void sensor_set_interval(tempsensor_t *sensorobj, uint32_t interval);
+static uint32_t sensor_get_interval(tempsensor_t *sensorobj);
+static uint32_t sensor_read_waitcount(tempsensor_t *sensorobj);
 
 waitcount waitcount_node_storage;
 
@@ -38,11 +38,11 @@ tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, ui
 	// Setting methods
 	tempsensor_t *sensorobj = (tempsensor_t*) calloc(1, sizeof(tempsensor_t));
 
-	sensorobj->read = read;
-	sensorobj->is_readable = is_readable;
-	sensorobj->set_interval = set_interval;
-	sensorobj->get_interval = get_interval;
-	sensorobj->read_waitcount = read_waitcount;
+	sensorobj->read = sensor_read;
+	sensorobj->is_readable = sensor_is_readable;
+	sensorobj->set_interval = sensor_set_interval;
+	sensorobj->get_interval = sensor_get_interval;
+	sensorobj->read_waitcount = sensor_read_waitcount;
 
 
 	// Setting fields
@@ -95,7 +95,7 @@ __weak float __sensor_read(tempsensor_t *sensorobj) {
 
 	return temp * 0.25f;
 }
-float read(tempsensor_t *sensorobj) {
+float sensor_read(tempsensor_t *sensorobj) {
 	float data = .0f;
 	if (sensorobj->is_readable(sensorobj)) {
 		data = __sensor_read(sensorobj);
@@ -106,16 +106,16 @@ float read(tempsensor_t *sensorobj) {
 	}
 	return data;
 }
-bool is_readable(tempsensor_t *sensorobj) {
+bool sensor_is_readable(tempsensor_t *sensorobj) {
 	return !(sensorobj->read_waitcount(sensorobj));
 }
 
-void set_interval(tempsensor_t *sensorobj, uint32_t interval) {
+void sensor_set_interval(tempsensor_t *sensorobj, uint32_t interval) {
 	sensorobj->__sensor_interval = interval;
 }
-uint32_t get_interval(tempsensor_t *sensorobj) {
+uint32_t sensor_get_interval(tempsensor_t *sensorobj) {
 	return sensorobj->__sensor_interval;
 }
-uint32_t read_waitcount(tempsensor_t *sensorobj) {
+uint32_t sensor_read_waitcount(tempsensor_t *sensorobj) {
 	return *(sensorobj->waitCount);
 }

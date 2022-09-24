@@ -8,28 +8,25 @@
 #include <stdio.h>
 
 PIDConst PIDTransient = {
-		.5f,		// kp
+		.2f,		// kp
 		0.f,		// ki
 		.2f,		// kd
 		10.f,		// filterConst
 		5.f,		// antiWindUpConst
-		.5f			// deadBandConst
+		.25f		// deadBandConst
 };
 
 PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 하락 목표
-		.05f,		// kp
-		.2f,		// ki
-		.01f,		// kd
+		.01f,		// kp
+		.06f,		// ki
+		.1f,		// kd
 		10.f,		// filterConst
 		5.f,		// antiWindUpConst
-		.5f			// deadBandConst
+		.25f		// deadBandConst
 };
 
-float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode){
-
+float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
 	float duty;
-	heaterobj->prev = heaterobj->current;
-	heaterobj->current = sensorADCRead;
 
 	// Proportional term
 	float temperatureError = heaterobj->target - heaterobj->current;
@@ -38,8 +35,8 @@ float Control_PID(float sensorADCRead, heater_t *heaterobj, PIDConst PIDMode){
 	float temperatureDifferential = (heaterobj->current - heaterobj->prev) / PERIOD;
 
 	// Integral term
-	if (temperatureError < -PIDMode.deadBandConst) heaterobj->errorSum += temperatureError * PERIOD + PIDMode.deadBandConst;
-	else if (temperatureError > PIDMode.deadBandConst) heaterobj->errorSum += temperatureError * PERIOD - PIDMode.deadBandConst;
+	if (temperatureError < -PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError + PIDMode.deadBandConst) * PERIOD;
+	else if (temperatureError > PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError - PIDMode.deadBandConst) * PERIOD;
 
 
 	// anti wind-up
