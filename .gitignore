@@ -66,8 +66,7 @@ ctrlp.root
 *.html
 
 Debug/
+
 .settings/
 Nucleo_Oven Debug.launch
-=======
 *.html
->>>>>>> cc3823c2c76d597e0679718f9f7e3b71b6ce33d9
