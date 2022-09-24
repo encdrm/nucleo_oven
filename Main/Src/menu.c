@@ -40,7 +40,7 @@ void profile(){}
 void test();
 void DCFan_Set(uint8_t level);
 void GraphUITest(){
-	float xData[10] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+	float xData[10] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
 	float yData[10] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 60.0};
 	graph_t * g = Graph_InitEdge(xData, yData, 0.1, 6.0);
 	Graph_UI(g);
