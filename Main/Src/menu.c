@@ -42,7 +42,7 @@ void DCFan_Set(uint8_t level);
 void GraphUITest(){
 	float xData[10] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
 	float yData[10] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 60.0};
-	graph_t * g = Graph_InitEdge(xData, yData, 0.1, 6.0);
+	graph_t * g = Graph_InitEdge(xData, yData, 1.0, 6.0);
 	Graph_UI(g);
 	Graph_Delete(g);
 }
