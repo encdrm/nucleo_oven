@@ -17,7 +17,7 @@ enum {
 };
 
 // TRANSIENT <-> STEADY 전환 기준이 되는 온도 편차. 타겟 온도와 차이가 더 커지면 TRANSIENT, 작아지면 STEADY 상태로 전환
-#define DEVIATION		3.0f
+#define DEVIATION		1.f
 
 //
 typedef struct{
@@ -122,15 +122,8 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 			heaterobj->duty = 0.f;
 			heaterobj->errorSum = 0.f;
 			if (heaterobj->onFlag) {
-				heaterobj->state = PREHEATING;
+				heaterobj->state = TRANSIENT;
 			}
-			break;
-
-		case PREHEATING:
-			heaterobj->duty = 1.f;
-			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if (abs(heaterobj->target - heaterobj->current) <= 5.f) heaterobj->state = TRANSIENT;
-
 			break;
 
 		case TRANSIENT:
