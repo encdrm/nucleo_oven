@@ -36,7 +36,7 @@ void testHeat();
 
 
 
-void profile(){}
+void profile();
 void test();
 void DCFan_Set(uint8_t level);
 void GraphUITest(){
@@ -45,6 +45,17 @@ void GraphUITest(){
 	graph_t * g = Graph_InitEdge(xData, yData, 1.0, 6.0);
 	Graph_UI(g);
 	Graph_Delete(g);
+}
+
+void profile(){
+	float tData[10] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
+	float uData[10] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
+	float dData[10] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
+	graph_t * g1 = Graph_InitEdge(tData, uData, 1.0, 6.0);
+	graph_t * g2 = Graph_InitEdge(tData, dData, 1.0, 6.0);
+	Graph_UI2(g1, g2);
+	Graph_Delete(g1);
+	Graph_Delete(g2);
 }
 
 Menu_t menuList[] = {

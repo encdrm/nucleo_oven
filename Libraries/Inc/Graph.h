@@ -37,6 +37,7 @@ void Graph_Reflect(graph_t * g, float * xData, float * yData);
 void Graph_Delete(graph_t * graph_var);
 
 void Graph_UI(graph_t * gr);
+void Graph_UI2(graph_t * gr1, graph_t * gr2);
 
 
 graph_t * regularPolygon(uint8_t number, float radius, float angle, uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen);
