@@ -646,6 +646,7 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
 	OLED_bgColor = 0x000000;
 	int idx = 0;
+	int heaterOn = 1;
 	float interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
 	float target1U = gr1->yData[idx];
 	float target2U = gr1->yData[idx + 1];
@@ -655,6 +656,7 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	float tempD = tempBottom->read(tempBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
+	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
 	HAL_Delay(500);
 	heaterTop -> target = target1U;
 	heaterBottom -> target = target1D;
@@ -667,6 +669,12 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	grn1->Add(grn1, gr1->xData[idx], tempU);
 	grn2->Add(grn2, gr2->xData[idx], tempD);
 	for(;;){
+		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
+			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
+			heaterTop->stop(heaterTop);
+			heaterBottom->stop(heaterBottom);
+			heaterOn = 0;
+		}
 		uint16_t sw = Switch_Read();
 		if(sw==SW_LEFT && graphmode == 0) break;
 		else if(sw == SW_LEFT && graphmode){
