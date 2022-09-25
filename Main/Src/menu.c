@@ -240,6 +240,7 @@ void profile(){
 			}
 			switch(idx){
 			case 0:
+				//그래프 데이터 받아오기
 				break;
 			case 1:
 				timerSetting = !timerSetting;
