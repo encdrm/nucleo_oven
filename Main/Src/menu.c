@@ -122,7 +122,7 @@ void Profile_Set(graph_t * gr1, graph_t * gr2){
 			pTime = HAL_GetTick();
 		}
 		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr2->yData[idx] > 4.0f && state == 2){
-			gr1->yData[idx] -= 5.0f;
+			gr2->yData[idx] -= 5.0f;
 			OLED_Clear();
 			OLED_Line(0, 53, 95, 53, 0xFF00FF);
 			gr1 -> Print(gr1, 0x0000FF);
@@ -669,6 +669,9 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	grn1->Add(grn1, gr1->xData[idx], tempU);
 	grn2->Add(grn2, gr2->xData[idx], tempD);
 	for(;;){
+		if(!graphmode){
+			OLED_Printf("/s$10/g%d", (HAL_GetTick() - heatTime) / 60000);
+		}
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
 			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
 			heaterTop->stop(heaterTop);
