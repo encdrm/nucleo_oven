@@ -41,11 +41,11 @@ void Switch_LED_Temperature(float temp){
 	if(temp_v > 250.00f){
 		Switch_LED(1023, 0);
 	}
-	else if(temp_v > 50.00f){
-		Switch_LED(1023, (250.00f - temp_v) * (250.00f - temp_v) * 1023.00f / 40000.0f);
+	else if(temp_v > 100.00f){
+		Switch_LED(1023, (180.00f - temp_v) * (180.00f - temp_v) * 1023.00f / 6400.0f);
 	}
-	else if(temp_v > 0){
-		Switch_LED(temp_v * temp_v * 1023.00f / 2500.0f, 1023);
+	else if(temp_v > 30){
+		Switch_LED((temp_v - 30) * (temp_v - 30) * 1023.00f / 4900.0f, 1023);
 	}
 	else{
 		Switch_LED(0, 1023);
