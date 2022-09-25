@@ -47,13 +47,220 @@ void GraphUITest(){
 	Graph_Delete(g);
 }
 
+
+void Profile_Set(graph_t * gr1, graph_t * gr2){
+	uint16_t idx = 0;
+	OLED_Line(0, 53, 95, 53, 0xFF00FF);
+	gr1 -> Print(gr1, 0x0000FF);
+	gr2 -> Print(gr2, 0x00FF00);
+	_Graph_PrintPoint(gr1, idx, 0xFF8800);
+	_Graph_PrintPoint(gr2, idx, 0xFF8800);
+	OLED_Printf("/s/k$60<$6F>");
+	OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+	uint32_t pTime = HAL_GetTick();
+	uint32_t state = 0;
+	for(;;){
+		uint16_t sw = Switch_Read();
+		if((sw == SW_TOP || sw == SW_TOP_LONG) && idx < gr1->count - 1 && state == 0){
+			idx ++;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr1 -> Print(gr1, 0x0000FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/k$60<$6F>");
+			OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && idx > 0 && state == 0){
+			idx --;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr1 -> Print(gr1, 0x0000FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+		}
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && gr1->yData[idx] < 299.0f && state == 1){
+			gr1->yData[idx] += 5.0f;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			gr1 -> Print(gr1, 0x0000FF);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s$62/yt%03d$66/ru%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr1->yData[idx] > 4.0f && state == 1){
+			gr1->yData[idx] -= 5.0f;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			gr1 -> Print(gr1, 0x0000FF);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s$62/yt%03d$66/ru%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+		}
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && gr2->yData[idx] < 299.0f && state == 2){
+			gr2->yData[idx] += 5.0f;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr1 -> Print(gr1, 0x0000FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s$62/yt%03d$66/yu%03d$6A/rd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && gr2->yData[idx] > 4.0f && state == 2){
+			gr1->yData[idx] -= 5.0f;
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr1 -> Print(gr1, 0x0000FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s$62/yt%03d$66/yu%03d$6A/rd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+		}
+		else if(sw == SW_ENTER){
+			state = (state + 1) % 3;
+			OLED_Printf("/s/p$60<$6F>");
+			if(state==2){
+				OLED_Printf("/s$62/yt%03d$66/yu%03d$6A/rd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			}
+			else if(state==1){
+				OLED_Printf("/s$62/yt%03d$66/ru%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			}
+			else{
+				OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			}
+		}
+		else if(sw == SW_LEFT){
+			break;
+		}
+		/*else if(sw == SW_RIGHT){
+			Heat2(gr1, gr2);
+
+			OLED_Clear();
+			OLED_Line(0, 53, 95, 53, 0xFF00FF);
+			gr1 -> Print(gr1, 0x0000FF);
+			gr2 -> Print(gr2, 0x00FF00);
+			_Graph_PrintPoint(gr1, idx, 0xFF8800);
+			_Graph_PrintPoint(gr2, idx, 0xFF8800);
+			OLED_Printf("/s/p$60<$6F>");
+			OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
+			pTime = HAL_GetTick();
+			state = 0;
+		}*/
+		if(HAL_GetTick() - pTime > 10){
+			pTime += 10;
+			Switch_LED_Temperature((gr1->yData[idx] + gr2->yData[idx])/2.0);
+		}
+
+	}
+
+
+}
+
+Menu_t profileList[] = {
+		{NULL, "/yGetProfile/r$1F>", COLOR_PINK},
+		{NULL, "/yTimer: /w90min/r$2F>", COLOR_PINK},
+		{NULL, "/yProfileSet/r$3F>", COLOR_PINK},
+		{NULL, "/oHeat/r$4F>", COLOR_PINK},
+};
+
+uint32_t timer = 90;
 void profile(){
-	float tData[10] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
-	float uData[10] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
-	float dData[10] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
-	graph_t * g1 = Graph_InitEdge(tData, uData, 1.0, 6.0);
-	graph_t * g2 = Graph_InitEdge(tData, dData, 1.0, 6.0);
-	Graph_UI2(g1, g2);
+	timer = 90;
+	float tData[100] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
+	float uData[100] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
+	float dData[100] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
+	graph_t * g1 = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+	graph_t * g2 = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+	SwitchLED(COLOR_SKY);
+	OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 4, 0xFFFF00);
+	OLED_Cursor(0, 0xFF6600);
+	int idx = 0;
+	uint32_t sw = 0;
+	uint32_t timerSetting = 0;
+	for(;;){
+		sw = Switch_Read();
+		if(sw == SW_LEFT && !timerSetting) break;
+		else if(sw == SW_LEFT && timerSetting){
+			timerSetting = !timerSetting;
+			OLED_Printf("$27%s%dmin", timerSetting?"/r":"/w", timer);
+		}
+		else if(sw == SW_TOP && !timerSetting){
+			idx += 3;
+			idx %= 4;
+			OLED_Cursor(idx, 0xFF6600);
+		}
+		else if(sw == SW_BOTTOM && !timerSetting){
+			idx += 1;
+			idx %= 4;
+			OLED_Cursor(idx, 0xFF6600);
+		}
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && timerSetting){
+			if(timer < 300){
+				timer += 10;
+				tData[timer/10] = (float)timer;
+				uData[timer/10] = 30.0f;
+				dData[timer/10] = 30.0f;
+				Graph_Delete(g1);
+				Graph_Delete(g2);
+				g1 = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+				g2 = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+				OLED_Printf("$27/r%dmin", timer);
+			}
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && timerSetting){
+			if(timer > 0){
+				timer -= 10;
+				Graph_Delete(g1);
+				Graph_Delete(g2);
+				g1 = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+				g2 = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+				OLED_Printf("$27/r%dmin", timer);
+			}
+		}
+		else if(sw == SW_RIGHT){
+			if(idx != 1){
+				OLED_Clear();
+			}
+			switch(idx){
+			case 0:
+				break;
+			case 1:
+				timerSetting = !timerSetting;
+				OLED_Printf("$27%s%dmin", timerSetting?"/r":"/w", timer);
+				break;
+			case 2:
+				Profile_Set(g1, g2);
+				break;
+			case 3:
+				Heat2(g1, g2);
+				break;
+			}
+			if(idx != 1){
+				OLED_Clear();
+				SwitchLED(COLOR_SKY);
+				OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 4, 0xFFFF00);
+				OLED_Printf("$27/w%dmin", timer);
+				OLED_Cursor(idx, 0xFF6600);
+			}
+		}
+	}
 	Graph_Delete(g1);
 	Graph_Delete(g2);
 }
@@ -427,6 +634,8 @@ Menu_t HeatList2[] = {
 };
 extern uint32_t OLED_bgColor;
 void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
+	graph_t * grn1 = Graph_InitNull(gr1->xAxisPos, gr1->yAxisPos, gr1->xDensity, gr1->yDensity);
+	graph_t * grn2 = Graph_InitNull(gr2->xAxisPos, gr2->yAxisPos, gr2->xDensity, gr2->yDensity);
 	OLED_Clear();
 	OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
 	heaterTop -> target = gr1->yData[0];
@@ -442,6 +651,8 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	float target2U = gr1->yData[idx + 1];
 	float target1D = gr2->yData[idx];
 	float target2D = gr2->yData[idx + 1];
+	float tempU = tempTop->read(tempTop);
+	float tempD = tempBottom->read(tempBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
 	HAL_Delay(500);
@@ -453,9 +664,22 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	uint32_t pTime = HAL_GetTick();
 	uint32_t gTime = HAL_GetTick();
 	uint32_t graphmode = 0;
+	grn1->Add(grn1, gr1->xData[idx], tempU);
+	grn2->Add(grn2, gr2->xData[idx], tempD);
 	for(;;){
 		uint16_t sw = Switch_Read();
-		if(sw==SW_LEFT) break;
+		if(sw==SW_LEFT && graphmode == 0) break;
+		else if(sw == SW_LEFT && graphmode){
+			graphmode = 0;
+			OLED_Clear();
+			OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
+			OLED_bgColor = 0xFF0000;
+			OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
+			OLED_bgColor = 0x000000;
+
+			OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
+			OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+		}
 		else if(sw == SW_ENTER && !graphmode){//콘벡숀 모오터 돌리기!
 			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
 			OLED_bgColor = 0xFF0000;
@@ -463,7 +687,8 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 			OLED_bgColor = 0x000000;
 		}
 		else if(sw == SW_RIGHT){//그래프 띄우기
-			graphmode = !graphmode;
+			graphmode ++;
+			graphmode %= 3;
 			OLED_Clear();
 			gTime = HAL_GetTick();
 			if(!graphmode){
@@ -478,10 +703,12 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 			}
 		}
 
-		float tempU = tempTop->read(tempTop);
-		float tempD = tempBottom->read(tempBottom);
+		tempU = tempTop->read(tempTop);
+		tempD = tempBottom->read(tempBottom);
 		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 2){
 			idx++;
+			grn1->Add(grn1, gr1->xData[idx], tempU);
+			grn2->Add(grn2, gr2->xData[idx], tempD);
 			interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
 			target1U = gr1->yData[idx];
 			target2U = gr1->yData[idx + 1];
@@ -533,10 +760,18 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 			if(HAL_GetTick() - gTime > 500){
 				gTime += 500;
 				OLED_Clear();
-				gr1 ->Print(gr1, 0xFF0000);
-				gr2 ->Print(gr2, 0xFFFF00);
-				Graph_PrintPoint(gr1, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0xFF8000);
-				Graph_PrintPoint(gr2, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterBottom->target, 0xFF8000);
+				if(graphmode == 1){
+					gr1 ->Print(gr1, 0x0000FF);
+					grn1 ->Print(grn1, 0xFF0000);
+					Graph_PrintPoint(gr1, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0x4444FF);
+					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempU, 0xFF4444);
+				}
+				else if(graphmode == 2){
+					gr2 ->Print(gr2, 0x00FF00);
+					grn2 ->Print(grn2, 0xFF0000);
+					Graph_PrintPoint(gr2, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterBottom->target, 0x44FF44);
+					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempD, 0xFF4444);
+				}
 			}
 
 			OLED_Line(0, 53, 95, 53, 0xFFFF00);

@@ -31,13 +31,13 @@ graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float y
 #define Graph_InitEdge(xData, yData, xDen, yDen) \
 	_Graph_Init(xData, yData, sizeof(xData) / sizeof(float), 1, 52, xDen, yDen)
 
-
+void _Graph_PrintPoint(graph_t * graph_var, uint16_t idx, uint32_t color);
 void Graph_PrintPoint(graph_t * graph_var, float x, float y, uint32_t color);
 void Graph_Reflect(graph_t * g, float * xData, float * yData);
 void Graph_Delete(graph_t * graph_var);
 
+//Graph_UI도 곧 함수명 변경 후 메뉴로 넣을 예정.
 void Graph_UI(graph_t * gr);
-void Graph_UI2(graph_t * gr1, graph_t * gr2);
 
 
 graph_t * regularPolygon(uint8_t number, float radius, float angle, uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float yDen);

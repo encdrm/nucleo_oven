@@ -18,6 +18,7 @@ void Menu();
 void Menu_Setup(void);
 void Menu_Loop(void);
 void Heat(graph_t * gr);
+void Heat2(graph_t * gr1, graph_t * gr2);
 
 
 #endif
