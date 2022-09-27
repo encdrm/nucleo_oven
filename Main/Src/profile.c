@@ -3,6 +3,7 @@
 
 extern tempsensor_t *tempTop;
 extern tempsensor_t *tempBottom;
+extern UART_HandleTypeDef huart1;
 
 graph_t * profile_upper;
 graph_t * profile_lower;
@@ -29,6 +30,25 @@ void profile(){
 	uint32_t sw = 0;
 	uint32_t timerSetting = 0;
 	OLED_Printf("$27/w%dmin", timer);
+
+	// for BT configuration
+	HAL_StatusTypeDef halError;
+	enum {
+		BTPARSE_IDLE, BTPARSE_READ, BTPARSE_WRITEGRAPH
+	};
+	uint8_t buffer[200] = {0};
+	int bufferIdx = 0;
+	uint8_t Data;
+	char bufferX[20] = { 0 };
+	char bufferY[20] = { 0 };
+	int btBufXIdx = 0;
+	int btBufYIdx = 0;
+	int btParseState = BTPARSE_IDLE;
+	int btTransCount = 0;
+	bool flag_start = false;
+	bool flag_bottom = false;
+	bool flag_finished = false;
+
 	for(;;){
 		sw = Switch_Read();
 		if(sw == SW_LEFT && !timerSetting) break;
@@ -75,7 +95,102 @@ void profile(){
 			}
 			switch(idx){
 			case 0:
-				//그래프 데이터 받아오기
+				Graph_Delete(g1);
+				Graph_Delete(g2);
+				g1 = Graph_InitNull(0, 52,
+									(float) timer / 90.0f, 6.0f);
+				g2 = Graph_InitNull(0, 52,
+									(float) timer / 90.0f, 6.0f);
+				memset(bufferX, 0, 20);
+				memset(bufferY, 0, 20);
+				btBufXIdx = 0;
+				btBufYIdx = 0;
+				btTransCount = 0;
+				flag_start = false;
+				flag_bottom = false;
+				flag_finished = false;
+
+				OLED_Printf("$20/s/rGetting Profile from BT...");
+				// Read bluetooth
+
+				while (true) {
+					halError = HAL_UART_Receive(&huart1, (uint8_t*) (buffer+bufferIdx), 1, 200);
+					if (halError == HAL_OK)
+						break;
+					if (Switch_Read())
+						break;
+				}
+				if (halError == HAL_OK) { // Received
+					while (halError == HAL_OK)
+						halError = HAL_UART_Receive(&huart1, (uint8_t*) (buffer+(++bufferIdx)), 1, 200);
+					for (int btIdx = 0;btIdx<bufferIdx;btIdx++) {
+						Data = *(buffer+btIdx);
+						switch (Data) {
+						case 't':	//
+							flag_start = true;
+							flag_bottom = false;
+							btTransCount = 0;
+							btParseState = BTPARSE_READ;
+							continue;
+						case 'b':
+							flag_start = true;
+							flag_bottom = true;
+							btTransCount = 0;
+							btParseState = BTPARSE_READ;
+							continue;
+						case '/':
+							if (flag_start) {
+								btTransCount++;
+								if (btTransCount%2 == 0)
+									btParseState = BTPARSE_WRITEGRAPH;
+								else
+									continue;
+							}
+							break;
+						case 'e':
+							flag_finished = true;
+							break;
+						}
+
+						if (flag_finished)
+							break;
+
+						switch (btParseState) {
+						case BTPARSE_IDLE:
+							break;
+						case BTPARSE_READ:
+							if (btTransCount%2 == 0)
+								bufferX[btBufXIdx++] = Data;
+							else
+								bufferY[btBufYIdx++] = Data;
+							break;
+						case BTPARSE_WRITEGRAPH:
+							if (flag_bottom){
+								g2->Add(g2, atof(bufferX), atof(bufferY));
+							} else {
+								g1->Add(g1, atof(bufferX), atof(bufferY));
+							}
+							memset(bufferX, 0, sizeof(bufferX));
+							memset(bufferY, 0, sizeof(bufferY));
+							btBufXIdx = 0;
+							btBufYIdx = 0;
+							btParseState = BTPARSE_READ;
+							break;
+						}
+					}
+				}
+				OLED_Clear();
+				if (flag_finished == true) {
+					OLED_Printf("$10/s/bFinished!");
+					flag_finished = false;
+					g1->Print(g1, 0x0000FF);
+					g2->Print(g1, 0x00FF00);
+					_Graph_PrintPoint(g1, idx, 0xFF8800);
+					_Graph_PrintPoint(g2, idx, 0xFF8800);
+					while (!Switch_Read());
+				} else {
+					OLED_Printf("$20/s/bExiting...");
+				}
 				break;
 			case 1:
 				timerSetting = !timerSetting;

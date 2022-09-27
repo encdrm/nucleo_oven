@@ -87,8 +87,12 @@ void Error_Handler(void);
 #define Motor2_GPIO_Port GPIOA
 #define Motor1_Pin GPIO_PIN_9
 #define Motor1_GPIO_Port GPIOA
+#define BT_RX_Pin GPIO_PIN_10
+#define BT_RX_GPIO_Port GPIOA
 #define LAMP_Pin GPIO_PIN_11
 #define LAMP_GPIO_Port GPIOA
+#define BT_TX_Pin GPIO_PIN_15
+#define BT_TX_GPIO_Port GPIOA
 #define TEMP_SO_Pin GPIO_PIN_11
 #define TEMP_SO_GPIO_Port GPIOC
 #define SW1_Pin GPIO_PIN_3

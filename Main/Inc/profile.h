@@ -7,6 +7,7 @@
 #include "Switch.h"
 
 #include <stdio.h>
+#include <string.h>
 #include "max6675.h"
 #include "control.h"
 

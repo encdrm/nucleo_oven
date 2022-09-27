@@ -10,7 +10,7 @@
 #include "control.h"
 
 extern SPI_HandleTypeDef hspi3;
-TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim3;
 
 extern tempsensor_t *tempTop;
 extern tempsensor_t *tempBottom;
