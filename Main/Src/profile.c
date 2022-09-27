@@ -28,6 +28,7 @@ void profile(){
 	int idx = 0;
 	uint32_t sw = 0;
 	uint32_t timerSetting = 0;
+	OLED_Printf("$27/w%dmin", timer);
 	for(;;){
 		sw = Switch_Read();
 		if(sw == SW_LEFT && !timerSetting) break;
