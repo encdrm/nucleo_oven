@@ -565,11 +565,11 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 				gTime += 500;
 				OLED_Clear();
 				if(graphmode == 1){
-					grn1 ->Print(grn1, 0xFF0000);
+					grn1 ->Print(grn1, 0x0000FF);
 					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempU, 0xFF4444);
 				}
 				else if(graphmode == 2){
-					grn2 ->Print(grn2, 0xFF0000);
+					grn2 ->Print(grn2, 0x00FF00);
 					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempD, 0xFF4444);
 				}
 			}
