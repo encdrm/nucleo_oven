@@ -366,14 +366,14 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	graph_t * grn2 = Graph_InitNull(0, 52, timer/90.0, 6.0);
 	OLED_Clear();
 	OLED_MenuUI("< HEAT:/bON       ", 0xFF0000, 0x000000, Heat2List, 6, 0xFFFF00);
-	OLED_Cursor(4, 0xFF0000);
+	OLED_Cursor(2, 0xFF0000);
 	heaterTop -> target = 30.0f;
 	heaterBottom -> target = 30.0f;
 	OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 	OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
 	OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 	OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
-	OLED_Printf("/s$4C/y/%3d", timer);
+	OLED_Printf("/s$4C/y<%03d", timer);
 	int idx = 0;
 	int curs = 2;
 	int heaterOn = 1;
@@ -418,6 +418,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
 			OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+			OLED_Printf("/s$4C/r<%03d", timer);
 			OLED_Cursor(curs, 0xFF0000);
 		}
 		else if(sw == SW_ENTER && !graphmode && curs == 4){//콘벡숀 모오터 돌리기!
@@ -439,9 +440,10 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 					OLED_bgColor = 0x000000;
 
 					OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
-					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
 					OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 					OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Printf("/s$4C/r<%03d", timer);
 					OLED_Cursor(curs, 0xFF0000);
 				}
 			}
@@ -452,7 +454,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			}
 			else if(curs == 3){
 				timerset = !timerset;
-				OLED_Printf("/s$4C%s/%3d", timerset ? "%r" : "%y",timer);
+				OLED_Printf("/s$4C%s<%3d", timerset ? "/r" : "/y",timer);
 			}
 			else if(curs == 2){
 				timerset ++;
@@ -488,7 +490,9 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && !graphmode && timerset){
 			if(curs == 3){
 				timer += 10;
-				OLED_Printf("/s$4C/r/%3d", timer);
+				grn1->ChangeDensity(grn1, timer / 90.0f, 6.0f);
+				grn2->ChangeDensity(grn2, timer / 90.0f, 6.0f);
+				OLED_Printf("/s$4C/r<%03d", timer);
 			}
 			else if(curs == 2){
 				switch(timerset){
@@ -508,7 +512,9 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && !graphmode && timerset){
 			if(curs == 3){
 				timer -= 10;
-				OLED_Printf("/s$4C/r/%3d", timer);
+				grn1->ChangeDensity(grn1, timer / 90.0f, 6.0f);
+				grn2->ChangeDensity(grn2, timer / 90.0f, 6.0f);
+				OLED_Printf("/s$4C/r<%03d", timer);
 			}
 			else if(curs == 2){
 				switch(timerset){
@@ -542,8 +548,8 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 				uint32_t tck = HAL_GetTick() - heatTime;
 				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
 				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
-				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
-				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
+//				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
+//				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
 //				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
 //				OLED_Printf("/s$4B/p%3.1f  \r\n", heaterBottom->duty);
 //				OLED_Printf("/s$55/p%s\r\n", heaterStateStr2[heaterTop->state]);
@@ -574,6 +580,8 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	heaterTop->stop(heaterTop);
 	heaterBottom->stop(heaterBottom);
 	timer = (grn1->count - 1) * 10;
+	profile_upper = grn1;
+	profile_lower = grn2;
 }
 
 

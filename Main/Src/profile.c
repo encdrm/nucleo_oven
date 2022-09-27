@@ -314,7 +314,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 					OLED_bgColor = 0x000000;
 
 					OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
-					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
 					OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 					OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
 					OLED_Cursor(curs, 0xFF0000);
