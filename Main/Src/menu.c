@@ -556,7 +556,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 //				OLED_Printf("/s$5B/p%s\r\n", heaterStateStr2[heaterBottom->state]);
 //				OLED_Printf("/s$65/p%3.1f  \r\n", heaterTop->errorSum);
 //				OLED_Printf("/s$6B/p%3.1f  \r\n", heaterBottom->errorSum);
-				OLED_Printf("/s$45/g%03d:%02d", tck / 60000,(tck / 1000) % 100);
+				OLED_Printf("/s$45/g%03d:%02d", tck / 60000,(tck / 1000) % 60);
 			}
 		}
 		else if(graphmode){

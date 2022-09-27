@@ -393,7 +393,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 //				OLED_Printf("/s$5B/p%s\r\n", heaterStateStr2[heaterBottom->state]);
 //				OLED_Printf("/s$65/p%3.1f  \r\n", heaterTop->errorSum);
 //				OLED_Printf("/s$6B/p%3.1f  \r\n", heaterBottom->errorSum);
-				OLED_Printf("/s$45/g%01d:%02d:%02d.%01d", (tck / 3600000) % 24,(tck / 60000) % 60,(tck / 1000) % 100, (tck / 100) % 10);
+				OLED_Printf("/s$45/g%01d:%02d:%02d.%01d", (tck / 3600000) % 24,(tck / 60000) % 60,(tck / 1000) % 60, (tck / 100) % 10);
 			}
 		}
 		else if(graphmode){
