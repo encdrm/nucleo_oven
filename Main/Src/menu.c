@@ -33,7 +33,7 @@ extern uint32_t timer;
 
 Menu_t menuList[] = {
 		{profile, "/yProfile/r$1F>", COLOR_PINK},
-		{Heat2, "/yHeat/r$5F>", COLOR_SKY},
+		{Heat2, "/yHeat/r$2F>", COLOR_SKY},
 		{test, "/yTest Module/r$3F>", COLOR_RED},
 };
 
@@ -108,6 +108,8 @@ void test(){
 	SwitchLED(testList[0].color);
 	uint8_t setting = 0;
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
+	htim3.Instance->CCR2 = 0;
+	htim3.Instance->CCR3 = 0;
 	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
 	uint32_t heatTime = HAL_GetTick();
 	float tempU, tempD;
@@ -123,12 +125,12 @@ void test(){
 			Switch_LED_Temperature((tempU + tempD) / 2.0);
 		}
 		uint16_t sw = Switch_Read();
-		if((sw == SW_TOP || sw == SW_TOP_LONG) && setting){
+		if((sw == SW_TOP || sw == SW_TOP_LONG) && !setting){
 			idx+=5;
 			idx %= 6;
 			OLED_Cursor(idx, 0xFF0000);
 		}
-		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && setting){
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && !setting){
 			idx+=1;
 			idx %= 6;
 			OLED_Cursor(idx, 0xFF0000);

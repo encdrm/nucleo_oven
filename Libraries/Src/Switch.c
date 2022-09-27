@@ -38,7 +38,7 @@ void Switch_LED_Temperature(float temp){
 	}
 
 
-	if(temp_v > 250.00f){
+	if(temp_v > 180.00f){
 		Switch_LED(1023, 0);
 	}
 	else if(temp_v > 100.00f){

@@ -317,8 +317,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 			else if(curs == 4){
 				HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, (Motor2_GPIO_Port->ODR) & Motor2_Pin?0:1);
+				OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 				OLED_Printf("/s$5B/rR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
-				OLED_Printf("/s$5B/yR:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 			}
 		}
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && !graphmode){
