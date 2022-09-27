@@ -25,6 +25,7 @@ typedef struct _heater_t {
 		float target;
 		float current;
 		float prev;
+		float prevError;
 		float errorSum;
 		bool onFlag;
 		void (*start)(heater_t *);
