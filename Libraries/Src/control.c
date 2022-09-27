@@ -32,7 +32,8 @@ float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
 	float temperatureError = heaterobj->target - heaterobj->current;
 
 	// Derivative term
-	float temperatureDifferential = (heaterobj->current - heaterobj->prev) / PERIOD;
+	float temperatureDifferential = (temperatureError - heaterobj->prevError) / PERIOD;
+	heaterobj->prevError = temperatureError;
 
 	// Integral term
 	if (temperatureError < -PIDMode.deadBandConst) heaterobj->errorSum += (temperatureError + PIDMode.deadBandConst) * PERIOD;
@@ -43,7 +44,7 @@ float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
 	else if (heaterobj->errorSum < -PIDMode.antiWindUpConst) heaterobj->errorSum = -PIDMode.antiWindUpConst;
 
 	// PID control
-	duty = (temperatureError * PIDMode.kp - temperatureDifferential * PIDMode.kd + heaterobj->errorSum * PIDMode.ki);
+	duty = (temperatureError * PIDMode.kp + temperatureDifferential * PIDMode.kd + heaterobj->errorSum * PIDMode.ki);
 
 	// output limit
 	if (duty < 0.01f) duty = 0.f;

@@ -77,6 +77,7 @@ heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel){
 	heaterobj->htim = htim;
 	heaterobj->onFlag = false;
 	heaterobj->prev = .0f;
+	heaterobj->prevError = .0f;
 	heaterobj->state = OFF;
 	heaterobj->target = .0f;
 
