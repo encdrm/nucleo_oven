@@ -637,9 +637,9 @@ Menu_t HeatList2[] = {
 		{NULL, "/s/1/R       U     D  ", COLOR_SKY},
 		{NULL, "/s/2/wTEMP", COLOR_SKY},
 		{NULL, "/s/3/wTARG", COLOR_SKY},
-		{NULL, "/s/4/wDUTY", COLOR_SKY},
-		{NULL, "/s/5/wSTAT", COLOR_SKY},
-		{NULL, "/s/6/wESUM", COLOR_SKY}
+		{NULL, "/s/4/wTIME", COLOR_SKY},
+		{NULL, "/s/5/wMOTR", COLOR_SKY},
+		{NULL, "/s/6/wShow Graph", COLOR_SKY}
 };
 extern uint32_t OLED_bgColor;
 void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
@@ -647,14 +647,18 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	graph_t * grn2 = Graph_InitNull(gr2->xAxisPos, gr2->yAxisPos, gr2->xDensity, gr2->yDensity);
 	OLED_Clear();
 	OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
+	OLED_Cursor(4, 0xFF0000);
 	heaterTop -> target = gr1->yData[0];
 	heaterBottom -> target = gr2->yData[0];
 	OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 	OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+	OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
+	OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
 	OLED_bgColor = 0xFF0000;
 	OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
 	OLED_bgColor = 0x000000;
 	int idx = 0;
+	int curs = 4;
 	int heaterOn = 1;
 	float interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
 	float target1U = gr1->yData[idx];
@@ -678,9 +682,6 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 	grn1->Add(grn1, gr1->xData[idx], tempU);
 	grn2->Add(grn2, gr2->xData[idx], tempD);
 	for(;;){
-		if(!graphmode){
-			OLED_Printf("/s$10/g%d", (HAL_GetTick() - heatTime) / 60000);
-		}
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
 			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
 			heaterTop->stop(heaterTop);
@@ -692,34 +693,55 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 		else if(sw == SW_LEFT && graphmode){
 			graphmode = 0;
 			OLED_Clear();
-			OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
-			OLED_bgColor = 0xFF0000;
-			OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-			OLED_bgColor = 0x000000;
+			OLED_MenuUI("< HEAT         >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
 
 			OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 			OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+			OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
+			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+			OLED_Cursor(curs, 0xFF0000);
 		}
-		else if(sw == SW_ENTER && !graphmode){//콘벡숀 모오터 돌리기!
+		else if(sw == SW_ENTER && !graphmode && curs == 4){//콘벡숀 모오터 돌리기!
 			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-			OLED_bgColor = 0xFF0000;
-			OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-			OLED_bgColor = 0x000000;
+			OLED_Printf("/s$55/rC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
+			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
 		}
 		else if(sw == SW_RIGHT){//그래프 띄우기
-			graphmode ++;
-			graphmode %= 3;
-			OLED_Clear();
-			gTime = HAL_GetTick();
-			if(!graphmode){
+			if(curs == 5){
+				graphmode ++;
+				graphmode %= 3;
 				OLED_Clear();
-				OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
-				OLED_bgColor = 0xFF0000;
-				OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-				OLED_bgColor = 0x000000;
+				gTime = HAL_GetTick();
+				if(!graphmode){
+					OLED_Clear();
+					OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
+					OLED_bgColor = 0xFF0000;
+					OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
+					OLED_bgColor = 0x000000;
 
-				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
-				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+					OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
+					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
+					OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
+					OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Cursor(curs, 0xFF0000);
+				}
+			}
+			else if(curs == 4){
+				HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, (Motor2_GPIO_Port->ODR) & Motor2_Pin?0:1);
+				OLED_Printf("/s$5B/rR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+				OLED_Printf("/s$5B/yR:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
+			}
+		}
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && !graphmode){
+			if(curs > 4){
+				curs --;
+				OLED_Cursor(curs, 0xFF0000);
+			}
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && !graphmode){
+			if(curs < 5){
+				curs ++;
+				OLED_Cursor(curs, 0xFF0000);
 			}
 		}
 
@@ -764,16 +786,18 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 				}
 			}
 			if(!graphmode){
+				uint32_t tck = HAL_GetTick() - heatTime;
 				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
 				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
 				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
-				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
-				OLED_Printf("/s$4B/p%3.1f  \r\n", heaterBottom->duty);
-				OLED_Printf("/s$55/p%s\r\n", heaterStateStr2[heaterTop->state]);
-				OLED_Printf("/s$5B/p%s\r\n", heaterStateStr2[heaterBottom->state]);
-				OLED_Printf("/s$65/p%3.1f  \r\n", heaterTop->errorSum);
-				OLED_Printf("/s$6B/p%3.1f  \r\n", heaterBottom->errorSum);
+//				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
+//				OLED_Printf("/s$4B/p%3.1f  \r\n", heaterBottom->duty);
+//				OLED_Printf("/s$55/p%s\r\n", heaterStateStr2[heaterTop->state]);
+//				OLED_Printf("/s$5B/p%s\r\n", heaterStateStr2[heaterBottom->state]);
+//				OLED_Printf("/s$65/p%3.1f  \r\n", heaterTop->errorSum);
+//				OLED_Printf("/s$6B/p%3.1f  \r\n", heaterBottom->errorSum);
+				OLED_Printf("/s$45/g%01d:%02d:%02d.%01d", (tck / 3600000) % 24,(tck / 60000) % 60,(tck / 1000) % 100, (tck / 100) % 10);
 			}
 		}
 		else if(graphmode){
