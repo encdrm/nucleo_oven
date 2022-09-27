@@ -22,7 +22,6 @@ Menu_t profileList[] = {
 void profile(){
 	graph_t * g1 = profile_upper;
 	graph_t * g2 = profile_lower;
-	timer = 90;
 	SwitchLED(COLOR_SKY);
 	OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 4, 0xFFFF00);
 	OLED_Cursor(0, 0xFF6600);
@@ -279,6 +278,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
 			heaterOn = 0;
+			OLED_Printf("$07/bOFF");
 		}
 		uint16_t sw = Switch_Read();
 		if(sw==SW_LEFT && graphmode == 0) break;

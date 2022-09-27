@@ -403,6 +403,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
 			heaterOn = 0;
+			OLED_Printf("$07/bOFF");
 		}
 		uint16_t sw = Switch_Read();
 		if(sw==SW_LEFT && graphmode == 0) break;
@@ -534,7 +535,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 
 		tempU = tempTop->read(tempTop);
 		tempD = tempBottom->read(tempBottom);
-		if(HAL_GetTick() - heatTime > threshold_time && idx < timer / 10 - 1){
+		if(HAL_GetTick() - heatTime > threshold_time && idx <= timer / 10 - 1){
 			idx++;
 			grn1->Add(grn1, idx * 10.0f, heaterTop->target);
 			grn2->Add(grn2, idx * 10.0f, heaterBottom->target);

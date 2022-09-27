@@ -116,6 +116,8 @@ graph_t * Graph_InitNull(uint8_t xAxisPos, uint8_t yAxisPos, float xDen, float y
 	graph_var -> Print = _Graph_Print;
 	graph_var -> Add = _Graph_Add;
 	graph_var -> Pop = _Graph_Pop;
+	graph_var -> ChangeDensity = _Graph_ChangeDensity;
+	graph_var -> ChangeAxis = _Graph_ChangeAxis;
 	return graph_var;
 }
 
