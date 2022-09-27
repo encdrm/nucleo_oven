@@ -16,6 +16,13 @@ extern tempsensor_t *tempBottom;
 extern heater_t *heaterTop;
 extern heater_t *heaterBottom;
 
+float tData[100] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
+float uData[100] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
+float dData[100] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
+graph_t * profile_upper;
+graph_t * profile_lower;
+
+
 void testTemp();
 void testTemp(){
 	SwitchLED(COLOR_BLACK);
@@ -182,12 +189,9 @@ Menu_t profileList[] = {
 
 uint32_t timer = 90;
 void profile(){
+	graph_t * g1 = profile_upper;
+	graph_t * g2 = profile_lower;
 	timer = 90;
-	float tData[100] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
-	float uData[100] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
-	float dData[100] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
-	graph_t * g1 = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
-	graph_t * g2 = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
 	SwitchLED(COLOR_SKY);
 	OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 4, 0xFFFF00);
 	OLED_Cursor(0, 0xFF6600);
@@ -282,6 +286,10 @@ void Menu_Setup(){
 	OLED_MenuUI("STM32 OVEN", 0xFF8800, 0x000000, menuList, menuCnt > 6 ? 6 : menuCnt, 0xFFFF00);
 	OLED_Cursor(0, 0xFF0000);
 	SwitchLED(menuList[0].color);
+
+
+	profile_upper = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+	profile_lower = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
 }
 
 void Menu(){
