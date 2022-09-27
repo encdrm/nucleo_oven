@@ -98,6 +98,8 @@ Menu_t testList[] = {
 };
 
 //출력 단자가 잘 동작하는지 테스트합니다.
+//수동 제어로 온도 변화를 확인할 수 있습니다.
+//오븐을 끈지 얼마 지나지 않은 상태에서도 test를 통해 온도를 확인할 수 있습니다.
 void test(){
 	SwitchLED(COLOR_BLACK);
 	uint8_t idx = 0;
@@ -108,14 +110,17 @@ void test(){
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
 	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
 	uint32_t heatTime = HAL_GetTick();
+	float tempU, tempD;
 	for(;;){
 		if(HAL_GetTick() - heatTime > 100){
 			heatTime += 100;
-			float tempU = tempTop->read(tempTop);
-			float tempD = tempBottom->read(tempBottom);
-			OLED_Printf("$45%3.2f", tempU);//민기야!
-			OLED_Printf("$55%3.2f", tempD);//온도 읽어줘!
-			Switch_LED_Temperature((tempU + tempD) / 2.0);//온도 읽어서 여기다가 넣어야 함.
+			if(tempTop->is_readable(tempTop))
+				tempU = tempTop->read(tempTop);
+			if(tempBottom->is_readable(tempTop))
+				tempD = tempBottom->read(tempBottom);
+			OLED_Printf("$45%3.2f", tempU);
+			OLED_Printf("$55%3.2f", tempD);
+			Switch_LED_Temperature((tempU + tempD) / 2.0);
 		}
 		uint16_t sw = Switch_Read();
 		if((sw == SW_TOP || sw == SW_TOP_LONG) && setting){
