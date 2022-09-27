@@ -9,6 +9,7 @@
 #include "control.h"
 
 extern SPI_HandleTypeDef hspi3;
+TIM_HandleTypeDef htim3;
 
 extern tempsensor_t *tempTop;
 extern tempsensor_t *tempBottom;
@@ -272,10 +273,8 @@ void profile(){
 
 Menu_t menuList[] = {
 		{profile, "/yProfile/r$1F>", COLOR_PINK},
-		{testTemp, "/yTestTemp/r$2F>", COLOR_WHITE},
-		{test, "/yTest/r$3F>", COLOR_RED},
-		{GraphUITest, "/yTestGraph/r$4F>", COLOR_BLUE},
-		{testHeat, "/yTestHeat/r$5F>", COLOR_SKY},
+		{testHeat, "/yHeat/r$5F>", COLOR_SKY},
+		{test, "/yTest Module/r$3F>", COLOR_RED},
 
 };
 
@@ -331,119 +330,165 @@ void Menu(){
 
 //출력 단자가 테스트 내용입니다.
 Menu_t testList[] = {
-		{NULL, "Motor1: OFF", COLOR_RED},
-		{NULL, "Motor2: OFF", COLOR_RED},
-		{NULL, "LAMP  : OFF", COLOR_RED},
-		{NULL, "HU    : OFF", COLOR_RED},
-		{NULL, "HD    : OFF", COLOR_RED},
-		{NULL, "FAN   : OFF", COLOR_RED},
+		{NULL, "/wMOTR /yC:OFF R:OFF", COLOR_RED},
+		{NULL, "/wLAMP /yOFF", COLOR_RED},
+		{NULL, "/wHEAT /yU:0.0 D:0.0", COLOR_RED},
+		{NULL, "/wTU", COLOR_RED},
+		{NULL, "/wTD", COLOR_RED},
+		{NULL, "/wFAN  /yOFF", COLOR_RED},
 };
 
 //출력 단자가 잘 동작하는지 테스트합니다.
 void test(){
+	SwitchLED(COLOR_BLACK);
 	uint8_t idx = 0;
 	OLED_MenuUI("< TEST", 0xFF00FF, 0x000000, testList, 6, 0x6600FF);
 	OLED_Cursor(0, 0xFF0000);
 	SwitchLED(testList[0].color);
-	testList[0].color = COLOR_RED;
-	testList[1].color = COLOR_RED;
-	testList[2].color = COLOR_RED;
-	testList[3].color = COLOR_RED;
-	testList[4].color = COLOR_RED;
-	testList[5].color = COLOR_RED;
+	uint8_t setting = 0;
+	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
+	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
+	uint32_t heatTime = HAL_GetTick();
 	for(;;){
+		if(HAL_GetTick() - heatTime > 100){
+			heatTime += 100;
+			float tempU = tempTop->read(tempTop);
+			float tempD = tempBottom->read(tempBottom);
+			OLED_Printf("$45%3.2f", tempU);//민기야!
+			OLED_Printf("$55%3.2f", tempD);//온도 읽어줘!
+			Switch_LED_Temperature((tempU + tempD) / 2.0);//온도 읽어서 여기다가 넣어야 함.
+		}
 		uint16_t sw = Switch_Read();
-		if(sw == SW_TOP || sw == SW_TOP_LONG){
+		if((sw == SW_TOP || sw == SW_TOP_LONG) && setting){
 			idx+=5;
 			idx %= 6;
 			OLED_Cursor(idx, 0xFF0000);
-			SwitchLED(testList[idx].color);
 		}
-		else if(sw == SW_BOTTOM || sw == SW_BOTTOM_LONG){
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && setting){
 			idx+=1;
 			idx %= 6;
 			OLED_Cursor(idx, 0xFF0000);
-			SwitchLED(testList[idx].color);
 		}
 		else if(sw == SW_LEFT){
 			break;
 		}
+		else if(sw == SW_RIGHT){
+			switch(idx){
+			case 0:
+				setting ++;
+				setting %= 3;
+				switch(setting){
+				case 0:
+					OLED_Printf("/y$15C:%s$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
+					break;
+				case 1:
+					OLED_Printf("/r$15C:%s/y$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
+					break;
+				case 2:
+					OLED_Printf("/y$15C:%s/r$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
+					break;
+				}
+				break;
+			case 2:
+				setting ++;
+				setting %= 3;
+				switch(setting){
+				case 0:
+					OLED_Printf("/y$15C:%1.1f$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+					break;
+				case 1:
+					OLED_Printf("/r$15C:%1.1f/y$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+					break;
+				case 2:
+					OLED_Printf("/y$15C:%1.1f/r$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+					break;
+				}
+				break;
+			case 1:
+				HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, LAMP_GPIO_Port->ODR & LAMP_Pin ? 0 : 1);
+				OLED_Printf("$25/y%s", LAMP_GPIO_Port->ODR & LAMP_Pin ? "OFF" : "ON");
+				break;
+			case 5:
+				HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, DCFAN_GPIO_Port->ODR & LAMP_Pin ? 0 : 1);
+				OLED_Printf("$25/y%s", DCFAN_GPIO_Port->ODR & DCFAN_Pin ? "ON " : "OFF");
+				break;
+			}
+		}
 		else if(sw == SW_ENTER){
-			if(testList[idx].color == COLOR_RED){
-				testList[idx].color = COLOR_WHITE;
-				switch(idx){
-				case 0:
-					// Convection Fan
-					HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, 0);
-					OLED_Printf("/1Motor1: ON ");
-					break;
+			switch(idx){
+			case 0:
+				switch(setting){
 				case 1:
-					// Rotisserie Motor
-					HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, 0);
-					OLED_Printf("/2Motor2: ON ");
+					HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, Motor1_GPIO_Port->ODR & Motor1_Pin ? 0 : 1);
+					OLED_Printf("/r$15C:%s/y$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
 					break;
 				case 2:
-					// Lamp
-					HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
-					OLED_Printf("/3LAMP  : ON ");
-					break;
-				case 3:
-					// Heater Top
-					HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 0);
-					OLED_Printf("/4HU    : ON ");
-					break;
-				case 4:
-					// Heater Bottom
-					HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 0);
-					OLED_Printf("/5HD    : ON ");
-					break;
-				case 5:
-					// Mainboard Fan
-					HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 1);
-					OLED_Printf("/6FAN   : ON ");
+					HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, Motor2_GPIO_Port->ODR & Motor2_Pin ? 0 : 1);
+					OLED_Printf("/y$15C:%s/r$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
 					break;
 				}
-			}
-			else if(testList[idx].color == COLOR_WHITE){
-				testList[idx].color = COLOR_RED;
-				switch(idx){
+				break;
+			case 2:
+				setting ++;
+				setting %= 3;
+				switch(setting){
 				case 0:
-					HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, 1);
-					OLED_Printf("/1Motor1: OFF");
+					OLED_Printf("/y$15C:%1.1f$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
 					break;
 				case 1:
-					HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, 1);
-					OLED_Printf("/2Motor2: OFF");
+					OLED_Printf("/r$15C:%1.1f/y$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
 					break;
 				case 2:
-					HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
-					OLED_Printf("/3LAMP  : OFF");
-					break;
-				case 3:
-					HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 1);
-					OLED_Printf("/4HU    : OFF");
-					break;
-				case 4:
-					HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 1);
-					OLED_Printf("/5HD    : OFF");
-					break;
-				case 5:
-					HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
-					OLED_Printf("/6FAN   : OFF");
+					OLED_Printf("/y$15C:%1.1f/r$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
 					break;
 				}
+				break;
+			case 1:
+				HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, LAMP_GPIO_Port->ODR & LAMP_Pin ? 0 : 1);
+				OLED_Printf("$25/y%s", LAMP_GPIO_Port->ODR & LAMP_Pin ? "OFF" : "ON");
+				break;
+			case 5:
+				HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, DCFAN_GPIO_Port->ODR & LAMP_Pin ? 0 : 1);
+				OLED_Printf("$25/y%s", DCFAN_GPIO_Port->ODR & DCFAN_Pin ? "ON " : "OFF");
+				break;
 			}
-
-			SwitchLED(testList[idx].color);
+		}
+		else if((sw == SW_TOP||sw == SW_TOP_LONG) && setting && idx == 2){
+			switch(setting){
+			case 1:
+				if(htim3.Instance->CCR2 < 10000)
+					htim3.Instance -> CCR2 += 1000;
+				OLED_Printf("/r$15C:%1.1f/y$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+				break;
+			case 2:
+				if(htim3.Instance->CCR3 < 10000)
+					htim3.Instance -> CCR3 += 1000;
+				OLED_Printf("/y$15C:%1.1f/r$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+				break;
+			}
+		}
+		else if((sw == SW_BOTTOM||sw == SW_BOTTOM_LONG) && setting && idx == 2){
+			switch(setting){
+			case 1:
+				if(htim3.Instance->CCR2 > 0)
+					htim3.Instance -> CCR2 -= 1000;
+				OLED_Printf("/r$15C:%1.1f/y$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+				break;
+			case 2:
+				if(htim3.Instance->CCR3 > 0)
+					htim3.Instance -> CCR3 -= 1000;
+				OLED_Printf("/y$15C:%1.1f/r$1BR:%1.1f", (float)(htim3.Instance->CCR2) / 10000, (float)(htim3.Instance->CCR3) / 10000);
+				break;
+			}
 		}
 	}
 
 	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, 1);
 	HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, 1);
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
-	HAL_GPIO_WritePin(Heater_Top_GPIO_Port, Heater_Top_Pin, 1);
-	HAL_GPIO_WritePin(Heater_Bottom_GPIO_Port, Heater_Bottom_Pin, 1);
 	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
+	htim3.Instance->CCR2 = 0;
+	htim3.Instance->CCR3 = 0;
 
 }
 
@@ -714,7 +759,7 @@ void Heat2(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 
 				gTime = HAL_GetTick();
 				if(!graphmode){
 					OLED_Clear();
-					OLED_MenuUI("< HEAT  CONV.0 >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
+					OLED_MenuUI("< HEAT         >", 0xFF0000, 0x000000, HeatList2, 6, 0xFFFF00);
 					OLED_bgColor = 0xFF0000;
 					OLED_Printf("/s/k$0D%d", (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
 					OLED_bgColor = 0x000000;
