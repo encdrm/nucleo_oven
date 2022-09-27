@@ -233,15 +233,15 @@ Menu_t HeatList[] = {
 		{NULL, "/s/3/wTARG", COLOR_SKY},
 		{NULL, "/s/4/wTIME", COLOR_SKY},
 		{NULL, "/s/5/wMOTR", COLOR_SKY},
-		{NULL, "/s/6/wShow Graph", COLOR_SKY}
+		{NULL, "/s/6/wShow Graph     >", COLOR_SKY}
 };
 
-
+extern uint32_t OLED_bgColor;
 void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
 	graph_t * grn1 = Graph_InitNull(gr1->xAxisPos, gr1->yAxisPos, gr1->xDensity, gr1->yDensity);
 	graph_t * grn2 = Graph_InitNull(gr2->xAxisPos, gr2->yAxisPos, gr2->xDensity, gr2->yDensity);
 	OLED_Clear();
-	OLED_MenuUI("< HEAT         >", 0xFF0000, 0x000000, HeatList, 6, 0xFFFF00);
+	OLED_MenuUI("< HEAT:/bON         ", 0xFF0000, 0x000000, HeatList, 6, 0xFFFF00);
 	OLED_Cursor(4, 0xFF0000);
 	heaterTop -> target = gr1->yData[0];
 	heaterBottom -> target = gr2->yData[0];
@@ -285,8 +285,10 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 		else if(sw == SW_LEFT && graphmode){
 			graphmode = 0;
 			OLED_Clear();
-			OLED_MenuUI("< HEAT         >", 0xFF0000, 0x000000, HeatList, 6, 0xFFFF00);
-
+			OLED_MenuUI("< HEAT:        ", 0xFF0000, 0x000000, HeatList, 6, 0xFFFF00);
+			OLED_bgColor = 0xFF0000;
+			OLED_Printf("$07/b%s", heaterOn?"ON ":"OFF");
+			OLED_bgColor = 0x000000;
 			OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 			OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
 			OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
@@ -306,7 +308,10 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 				gTime = HAL_GetTick();
 				if(!graphmode){
 					OLED_Clear();
-					OLED_MenuUI("< HEAT         >", 0xFF0000, 0x000000, HeatList, 6, 0xFFFF00);
+					OLED_MenuUI("< HEAT:         ", 0xFF0000, 0x000000, HeatList, 6, 0xFFFF00);
+					OLED_bgColor = 0xFF0000;
+					OLED_Printf("$07/b%s", heaterOn?"ON ":"OFF");
+					OLED_bgColor = 0x000000;
 
 					OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
@@ -336,15 +341,17 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 
 		tempU = tempTop->read(tempTop);
 		tempD = tempBottom->read(tempBottom);
-		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 2){
+		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 1){
 			idx++;
 			grn1->Add(grn1, gr1->xData[idx], tempU);
 			grn2->Add(grn2, gr2->xData[idx], tempD);
-			interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
-			target1U = gr1->yData[idx];
-			target2U = gr1->yData[idx + 1];
-			target1D = gr2->yData[idx];
-			target2D = gr2->yData[idx + 1];
+			if(idx != gr1->count - 1){
+				interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
+				target1U = gr1->yData[idx];
+				target2U = gr1->yData[idx + 1];
+				target1D = gr2->yData[idx];
+				target2D = gr2->yData[idx + 1];
+			}
 		}
 		if(HAL_GetTick() - pTime > 100){
 			pTime += 100;
