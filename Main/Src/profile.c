@@ -454,7 +454,9 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
 			heaterOn = 0;
+			OLED_bgColor = 0xFF0000;
 			OLED_Printf("$07/bOFF");
+			OLED_bgColor = 0x000000;
 		}
 		uint16_t sw = Switch_Read();
 		if(sw==SW_LEFT && graphmode == 0) break;
