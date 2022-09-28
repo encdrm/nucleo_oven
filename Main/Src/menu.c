@@ -41,6 +41,7 @@ Menu_t menuList[] = {
 };
 
 const uint8_t menuCnt = sizeof(menuList) / sizeof(Menu_t);
+extern TIM_HandleTypeDef htim2;
 
 void Menu_Setup(){
 	OLED_Begin();
@@ -54,13 +55,37 @@ void Menu_Setup(){
 	float dData[100] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
 	profile_upper = _Graph_Init(tData, uData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
 	profile_lower = _Graph_Init(tData, dData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
+
+
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+	htim2.Instance->CCR1 = 256;
+	HAL_Delay(50);
+	htim2.Instance->CCR1 = 128;
+	HAL_Delay(50);
+	htim2.Instance->CCR1 = 64;
+	HAL_Delay(50);
+	htim2.Instance->CCR1 = 32;
+	HAL_Delay(50);
+	htim2.Instance->CCR1 = 0;
+
 }
 
 void Menu(){
 	Menu_Setup();
 	uint8_t idx = 0;
+	uint32_t buzzer_time = HAL_GetTick();
+	uint32_t buzzer_mode = 0;
 	for(;;){
 		uint16_t sw = Switch_Read();
+//		if(sw){
+//			htim2.Instance->CCR1 = 64;
+//			buzzer_mode = 1;
+//			buzzer_time = HAL_GetTick();
+//		}
+//		if(HAL_GetTick() - buzzer_time > 80 && buzzer_mode){
+//			htim2.Instance->CCR1 = 0;
+//			buzzer_mode = 0;
+//		}
 		if(sw == SW_TOP || sw == SW_TOP_LONG){
 			idx+=menuCnt - 1;
 			idx %= menuCnt;
@@ -353,6 +378,9 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			OLED_Cursor(idx, 0xFF0000);
 		}
 	}
+	htim2.Instance->CCR1 = 256;
+	HAL_Delay(300);
+	htim2.Instance->CCR1 = 0;
 	Graph_Delete(profile_upper);
 	Graph_Delete(profile_lower);
 	graph_t * grn1 = Graph_InitNull(0, 52, timer/90.0, 6.0);
@@ -392,6 +420,17 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	uint8_t timerset = 0;
 	for(;;){
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
+			htim2.Instance->CCR1 = 256;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 0;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 256;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 0;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 256;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 0;
 			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
@@ -664,6 +703,9 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			OLED_Cursor(idx, 0xFF0000);
 		}
 	}
+	htim2.Instance->CCR1 = 256;
+	HAL_Delay(300);
+	htim2.Instance->CCR1 = 0;
 	Graph_Delete(profile_upper);
 	Graph_Delete(profile_lower);
 	graph_t * grn1 = Graph_InitNull(0, 52, timer/90.0, 6.0);
@@ -703,6 +745,17 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	uint8_t timerset = 0;
 	for(;;){
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
+			htim2.Instance->CCR1 = 256;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 0;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 256;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 0;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 256;
+			HAL_Delay(50);
+			htim2.Instance->CCR1 = 0;
 			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
