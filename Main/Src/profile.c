@@ -41,7 +41,7 @@ void profile(){
 	enum {
 		BTPARSE_IDLE, BTPARSE_READ, BTPARSE_WRITEGRAPH
 	};
-	uint8_t buffer[200] = {0};
+	uint8_t buffer[3000] = {0};	// UART 데이터
 	int bufferIdx = 0;
 	uint8_t Data;
 	char bufferX[20] = { 0 };
@@ -125,11 +125,12 @@ void profile(){
 				g1->Add(g1, 0.0f, 30.0f);
 				g2->Add(g2, 0.0f, 30.0f);
 				timer = 0;//그래프 설정 시 타이머 초기화하여 t값의 최댓값으로 반영.
+				bufferIdx = 0;
 				memset(bufferX, 0, 20);
 				memset(bufferY, 0, 20);
 				btBufXIdx = 0;
 				btBufYIdx = 0;
-				btTransCount = 0;
+				btTransCount = 0;	// '/' 구분자 감지 횟수
 				flag_start = false;
 				flag_bottom = false;
 				flag_finished = false;
@@ -138,7 +139,7 @@ void profile(){
 				// Read bluetooth
 
 				while (true) {
-					halError = HAL_UART_Receive(&huart1, (uint8_t*) (buffer+bufferIdx), 1, 200);
+					halError = HAL_UART_Receive(&huart1, (uint8_t*) buffer, 1, 200);
 					if (halError == HAL_OK)
 						break;
 					if (Switch_Read())
