@@ -30,6 +30,7 @@ void test();
 
 
 extern uint32_t timer;
+extern uint32_t time_interval;
 
 Menu_t menuList[] = {
 		{profile, "/yProfile/r$1F>", COLOR_PINK},
@@ -46,8 +47,11 @@ void Menu_Setup(){
 	SwitchLED(menuList[0].color);
 
 
-	profile_upper = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
-	profile_lower = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+	float tData[100] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
+	float uData[100] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
+	float dData[100] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
+	profile_upper = _Graph_Init(tData, uData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
+	profile_lower = _Graph_Init(tData, dData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
 }
 
 void Menu(){
@@ -269,92 +273,7 @@ Menu_t Heat2List[] = {
 };
 
 
-// FLAG_TEMPSENSOR_DEBUG가 설정되면 온도를 직접 제어할 수 있음.
-// 디버깅을 위한 state to string 저장소
-//char *heaterStateStr[] = {"OFF", "PREHEATING", "TRANSIENT", "STEADY"};
-//char *heaterStateStr2[] = {"OFF  ", "PREHT", "TRANS", "STEAD"};
-/*
-void Heat2(){
-	Graph_Delete(profile_upper);
-	Graph_Delete(profile_lower);
-	timer = 60;//기본 시간설정은 60초, 더 늘리거나 줄일 수 있습니다.
-	profile_upper = Graph_InitNull(0, 52, timer / 90.0, 6.0f);
-	profile_lower = Graph_InitNull(0, 52, timer / 90.0, 6.0f);
-	SwitchLED(COLOR_SKY);
-	OLED_MenuUI("< HEAT", 0xFF0000, 0x000000, Heat2List, 6, 0xFFFF00);
-	OLED_Printf("/s$29/y%3.2f  \r\n", heaterTop->target);
-	OLED_Printf("/s$39/y%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
-	OLED_Cursor(0, 0xFF6600);
-	int idx = 0;
-	heaterTop->start(heaterTop);
-	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
-	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
-	uint32_t pTime = HAL_GetTick();
-	uint32_t adjust = 0;
-	uint32_t heatTime = HAL_GetTick();
-	for(;;){
-		if(HAL_GetTick() - heatTime > 600000UL){
 
-		}
-		uint16_t sw = Switch_Read();
-
-		if(sw==SW_LEFT) break;
-		else if (sw==SW_TOP && !adjust) {
-			idx -= (idx>0)?1:0;
-			OLED_Cursor(idx, 0xFF6600);
-		}
-		else if (sw==SW_BOTTOM && !adjust) {
-			idx += (idx<2)?1:0;
-			OLED_Cursor(idx, 0xFF6600);
-		}
-		else if ((sw==SW_TOP || sw==SW_TOP_LONG) && adjust) {
-			switch(idx) {
-#ifdef FLAG_TEMPSENSOR_DEBUG
-			case 0:
-				tempTop->lastTemp += 10.0f;
-				break;
-#endif
-			case 1:
-				heaterTop->target += 1.0f;
-				OLED_Printf("/s$29/r%3.2f  \r\n", heaterTop->target);
-				break;
-			}
-		}
-		else if ((sw==SW_BOTTOM || sw==SW_BOTTOM_LONG) && adjust) {
-			switch(idx) {
-#ifdef FLAG_TEMPSENSOR_DEBUG
-			case 0:
-				tempTop->lastTemp -= 10.0f;
-				break;
-#endif
-			case 1:
-				heaterTop->target -= 1.0f;
-				OLED_Printf("/s$29/r%3.2f  \r\n", heaterTop->target);
-				break;
-			}
-		}
-		else if(sw == SW_ENTER){
-			switch(idx){
-			case 1:
-				adjust = !adjust;
-				OLED_Printf("/s$29%s%3.2f  \r\n", adjust?"/r":"/y", heaterTop->target);
-				break;
-			case 2:
-				HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-				OLED_Printf("/s$39/r%s\r\n", (Motor1_GPIO_Port->ODR) & Motor1_Pin?"OFF":"ON ");
-				break;
-			}
-		}
-		float temp = tempTop->read(tempTop);
-		if(HAL_GetTick() - pTime > 50){
-			pTime += 50;
-			Switch_LED_Temperature(temp);
-		}
-		OLED_Printf("/s$19/y%3.2f  \r\n", temp);
-	}
-	heaterTop->stop(heaterTop);
-}
-*/
 
 
 extern uint32_t OLED_bgColor;
@@ -395,7 +314,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	uint32_t graphmode = 0;
 	grn1->Add(grn1, 0.0f, heaterTop -> target);
 	grn2->Add(grn2, 0.0f, heaterTop -> target);
-	uint32_t threshold_time = 600000;
+	uint32_t threshold_time = 60000 * time_interval;
 	uint8_t timerset = 0;
 	for(;;){
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
@@ -490,7 +409,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		}
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && !graphmode && timerset){
 			if(curs == 3){
-				timer += 10;
+				timer += time_interval;
 				grn1->ChangeDensity(grn1, timer / 90.0f, 6.0f);
 				grn2->ChangeDensity(grn2, timer / 90.0f, 6.0f);
 				OLED_Printf("/s$4C/r<%03d", timer);
@@ -512,7 +431,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		}
 		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && !graphmode && timerset){
 			if(curs == 3){
-				timer -= 10;
+				timer -= time_interval;
 				grn1->ChangeDensity(grn1, timer / 90.0f, 6.0f);
 				grn2->ChangeDensity(grn2, timer / 90.0f, 6.0f);
 				OLED_Printf("/s$4C/r<%03d", timer);
@@ -537,9 +456,9 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		tempD = tempBottom->read(tempBottom);
 		if(HAL_GetTick() - heatTime > threshold_time && idx <= timer / 10 - 1){
 			idx++;
-			grn1->Add(grn1, idx * 10.0f, heaterTop->target);
-			grn2->Add(grn2, idx * 10.0f, heaterBottom->target);
-			threshold_time += 600000UL;
+			grn1->Add(grn1, idx * (float)time_interval, heaterTop->target);
+			grn2->Add(grn2, idx * (float)time_interval, heaterBottom->target);
+			threshold_time += time_interval * 60000UL;
 		}
 		if(HAL_GetTick() - pTime > 100){
 			pTime += 100;
@@ -580,7 +499,7 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	}
 	heaterTop->stop(heaterTop);
 	heaterBottom->stop(heaterBottom);
-	timer = (grn1->count - 1) * 10;
+	timer = (grn1->count - 1) * time_interval;
 	profile_upper = grn1;
 	profile_lower = grn2;
 }

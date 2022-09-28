@@ -8,9 +8,12 @@ extern UART_HandleTypeDef huart1;
 graph_t * profile_upper;
 graph_t * profile_lower;
 uint32_t timer = 90;
-float tData[100] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0};
-float uData[100] = {30.0, 80.0, 50.0, 80.0, 50.0, 80.0, 50.0, 60.0, 80.0, 30.0};
-float dData[100] = {30.0, 100.0, 70.0, 100.0, 70.0, 90.0, 70.0, 60.0, 50.0, 30.0};
+uint32_t time_interval = 10;//작동 중 오류를 방지하기 위해 임시적으로 10을 interval로 설정하되, 바꿀 수 있게 합니다.
+
+//온도 프로필 권장사항
+//tData값은 반드시 오름차순이어야 하며, 보낼 때 이를 고려하여 순서에 맞게 보내야 함.
+//tData값은 항상 간격이 일정할 필요는 없지만, 자동 인터벌 설정을 지원받기 위해서는 간격 편차가 일정 값 이하여야 함.
+//자동 인터벌 값을 인터벌 값을 평균내서 구하며, 타이머에 추가 시 이를 반영.
 void Heat(graph_t * gr1, graph_t * gr2);
 
 
@@ -68,24 +71,30 @@ void profile(){
 		}
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && timerSetting){
 			if(timer < 300){
-				timer += 10;
-				tData[timer/10] = (float)timer;
-				uData[timer/10] = 30.0f;
-				dData[timer/10] = 30.0f;
-				Graph_Delete(g1);
-				Graph_Delete(g2);
-				g1 = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
-				g2 = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+				timer += time_interval;
+				//tData[timer/time_interval] = (float)timer;
+				//uData[timer/time_interval] = 30.0f;
+				//dData[timer/time_interval] = 30.0f;
+				//Graph_Delete(g1);
+				//Graph_Delete(g2);
+				//g1 = _Graph_Init(tData, uData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
+				//g2 = _Graph_Init(tData, dData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
+				g1->Add(g1, (float)timer, g1->yData[g1->count - 1]);
+				g1->ChangeDensity(g1, (float)timer / 90.0f, 6.0f);
+				g2->Add(g2, (float)timer, g2->yData[g2->count - 1]);
+				g2->ChangeDensity(g2, (float)timer / 90.0f, 6.0f);
 				OLED_Printf("$27/r%dmin", timer);
 			}
 		}
 		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && timerSetting){
 			if(timer > 0){
-				timer -= 10;
-				Graph_Delete(g1);
-				Graph_Delete(g2);
-				g1 = _Graph_Init(tData, uData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
-				g2 = _Graph_Init(tData, dData, 1 + (timer / 10), 0, 52, (float)timer / 90.0f, 6.0f);
+				timer = g1->xData[g1->count - 2];//타이머 간격이 일정하지 않을 수 있음을 감안하여 xData값을 바탕으로 타이머 설정.
+//				Graph_Delete(g1);
+//				Graph_Delete(g2);
+//				g1 = _Graph_Init(tData, uData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
+//				g2 = _Graph_Init(tData, dData, 1 + (timer / time_interval), 0, 52, (float)timer / 90.0f, 6.0f);
+				g1->Pop(g1, NULL, NULL);
+				g2->Pop(g2, NULL, NULL);
 				OLED_Printf("$27/r%dmin", timer);
 			}
 		}
@@ -101,6 +110,10 @@ void profile(){
 									(float) timer / 90.0f, 6.0f);
 				g2 = Graph_InitNull(0, 52,
 									(float) timer / 90.0f, 6.0f);
+				//초기값이 누락되어 있을 수 있어서 추가.
+				g1->Add(g1, 0.0f, 30.0f);
+				g2->Add(g2, 0.0f, 30.0f);
+				timer = 0;//그래프 설정 시 타이머 초기화하여 t값의 최댓값으로 반영.
 				memset(bufferX, 0, 20);
 				memset(bufferY, 0, 20);
 				btBufXIdx = 0;
@@ -164,17 +177,31 @@ void profile(){
 							else
 								bufferY[btBufYIdx++] = Data;
 							break;
-						case BTPARSE_WRITEGRAPH:
-							if (flag_bottom){
-								g2->Add(g2, atof(bufferX), atof(bufferY));
-							} else {
-								g1->Add(g1, atof(bufferX), atof(bufferY));
+						case BTPARSE_WRITEGRAPH://민기야 코드 짜서 고맙고, 타이머 문제 때문에 그래프 출력 안되는거야 걱정마렴.
+							{
+								float xdata = atof(bufferX);
+								float ydata = atof(bufferY);
+								if(xdata < 0.05f){//초기값 설정으로 판별
+									if(flag_bottom){
+										g2->Pop(g2, NULL, NULL);
+									} else {
+										g1->Pop(g1, NULL, NULL);
+									}
+								}
+								timer = timer > (int)xdata ? timer : (int)xdata;//타이머 값은 자동 설정.
+								g1->ChangeDensity(g1, (float)timer / 90.0f, 6.0);
+								g2->ChangeDensity(g2, (float)timer / 90.0f, 6.0);
+								if (flag_bottom){
+									g2->Add(g2, xdata, ydata);
+								} else {
+									g1->Add(g1, xdata, ydata);
+								}
+								memset(bufferX, 0, sizeof(bufferX));
+								memset(bufferY, 0, sizeof(bufferY));
+								btBufXIdx = 0;
+								btBufYIdx = 0;
+								btParseState = BTPARSE_READ;
 							}
-							memset(bufferX, 0, sizeof(bufferX));
-							memset(bufferY, 0, sizeof(bufferY));
-							btBufXIdx = 0;
-							btBufYIdx = 0;
-							btParseState = BTPARSE_READ;
 							break;
 						}
 					}
@@ -184,9 +211,10 @@ void profile(){
 					OLED_Printf("$10/s/bFinished!");
 					flag_finished = false;
 					g1->Print(g1, 0x0000FF);
-					g2->Print(g1, 0x00FF00);
-					_Graph_PrintPoint(g1, idx, 0xFF8800);
-					_Graph_PrintPoint(g2, idx, 0xFF8800);
+					g2->Print(g2, 0x00FF00);
+//그 인덱스가 그 인덱스가 아니야...
+//					_Graph_PrintPoint(g1, idx, 0xFF8800);
+//					_Graph_PrintPoint(g2, idx, 0xFF8800);
 					while (!Switch_Read());
 				} else {
 					OLED_Printf("$20/s/bExiting...");
@@ -212,8 +240,9 @@ void profile(){
 			}
 		}
 	}
-	Graph_Delete(g1);
-	Graph_Delete(g2);
+//	g1, g2가 전역변수에서 정의되므로 Graph_Delete 삭제
+//	Graph_Delete(g1);
+//	Graph_Delete(g2);
 }
 
 void Profile_Set(graph_t * gr1, graph_t * gr2){
@@ -331,8 +360,8 @@ void Profile_Set(graph_t * gr1, graph_t * gr2){
 			pTime = HAL_GetTick();
 			state = 0;
 		}*/
-		if(HAL_GetTick() - pTime > 10){
-			pTime += 10;
+		if(HAL_GetTick() - pTime > 100){
+			pTime += 100;
 			Switch_LED_Temperature((gr1->yData[idx] + gr2->yData[idx])/2.0);
 		}
 
