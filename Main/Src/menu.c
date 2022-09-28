@@ -286,13 +286,13 @@ extern uint32_t OLED_bgColor;
 void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
 	OLED_Clear();
 	//인터벌 및 타이머 설정 창입니다.
-	OLED_MenuUI("< HEAT:/bOFF       ", 0xFF0000, 0x000000, Heat2List, 6, 0xFFFF00);
+	OLED_MenuUI("< HEAT:/bOFF       ", 0xFF0000, 0x000000, HeatTimerList, 3, 0xFFFF00);
 	int idx = 0;
 	int curs = 0;
 	uint8_t timersetting = 0;
 	OLED_Cursor(0, 0xFF0000);
-	OLED_Printf("$27/y%d", timer);
-	OLED_Printf("$37/y%d", time_interval);
+	OLED_Printf("$27/y%2d", timer);
+	OLED_Printf("$37/y%2d", time_interval);
 	for(;;){
 		uint16_t sw = Switch_Read();
 		if(sw == SW_RIGHT && idx == 0){
@@ -300,29 +300,29 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		}
 		else if(sw == SW_RIGHT && idx == 1){
 			timersetting = !timersetting;
-			OLED_Printf("$27%s%d", timersetting?"/r":"/y", timer);
+			OLED_Printf("$27%s%2d", timersetting?"/r":"/y", timer);
 		}
 		else if(sw == SW_RIGHT && idx == 2){
 			timersetting = !timersetting;
-			OLED_Printf("$37%s%d", timersetting?"/r":"/y", time_interval);
+			OLED_Printf("$37%s%2d", timersetting?"/r":"/y", time_interval);
 		}
 		else if(sw == SW_LEFT && !timersetting){
 			return;
 		}
 		else if(sw == SW_LEFT && timersetting){
 			timersetting = 0;
-			OLED_Printf("$27/y%d", timer);
-			OLED_Printf("$37/y%d", time_interval);
+			OLED_Printf("$27/y%2d", timer);
+			OLED_Printf("$37/y%2d", time_interval);
 		}
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && timersetting){
 			switch(idx){
 			case 1:
 				timer += time_interval;
-				OLED_Printf("$27/r%d", timer);
+				OLED_Printf("$27/r%2d", timer);
 				break;
 			case 2:
 				time_interval += 1;
-				OLED_Printf("$37/r%d", time_interval);
+				OLED_Printf("$37/r%2d", time_interval);
 				break;
 			}
 		}
@@ -331,12 +331,12 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			case 1:
 				if(timer > time_interval)
 					timer -= time_interval;
-				OLED_Printf("$27/r%d", timer);
+				OLED_Printf("$27/r%2d", timer);
 				break;
 			case 2:
 				if(time_interval > 1)
 					time_interval -= 1;
-				OLED_Printf("$37/r%d", time_interval);
+				OLED_Printf("$37/r%2d", time_interval);
 				break;
 			}
 		}
