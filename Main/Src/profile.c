@@ -274,6 +274,8 @@ void profile(){
 //	g1, g2가 전역변수에서 정의되므로 Graph_Delete 삭제
 //	Graph_Delete(g1);
 //	Graph_Delete(g2);
+	profile_upper = g1;
+	profile_lower = g2;
 }
 
 void Profile_Set(graph_t * gr1, graph_t * gr2){
