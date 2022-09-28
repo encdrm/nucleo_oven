@@ -578,31 +578,31 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 				target2D = gr2->yData[idx + 1];
 			}
 		}
-		if(HAL_GetTick() - pTime > 100){
-			pTime += 100;
+		if(HAL_GetTick() - pTime > 200){
+			pTime += 200;
 			Switch_LED_Temperature((tempU + tempD) / 2.0);
 			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
 			if(!pause){
 				if(heaterTop->target < target2U){
-					heaterTop->target += 5000.0 * ((target2U - target1U) > 0? (target2U - target1U) : (target1U - target2U)) / interval;
+					heaterTop->target += 200.0 * ((target2U - target1U) > 0? (target2U - target1U) : (target1U - target2U)) / interval;
 					if(heaterTop -> target > target2U){
 						heaterTop->target = target2U;
 					}
 				}
 				else if(heaterTop->target > target2U){
-					heaterTop->target -= 5000.0 * ((target2U - target1U) > 0? (target2U - target1U) : (target1U - target2U)) / interval;
+					heaterTop->target -= 200.0 * ((target2U - target1U) > 0? (target2U - target1U) : (target1U - target2U)) / interval;
 					if(heaterTop -> target < target2U){
 						heaterTop->target = target2U;
 					}
 				}
 				if(heaterBottom->target < target2D){
-					heaterBottom->target += 5000.0 * ((target2D - target1D) > 0? (target2D - target1D) : (target1D - target2D)) / interval;
+					heaterBottom->target += 200.0 * ((target2D - target1D) > 0? (target2D - target1D) : (target1D - target2D)) / interval;
 					if(heaterBottom -> target > target2D){
 						heaterBottom->target = target2D;
 					}
 				}
 				else if(heaterBottom->target > target2D){
-					heaterBottom->target -= 5000.0 * ((target2D - target1D) > 0? (target2D - target1D) : (target1D - target2D)) / interval;
+					heaterBottom->target -= 200.0 * ((target2D - target1D) > 0? (target2D - target1D) : (target1D - target2D)) / interval;
 					if(heaterBottom -> target < target2D){
 						heaterBottom->target = target2D;
 					}
