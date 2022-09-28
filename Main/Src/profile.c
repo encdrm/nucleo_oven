@@ -20,19 +20,21 @@ void Heat(graph_t * gr1, graph_t * gr2);
 Menu_t profileList[] = {
 		{NULL, "/yGetProfile/r$1F>", COLOR_PINK},
 		{NULL, "/yTimer: /w90min/r$2F>", COLOR_PINK},
-		{NULL, "/yProfileSet/r$3F>", COLOR_PINK},
-		{NULL, "/oHeat/r$4F>", COLOR_PINK},
+		{NULL, "/yIntvl: /w10min/r$3F>", COLOR_PINK},
+		{NULL, "/yProfileSet/r$4F>", COLOR_PINK},
+		{NULL, "/oHeat/r$5F>", COLOR_PINK},
 };
 void profile(){
 	graph_t * g1 = profile_upper;
 	graph_t * g2 = profile_lower;
 	SwitchLED(COLOR_SKY);
-	OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 4, 0xFFFF00);
+	OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 5, 0xFFFF00);
 	OLED_Cursor(0, 0xFF6600);
 	int idx = 0;
 	uint32_t sw = 0;
 	uint32_t timerSetting = 0;
 	OLED_Printf("$27/w%dmin", timer);
+	OLED_Printf("$37/w%dmin", time_interval);
 
 	// for BT configuration
 	HAL_StatusTypeDef halError;
@@ -58,19 +60,20 @@ void profile(){
 		else if(sw == SW_LEFT && timerSetting){
 			timerSetting = !timerSetting;
 			OLED_Printf("$27%s%dmin", timerSetting?"/r":"/w", timer);
+			OLED_Printf("$37%s%dmin", timerSetting?"/r":"/w", time_interval);
 		}
 		else if(sw == SW_TOP && !timerSetting){
-			idx += 3;
-			idx %= 4;
+			idx += 4;
+			idx %= 5;
 			OLED_Cursor(idx, 0xFF6600);
 		}
 		else if(sw == SW_BOTTOM && !timerSetting){
 			idx += 1;
-			idx %= 4;
+			idx %= 5;
 			OLED_Cursor(idx, 0xFF6600);
 		}
 		else if((sw == SW_TOP || sw == SW_TOP_LONG) && timerSetting){
-			if(timer < 300){
+			if(idx == 1){
 				timer += time_interval;
 				//tData[timer/time_interval] = (float)timer;
 				//uData[timer/time_interval] = 30.0f;
@@ -85,9 +88,13 @@ void profile(){
 				g2->ChangeDensity(g2, (float)timer / 90.0f, 6.0f);
 				OLED_Printf("$27/r%dmin", timer);
 			}
+			else if(idx == 2){//불규칙 간격 타이머도 만들 수 있음. 따라서 그래프 객체는 여기서 건드리지 않습니다.
+				time_interval += 1;
+				OLED_Printf("$37/r%dmin", time_interval);
+			}
 		}
 		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && timerSetting){
-			if(timer > 0){
+			if(timer > 0 && idx == 1){
 				timer = g1->xData[g1->count - 2];//타이머 간격이 일정하지 않을 수 있음을 감안하여 xData값을 바탕으로 타이머 설정.
 //				Graph_Delete(g1);
 //				Graph_Delete(g2);
@@ -96,6 +103,10 @@ void profile(){
 				g1->Pop(g1, NULL, NULL);
 				g2->Pop(g2, NULL, NULL);
 				OLED_Printf("$27/r%dmin", timer);
+			}
+			else if(time_interval > 1 && idx == 2){
+				time_interval -= 1;
+				OLED_Printf("$37/r%dmin", time_interval);
 			}
 		}
 		else if(sw == SW_RIGHT){
@@ -208,7 +219,21 @@ void profile(){
 				}
 				OLED_Clear();
 				if (flag_finished == true) {
-					OLED_Printf("$10/s/bFinished!");
+					//그래프 길이를 맞춰야 정상 작동해요 ㅠㅠ
+					if(g1->count < g2->count){
+						for(uint16_t i = g1->count; i < g2->count; i++){
+							g1->Add(g1, g2->xData[i], 20.0f);
+						}
+					}
+					else if(g2->count < g1->count){
+						for(uint16_t i = g2->count; i < g1->count; i++){
+							g2->Add(g2, g1->xData[i], 20.0f);
+						}
+					}
+					//자동 인터벌 설정 : g1, g2의 길이를 맞췄으므로 g1의 데이터만 갖고 사용한다.
+					time_interval = (int)(g1->xData[g1->count-1] / (g1->count - 1));
+					//그래프 출력 시 문구는 아래쪽에 출력하는게 좋아요.
+					OLED_Printf("$60/s/bFinished!");
 					flag_finished = false;
 					g1->Print(g1, 0x0000FF);
 					g2->Print(g2, 0x00FF00);
@@ -225,16 +250,20 @@ void profile(){
 				OLED_Printf("$27%s%dmin", timerSetting?"/r":"/w", timer);
 				break;
 			case 2:
-				Profile_Set(g1, g2);
+				timerSetting = !timerSetting;
+				OLED_Printf("$37%s%dmin", timerSetting?"/r":"/w", time_interval);
 				break;
 			case 3:
+				Profile_Set(g1, g2);
+				break;
+			case 4:
 				Heat(g1, g2);
 				break;
 			}
 			if(idx != 1){
 				OLED_Clear();
 				SwitchLED(COLOR_SKY);
-				OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 4, 0xFFFF00);
+				OLED_MenuUI("< Profile", 0xFF0000, 0x000000, profileList, 5, 0xFFFF00);
 				OLED_Printf("$27/w%dmin", timer);
 				OLED_Cursor(idx, 0xFF6600);
 			}

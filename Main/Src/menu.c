@@ -272,15 +272,87 @@ Menu_t Heat2List[] = {
 		{NULL, "/s/6/wShow Graph     >", COLOR_SKY}
 };
 
+Menu_t HeatTimerList[] = {
+		{NULL, "/s/1/RHeat!", COLOR_SKY},
+		{NULL, "/s/2/wTimer:", COLOR_SKY},
+		{NULL, "/s/3/wIntvl:", COLOR_SKY},
+
+};
 
 
 
 
 extern uint32_t OLED_bgColor;
 void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
+	OLED_Clear();
+	//인터벌 및 타이머 설정 창입니다.
+	OLED_MenuUI("< HEAT:/bOFF       ", 0xFF0000, 0x000000, Heat2List, 6, 0xFFFF00);
+	int idx = 0;
+	int curs = 0;
+	uint8_t timersetting = 0;
+	OLED_Cursor(0, 0xFF0000);
+	OLED_Printf("$27/y%d", timer);
+	OLED_Printf("$37/y%d", time_interval);
+	for(;;){
+		uint16_t sw = Switch_Read();
+		if(sw == SW_RIGHT && idx == 0){
+			break;
+		}
+		else if(sw == SW_RIGHT && idx == 1){
+			timersetting = !timersetting;
+			OLED_Printf("$27%s%d", timersetting?"/r":"/y", timer);
+		}
+		else if(sw == SW_RIGHT && idx == 2){
+			timersetting = !timersetting;
+			OLED_Printf("$37%s%d", timersetting?"/r":"/y", time_interval);
+		}
+		else if(sw == SW_LEFT && !timersetting){
+			return;
+		}
+		else if(sw == SW_LEFT && timersetting){
+			timersetting = 0;
+			OLED_Printf("$27/y%d", timer);
+			OLED_Printf("$37/y%d", time_interval);
+		}
+		else if((sw == SW_TOP || sw == SW_TOP_LONG) && timersetting){
+			switch(idx){
+			case 1:
+				timer += time_interval;
+				OLED_Printf("$27/r%d", timer);
+				break;
+			case 2:
+				time_interval += 1;
+				OLED_Printf("$37/r%d", time_interval);
+				break;
+			}
+		}
+		else if((sw == SW_BOTTOM || sw == SW_BOTTOM_LONG) && timersetting){
+			switch(idx){
+			case 1:
+				if(timer > time_interval)
+					timer -= time_interval;
+				OLED_Printf("$27/r%d", timer);
+				break;
+			case 2:
+				if(time_interval > 1)
+					time_interval -= 1;
+				OLED_Printf("$37/r%d", time_interval);
+				break;
+			}
+		}
+		else if(sw == SW_TOP && !timersetting){
+			idx += 2;
+			idx %= 3;
+			OLED_Cursor(idx, 0xFF0000);
+		}
+		else if(sw == SW_BOTTOM && !timersetting){
+			idx += 1;
+			idx %= 3;
+			OLED_Cursor(idx, 0xFF0000);
+		}
+	}
 	Graph_Delete(profile_upper);
 	Graph_Delete(profile_lower);
-	timer = 60;
 	graph_t * grn1 = Graph_InitNull(0, 52, timer/90.0, 6.0);
 	graph_t * grn2 = Graph_InitNull(0, 52, timer/90.0, 6.0);
 	OLED_Clear();
@@ -293,8 +365,8 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
 	OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
 	OLED_Printf("/s$4C/y<%03d", timer);
-	int idx = 0;
-	int curs = 2;
+	idx = 0;
+	curs = 2;
 	int heaterOn = 1;
 //	float targetU = 30.0f;
 //	float targetD = 30.0f;
