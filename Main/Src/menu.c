@@ -936,17 +936,18 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		tempD = tempBottom->read(tempBottom);
 		if(HAL_GetTick() - heatTime > threshold_time && idx <= timer / 10 - 1){
 			idx++;
-			grn1->Add(grn1, idx * (float)time_interval, heaterTop->target);
-			grn2->Add(grn2, idx * (float)time_interval, heaterBottom->target);
+			grn1->Add(grn1, idx * (float)time_interval, tempU);
+			grn2->Add(grn2, idx * (float)time_interval, tempD);
 			threshold_time += time_interval * 60000UL;
 		}
-		if(HAL_GetTick() - pTime > 100){
-			pTime += 100;
+		if(HAL_GetTick() - pTime > 200){
+			pTime += 200;
 			Switch_LED_Temperature((tempU + tempD) / 2.0);
 			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
 			if(!graphmode){
 				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
 				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
+				OLED_Printf("/s$10/yDUTY$15%1.2f$1B%1.2f", heaterTop->duty, heaterBottom->duty);
 			}
 		}
 		else if(graphmode){
