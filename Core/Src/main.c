@@ -21,10 +21,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "stdbool.h"
 #include "control.h"
 #include "max6675.h"
 #include "menu.h"
+#include "setting.h"
 #include <stdio.h>
+#include "config.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,12 +67,15 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 
 // Tempsensor object
-tempsensor_t *tempTop;
-tempsensor_t *tempBottom;
+tempsensor_t *thermoTop;
+tempsensor_t *thermoBottom;
 
 // Heater object
 heater_t *heaterTop;
 heater_t *heaterBottom;
+
+// Oven setting object
+setting_t *ovenSetting;
 
 /* USER CODE END PV */
 
@@ -141,18 +148,20 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
 
   /* New temperature sensor object */
-  tempBottom = Custom_Tempsensor(&hspi3, TEMPSENSOR_DOWN_CS_Port, TEMPSENSOR_DOWN_CS_Pin, 300);
-  tempTop = Custom_Tempsensor(&hspi3, TEMPSENSOR_UP_CS_Port, TEMPSENSOR_UP_CS_Pin, 300);
+  thermoBottom = Custom_Tempsensor(&hspi3, TEMPSENSOR_DOWN_CS_Port, TEMPSENSOR_DOWN_CS_Pin, 300);
+  thermoTop = Custom_Tempsensor(&hspi3, TEMPSENSOR_UP_CS_Port, TEMPSENSOR_UP_CS_Pin, 300);
 
   /* New heater object */
   heaterTop = Custom_HeaterControl(&htim3, TIM_CHANNEL_3);	// HU
   heaterBottom = Custom_HeaterControl(&htim3, TIM_CHANNEL_2);	// HD
 
+  /* New setting object */
+  ovenSetting = Custom_Setting(globalFeatureList, globalFeatureListSize);
+
   /* Start HeaterControl interrupt */
   HAL_TIM_Base_Start_IT(&htim9);
   printf("Hello!\r\n");
   Menu();
-
 
   /* USER CODE END 2 */
 

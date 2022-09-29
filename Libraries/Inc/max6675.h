@@ -22,6 +22,8 @@ float __sensor_read(tempsensor_t *sensorobj) {
 }
 #endif
 
+//========================= Type definitions & Structs =========================
+
 typedef enum {
 	SENSOR_HIGH,
 	SENSOR_LOW
@@ -42,6 +44,7 @@ typedef struct __waitcount {
 	uint32_t size;
 } waitcount;
 
+/* 온도센서 객체 구조체 */
 typedef struct __tempsensor_t {
 	SPI_HandleTypeDef *hspi;
 	GPIO_TypeDef *csPort;
@@ -62,6 +65,8 @@ typedef struct __tempsensor_t {
 // 센서와 통신하는 간격을 최소 250ms로 맞추기 위한 카운트
 // 센서값을 읽어들일 때마다 250으로 설정되며, 1ms마다 1씩 줄어든다.
 extern waitcount global_waitcount;
+
+//======================== Callback & Public functions ========================
 
 void Systick_Sensor_IRQ();
 tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t interval);

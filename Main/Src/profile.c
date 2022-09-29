@@ -1,9 +1,11 @@
 #include "profile.h"
+#include "setting.h"
 
-
-extern tempsensor_t *tempTop;
-extern tempsensor_t *tempBottom;
 extern UART_HandleTypeDef huart1;
+extern tempsensor_t *thermoTop;
+extern tempsensor_t *thermoBottom;
+extern setting_t *ovenSetting;
+
 
 graph_t * profile_upper;
 graph_t * profile_lower;
@@ -15,7 +17,6 @@ uint32_t time_interval = 10;//작동 중 오류를 방지하기 위해 임시적
 //tData값은 항상 간격이 일정할 필요는 없지만, 자동 인터벌 설정을 지원받기 위해서는 간격 편차가 일정 값 이하여야 함.
 //자동 인터벌 값을 인터벌 값을 평균내서 구하며, 타이머에 추가 시 이를 반영.
 void Heat(graph_t * gr1, graph_t * gr2);
-
 
 Menu_t profileList[] = {
 		{NULL, "/yGetProfile/r$1F>", COLOR_PINK},
@@ -151,13 +152,13 @@ void profile(){
 					for (int btIdx = 0;btIdx<bufferIdx;btIdx++) {
 						Data = *(buffer+btIdx);
 						switch (Data) {
-						case 'u':	//
+						case 'T':	//
 							flag_start = true;
 							flag_bottom = false;
 							btTransCount = 0;
 							btParseState = BTPARSE_READ;
 							continue;
-						case 'd':
+						case 'B':
 							flag_start = true;
 							flag_bottom = true;
 							btTransCount = 0;
@@ -172,7 +173,7 @@ void profile(){
 									continue;
 							}
 							break;
-						case 'e':
+						case 'E':
 							flag_finished = true;
 							break;
 						}
@@ -189,7 +190,7 @@ void profile(){
 							else
 								bufferY[btBufYIdx++] = Data;
 							break;
-						case BTPARSE_WRITEGRAPH://민기야 코드 짜서 고맙고, 타이머 문제 때문에 그래프 출력 안되는거야 걱정마렴.
+						case BTPARSE_WRITEGRAPH:
 							{
 								float xdata = atof(bufferX);
 								float ydata = atof(bufferY);
@@ -273,6 +274,7 @@ void profile(){
 	profile_upper = g1;
 	profile_lower = g2;
 }
+
 
 void Profile_Set(graph_t * gr1, graph_t * gr2){
 	uint16_t idx = 0;
@@ -424,8 +426,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 	heaterBottom -> target = gr2->yData[0];
 	OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 	OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
-	OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-	OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+	OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+	OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 	int idx = 0;
 	int curs = 4;
 	int heaterOn = 1;
@@ -434,24 +436,24 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 	float target2U = gr1->yData[idx + 1];
 	float target1D = gr2->yData[idx];
 	float target2D = gr2->yData[idx + 1];
-	float tempU = tempTop->read(tempTop);
-	float tempD = tempBottom->read(tempBottom);
+	float tempTop = thermoTop->read(thermoTop);
+	float tempBottom = thermoBottom->read(thermoBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
-	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
+	ovenSetting->feature_on(ovenSetting, "lamp");
 	HAL_Delay(500);
 	heaterTop -> target = target1U;
 	heaterBottom -> target = target1D;
-	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
-	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
+	ovenSetting->feature_off(ovenSetting, "convection");	// Convection 팬 끄기
+	ovenSetting->feature_on(ovenSetting, "fan");	// 냉각팬 켜기
 	uint32_t heatTime = HAL_GetTick();
 	uint32_t pTime = HAL_GetTick();
 	uint32_t gTime = HAL_GetTick();
 	uint32_t pauseTime = HAL_GetTick();
 	uint32_t graphmode = 0;
 	uint8_t pause = 0;
-	grn1->Add(grn1, gr1->xData[idx], tempU);
-	grn2->Add(grn2, gr2->xData[idx], tempD);
+	grn1->Add(grn1, gr1->xData[idx], tempTop);
+	grn2->Add(grn2, gr2->xData[idx], tempBottom);
 	for(;;){
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
 			htim2.Instance->CCR1 = 256;
@@ -465,7 +467,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			htim2.Instance->CCR1 = 256;
 			HAL_Delay(50);
 			htim2.Instance->CCR1 = 0;
-			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
+			ovenSetting->feature_off(ovenSetting, "lamp");
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
 			heaterOn = 0;
@@ -484,14 +486,14 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			OLED_bgColor = 0x000000;
 			OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 			OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
-			OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+			OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+			OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 			OLED_Cursor(curs, 0xFF0000);
 		}
 		else if(sw == SW_ENTER && !graphmode && curs == 4){//콘벡숀 모오터 돌리기!
-			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-			OLED_Printf("/s$55/rC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+			ovenSetting->feature_toggle(ovenSetting, "convection");
+			OLED_Printf("/s$55/rC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+			OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 		}
 		else if(sw == SW_RIGHT && !pause){//그래프 띄우기
 			if(curs == 5){
@@ -508,15 +510,15 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 
 					OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
-					OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-					OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+					OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 					OLED_Cursor(curs, 0xFF0000);
 				}
 			}
 			else if(curs == 4){
-				HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, (Motor2_GPIO_Port->ODR) & Motor2_Pin?0:1);
-				OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-				OLED_Printf("/s$5B/rR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+				ovenSetting->feature_toggle(ovenSetting, "rotisserie");
+				OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+				OLED_Printf("/s$5B/rR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 			}
 		}
 		else if(sw == SW_TOP && pause){
@@ -560,12 +562,12 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 		}
 
-		tempU = tempTop->read(tempTop);
-		tempD = tempBottom->read(tempBottom);
+		tempTop = thermoTop->read(thermoTop);
+		tempBottom = thermoBottom->read(thermoBottom);
 		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 1){
 			idx++;
-			grn1->Add(grn1, gr1->xData[idx], tempU);
-			grn2->Add(grn2, gr2->xData[idx], tempD);
+			grn1->Add(grn1, gr1->xData[idx], tempTop);
+			grn2->Add(grn2, gr2->xData[idx], tempBottom);
 			if(idx != gr1->count - 1){
 				interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
 				target1U = gr1->yData[idx];
@@ -576,7 +578,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 		}
 		if(HAL_GetTick() - pTime > 200){
 			pTime += 200;
-			Switch_LED_Temperature((tempU + tempD) / 2.0);
+			Switch_LED_Temperature((tempTop + tempBottom) / 2.0);
 			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
 			if(!pause){
 				if(heaterTop->target < target2U){
@@ -606,8 +608,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 			if(!graphmode){
 				uint32_t tck = HAL_GetTick() - heatTime;
-				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
-				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
+				OLED_Printf("/s$25/y%3.1f  \r\n", tempTop);
+				OLED_Printf("/s$2B/y%3.1f  \r\n", tempBottom);
 				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
 //				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
@@ -628,13 +630,13 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 					gr1 ->Print(gr1, 0x0000FF);
 					grn1 ->Print(grn1, 0xFF0000);
 					Graph_PrintPoint(gr1, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0x4444FF);
-					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempU, 0xFF4444);
+					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempTop, 0xFF4444);
 				}
 				else if(graphmode == 2){
 					gr2 ->Print(gr2, 0x00FF00);
 					grn2 ->Print(grn2, 0xFF0000);
 					Graph_PrintPoint(gr2, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterBottom->target, 0x44FF44);
-					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempD, 0xFF4444);
+					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempBottom, 0xFF4444);
 				}
 			}
 

@@ -17,6 +17,7 @@
 
 #define PERIOD 1
 
+//========================= Type definitions & Structs =========================
 
 typedef struct _heater_t heater_t;
 typedef struct _heater_t {
@@ -45,11 +46,20 @@ typedef struct _PIDConst {
 
 }PIDConst;
 
+//============================== Exported types ==============================
+
 extern heater_t *heaterTop;
 extern heater_t *heaterBottom;
 
 extern PIDConst PIDTransient;
 extern PIDConst PIDSteady;
+
+extern TIM_HandleTypeDef htim9;
+extern UART_HandleTypeDef huart1;
+
+extern tempsensor_t *thermoTop;
+extern tempsensor_t *thermoBottom;
+
 
 heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel);
 void HeaterControl_TIM9_IRQ();

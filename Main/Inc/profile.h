@@ -11,7 +11,6 @@
 #include "max6675.h"
 #include "control.h"
 
-
 void profile();
 void Profile_Set(graph_t * gr1, graph_t * gr2);
 
