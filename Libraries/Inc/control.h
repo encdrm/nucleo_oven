@@ -12,6 +12,8 @@
 #include "max6675.h"
 #include <stdbool.h>
 #include <math.h>
+#include <string.h>
+#include <stdio.h>
 
 #define PERIOD 1
 

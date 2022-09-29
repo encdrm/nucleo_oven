@@ -44,12 +44,14 @@ float temperatureTestArr[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 
 							  150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100, 100,};
 
 extern TIM_HandleTypeDef htim9;
+extern UART_HandleTypeDef huart1;
 
 extern tempsensor_t *tempTop;
 extern tempsensor_t *tempBottom;
 
 
 void HeaterControl_TIM9_IRQ();
+void Custom_TransmitTempTBtoBT(void);
 static void heater_start(heater_t *heaterobj);
 static void heater_stop(heater_t *heaterobj);
 static void heater_set_target_temp(heater_t *heaterobj, float targetTemp);
@@ -57,12 +59,21 @@ __STATIC_INLINE void __Heater_SetDuty(heater_t *heaterobj);
 static void Heater_Controller(tempsensor_t *tempsensor, heater_t *heaterobj);
 
 void HeaterControl_TIM9_IRQ(){
+	Custom_TransmitTempTBtoBT();
 	Heater_Controller(tempTop, heaterTop);
 	Heater_Controller(tempBottom, heaterBottom);
 	if(heaterTop->state)
 		__Heater_SetDuty(heaterTop);
 	if(heaterBottom->state)
 		__Heater_SetDuty(heaterBottom);
+}
+
+void Custom_TransmitTempTBtoBT(){
+	// BT로 Top, Bottom 온도 전송하는 함수.
+	// 아무리 온도 길이가 길어봤자 1000.00도(7word) 이하일 것.
+	char buffer[20];
+	snprintf(buffer, sizeof(buffer), "%.2f,%.2f", tempTop->read(tempTop), tempBottom->read(tempBottom));
+	HAL_UART_Transmit(&huart1, (uint8_t *) buffer, strlen(buffer), 10);
 }
 
 heater_t *Custom_HeaterControl(TIM_HandleTypeDef *htim, uint32_t Channel){

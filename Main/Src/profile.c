@@ -220,7 +220,6 @@ void profile(){
 				}
 				OLED_Clear();
 				if (flag_finished == true) {
-					//그래프 길이를 맞춰야 정상 작동해요 ㅠㅠ
 					if(g1->count < g2->count){
 						for(uint16_t i = g1->count; i < g2->count; i++){
 							g1->Add(g1, g2->xData[i], 20.0f);
@@ -234,14 +233,10 @@ void profile(){
 					//자동 인터벌 설정 : g1, g2의 길이를 맞췄으므로 g1의 데이터만 갖고 사용한다.
 					if(g1->count > 1)
 						time_interval = (int)(g1->xData[g1->count-1] / (g1->count - 1));
-					//그래프 출력 시 문구는 아래쪽에 출력하는게 좋아요.
 					OLED_Printf("/s/b$60Finished!");
 					flag_finished = false;
 					g1->Print(g1, 0x0000FF);
 					g2->Print(g2, 0x00FF00);
-//그 인덱스가 그 인덱스가 아니야...
-//					_Graph_PrintPoint(g1, idx, 0xFF8800);
-//					_Graph_PrintPoint(g2, idx, 0xFF8800);
 					while (!Switch_Read());
 				} else {
 					OLED_Printf("$20/s/bExiting...");
