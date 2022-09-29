@@ -21,9 +21,10 @@
 
 typedef struct _heater_t heater_t;
 typedef struct _heater_t {
-		TIM_HandleTypeDef *htim;
-		uint32_t channel;
+		TIM_HandleTypeDef *htim;	// PWM 타이머 핸들
+		uint32_t channel;			// PWM 타이머 채널
 		uint32_t state;
+		float time;
 		float duty;
 		float target;
 		float current;

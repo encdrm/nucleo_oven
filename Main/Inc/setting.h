@@ -29,7 +29,7 @@ typedef struct _setting_t {
 	uint32_t _feature_count;	// 기능 개수
 
 	// Fields
-
+	uint32_t heatruntime;		// 현재 히터 가동 시간(ms)(임시)
 } setting_t;
 
 //============================== Public functions ==============================
