@@ -1,8 +1,8 @@
 #include "profile.h"
 
 
-extern tempsensor_t *tempTop;
-extern tempsensor_t *tempBottom;
+extern tempsensor_t *thermoTop;
+extern tempsensor_t *thermoBottom;
 extern UART_HandleTypeDef huart1;
 
 graph_t * profile_upper;
@@ -151,13 +151,13 @@ void profile(){
 					for (int btIdx = 0;btIdx<bufferIdx;btIdx++) {
 						Data = *(buffer+btIdx);
 						switch (Data) {
-						case 'u':	//
+						case 'T':	//
 							flag_start = true;
 							flag_bottom = false;
 							btTransCount = 0;
 							btParseState = BTPARSE_READ;
 							continue;
-						case 'd':
+						case 'B':
 							flag_start = true;
 							flag_bottom = true;
 							btTransCount = 0;
@@ -172,7 +172,7 @@ void profile(){
 									continue;
 							}
 							break;
-						case 'e':
+						case 'E':
 							flag_finished = true;
 							break;
 						}
@@ -189,7 +189,7 @@ void profile(){
 							else
 								bufferY[btBufYIdx++] = Data;
 							break;
-						case BTPARSE_WRITEGRAPH://민기야 코드 짜서 고맙고, 타이머 문제 때문에 그래프 출력 안되는거야 걱정마렴.
+						case BTPARSE_WRITEGRAPH:
 							{
 								float xdata = atof(bufferX);
 								float ydata = atof(bufferY);
@@ -434,8 +434,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 	float target2U = gr1->yData[idx + 1];
 	float target1D = gr2->yData[idx];
 	float target2D = gr2->yData[idx + 1];
-	float tempU = tempTop->read(tempTop);
-	float tempD = tempBottom->read(tempBottom);
+	float tempTop = thermoTop->read(thermoTop);
+	float tempBottom = thermoBottom->read(thermoBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
@@ -450,8 +450,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 	uint32_t pauseTime = HAL_GetTick();
 	uint32_t graphmode = 0;
 	uint8_t pause = 0;
-	grn1->Add(grn1, gr1->xData[idx], tempU);
-	grn2->Add(grn2, gr2->xData[idx], tempD);
+	grn1->Add(grn1, gr1->xData[idx], tempTop);
+	grn2->Add(grn2, gr2->xData[idx], tempBottom);
 	for(;;){
 		if(HAL_GetTick() - heatTime > timer * 60000 && heaterOn){
 			htim2.Instance->CCR1 = 256;
@@ -560,12 +560,12 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 		}
 
-		tempU = tempTop->read(tempTop);
-		tempD = tempBottom->read(tempBottom);
+		tempTop = thermoTop->read(thermoTop);
+		tempBottom = thermoBottom->read(thermoBottom);
 		if(HAL_GetTick() - heatTime > (uint32_t)(gr1->xData[idx + 1] * 60000.0) && idx < gr1->count - 1){
 			idx++;
-			grn1->Add(grn1, gr1->xData[idx], tempU);
-			grn2->Add(grn2, gr2->xData[idx], tempD);
+			grn1->Add(grn1, gr1->xData[idx], tempTop);
+			grn2->Add(grn2, gr2->xData[idx], tempBottom);
 			if(idx != gr1->count - 1){
 				interval = (gr1->xData[idx + 1] - gr1->xData[idx]) * 60000.00;
 				target1U = gr1->yData[idx];
@@ -576,7 +576,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 		}
 		if(HAL_GetTick() - pTime > 200){
 			pTime += 200;
-			Switch_LED_Temperature((tempU + tempD) / 2.0);
+			Switch_LED_Temperature((tempTop + tempBottom) / 2.0);
 			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
 			if(!pause){
 				if(heaterTop->target < target2U){
@@ -606,8 +606,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 			if(!graphmode){
 				uint32_t tck = HAL_GetTick() - heatTime;
-				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
-				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
+				OLED_Printf("/s$25/y%3.1f  \r\n", tempTop);
+				OLED_Printf("/s$2B/y%3.1f  \r\n", tempBottom);
 				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
 //				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
@@ -628,13 +628,13 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 					gr1 ->Print(gr1, 0x0000FF);
 					grn1 ->Print(grn1, 0xFF0000);
 					Graph_PrintPoint(gr1, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterTop->target, 0x4444FF);
-					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempU, 0xFF4444);
+					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempTop, 0xFF4444);
 				}
 				else if(graphmode == 2){
 					gr2 ->Print(gr2, 0x00FF00);
 					grn2 ->Print(grn2, 0xFF0000);
 					Graph_PrintPoint(gr2, (float) (HAL_GetTick() - heatTime) / 60000.0f, heaterBottom->target, 0x44FF44);
-					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempD, 0xFF4444);
+					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempBottom, 0xFF4444);
 				}
 			}
 

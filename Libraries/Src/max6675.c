@@ -7,8 +7,11 @@
 
 #include "max6675.h"
 
+//============================= Private functions =============================
 static void Add_GlobalWaitCountNode(waitcount_node *waitCntNode);
 __weak float __sensor_read(tempsensor_t *sensorobj);
+
+//================================== Methods ==================================
 static float sensor_read(tempsensor_t *sensorobj);
 static bool sensor_is_readable(tempsensor_t *sensorobj);
 static void sensor_set_interval(tempsensor_t *sensorobj, uint32_t interval);
@@ -17,11 +20,13 @@ static uint32_t sensor_read_waitcount(tempsensor_t *sensorobj);
 
 waitcount waitcount_node_storage;
 
-/* Functions */
+//================================= functions =================================
 
-// 카운트 값을 1씩 줄이기 위한 인터럽트 핸들러.
-// HAL_InitTick 함수에서 Systick 인터럽트가 1ms마다 실행되도록 설정되므로,
-// 핸들러의 실행주기도 1ms이다.
+/*
+ * 카운트 값을 1씩 줄이기 위한 인터럽트 핸들러.
+ * HAL_InitTick 함수에서 Systick 인터럽트가 1ms마다 실행되도록 설정되므로,
+ * 핸들러의 실행주기도 1ms이다.
+ */
 void Systick_Sensor_IRQ() {
 	// 카운트가 0이 아니면, waitcount의 값을 1 감소시킨다.
 	// 현재 카운트 node를 읽으면, next node가 없을 때까지 다음으로 넘어가 읽기를 반복한다.
@@ -34,6 +39,7 @@ void Systick_Sensor_IRQ() {
 	}
 }
 
+/* 온도 센서 객체를 생성하는 함수 */
 tempsensor_t* Custom_Tempsensor(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t interval) {
 	// Setting methods
 	tempsensor_t *sensorobj = (tempsensor_t*) calloc(1, sizeof(tempsensor_t));
@@ -79,7 +85,7 @@ void Add_GlobalWaitCountNode(waitcount_node *waitCntNode) {
 	}
 }
 
-/* Methods */
+/* 센서 값을 실제로 읽는 함수 */
 __weak float __sensor_read(tempsensor_t *sensorobj) {
 	uint8_t pData[2];
 	float temp = 0;
@@ -95,6 +101,13 @@ __weak float __sensor_read(tempsensor_t *sensorobj) {
 
 	return temp * 0.25f;
 }
+
+/*
+ * 센서 값을 읽는 메소드.
+ * 센서는 최소 250ms의 간격을 두고 읽어야 한다.
+ * 따라서 마지막으로 센서를 읽은 지 250ms가 흐르지 않았다면, 대신 이전에 읽은 센서 값을 반환한다.
+ * 실제로 센서 값을 읽는 작업은 __sensor_read가 수행한다.
+ */
 float sensor_read(tempsensor_t *sensorobj) {
 	float data = .0f;
 	if (sensorobj->is_readable(sensorobj)) {
@@ -106,16 +119,22 @@ float sensor_read(tempsensor_t *sensorobj) {
 	}
 	return data;
 }
+
+/* 센서 값을 읽을 수 있는지 확인하는 메소드 */
 bool sensor_is_readable(tempsensor_t *sensorobj) {
 	return !(sensorobj->read_waitcount(sensorobj));
 }
 
+/* 센서를 읽는 간격(in ms)을 설정하는 메소드 */
 void sensor_set_interval(tempsensor_t *sensorobj, uint32_t interval) {
 	sensorobj->__sensor_interval = interval;
 }
+
+/* 센서를 읽는 간격(in ms)을 가져오는 메소드*/
 uint32_t sensor_get_interval(tempsensor_t *sensorobj) {
 	return sensorobj->__sensor_interval;
 }
+
 uint32_t sensor_read_waitcount(tempsensor_t *sensorobj) {
 	return *(sensorobj->waitCount);
 }

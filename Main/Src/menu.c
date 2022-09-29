@@ -12,8 +12,8 @@
 extern SPI_HandleTypeDef hspi3;
 extern TIM_HandleTypeDef htim3;
 
-extern tempsensor_t *tempTop;
-extern tempsensor_t *tempBottom;
+extern tempsensor_t *thermoTop;
+extern tempsensor_t *thermoBottom;
 
 extern heater_t *heaterTop;
 extern heater_t *heaterBottom;
@@ -21,14 +21,12 @@ extern float tData[100];
 extern float uData[100];
 extern float dData[100];
 
-
 extern graph_t * profile_upper;
 extern graph_t * profile_lower;
 
 void Heat2();
 void Heat3();
 void test();
-
 
 extern uint32_t timer;
 extern uint32_t time_interval;
@@ -73,19 +71,10 @@ void Menu_Setup(){
 void Menu(){
 	Menu_Setup();
 	uint8_t idx = 0;
-	uint32_t buzzer_time = HAL_GetTick();
-	uint32_t buzzer_mode = 0;
+
 	for(;;){
 		uint16_t sw = Switch_Read();
-//		if(sw){
-//			htim2.Instance->CCR1 = 64;
-//			buzzer_mode = 1;
-//			buzzer_time = HAL_GetTick();
-//		}
-//		if(HAL_GetTick() - buzzer_time > 80 && buzzer_mode){
-//			htim2.Instance->CCR1 = 0;
-//			buzzer_mode = 0;
-//		}
+
 		if(sw == SW_TOP || sw == SW_TOP_LONG){
 			idx+=menuCnt - 1;
 			idx %= menuCnt;
@@ -143,17 +132,15 @@ void test(){
 	htim3.Instance->CCR3 = 0;
 	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, 0);
 	uint32_t heatTime = HAL_GetTick();
-	float tempU, tempD;
+	float tempTop, tempBottom;
 	for(;;){
 		if(HAL_GetTick() - heatTime > 100){
 			heatTime += 100;
-			if(tempTop->is_readable(tempTop))
-				tempU = tempTop->read(tempTop);
-			if(tempBottom->is_readable(tempBottom))
-				tempD = tempBottom->read(tempBottom);
-			OLED_Printf("$45%3.2f", tempU);
-			OLED_Printf("$55%3.2f", tempD);
-			Switch_LED_Temperature((tempU + tempD) / 2.0);
+			tempTop = thermoTop->read(thermoTop);
+			tempBottom = thermoBottom->read(thermoBottom);
+			OLED_Printf("$45%3.2f", tempTop);
+			OLED_Printf("$55%3.2f", tempBottom);
+			Switch_LED_Temperature((tempTop + tempBottom) / 2.0);
 		}
 		uint16_t sw = Switch_Read();
 		if((sw == SW_TOP || sw == SW_TOP_LONG) && !setting){
@@ -176,13 +163,19 @@ void test(){
 				setting %= 3;
 				switch(setting){
 				case 0:
-					OLED_Printf("/y$15C:%s$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Printf("/y$15C:%s$1BR:%s", \
+							ovenSetting->feature_state(ovenSetting, "convection") ? "ON" : "OFF ", \
+									ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON" : "OFF ");
 					break;
 				case 1:
-					OLED_Printf("/r$15C:%s/y$1BR:%s", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Printf("/r$15C:%s/y$1BR:%s", \
+							ovenSetting->feature_state(ovenSetting, "convection") ? "ON" : "OFF ", \
+									ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON" : "OFF ");
 					break;
 				case 2:
-					OLED_Printf("/y$15C:%s/r$1BR:%s/y", Motor1_GPIO_Port->ODR & Motor1_Pin ? "OFF" : "ON ", Motor2_GPIO_Port->ODR & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Printf("/y$15C:%s/r$1BR:%s/y", \
+							ovenSetting->feature_state(ovenSetting, "convection") ? "ON" : "OFF ", \
+									ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON" : "OFF ");
 					break;
 				}
 				break;
@@ -398,10 +391,8 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	idx = 0;
 	curs = 2;
 	int heaterOn = 1;
-//	float targetU = 30.0f;
-//	float targetD = 30.0f;
-	float tempU = tempTop->read(tempTop);
-	float tempD = tempBottom->read(tempBottom);
+	float tempTop = thermoTop->read(thermoTop);
+	float tempBottom = thermoBottom->read(thermoBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
@@ -567,8 +558,8 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			}
 		}
 
-		tempU = tempTop->read(tempTop);
-		tempD = tempBottom->read(tempBottom);
+		tempTop = thermoTop->read(thermoTop);
+		tempBottom = thermoBottom->read(thermoBottom);
 		if(HAL_GetTick() - heatTime > threshold_time && idx <= timer / 10 - 1){
 			idx++;
 			grn1->Add(grn1, idx * (float)time_interval, heaterTop->target);
@@ -577,20 +568,12 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 		}
 		if(HAL_GetTick() - pTime > 100){
 			pTime += 100;
-			Switch_LED_Temperature((tempU + tempD) / 2.0);
+			Switch_LED_Temperature((tempTop + tempBottom) / 2.0);
 			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
 			if(!graphmode){
 				uint32_t tck = HAL_GetTick() - heatTime;
-				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
-				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
-//				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
-//				OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
-//				OLED_Printf("/s$45/p%3.1f  \r\n", heaterTop->duty);
-//				OLED_Printf("/s$4B/p%3.1f  \r\n", heaterBottom->duty);
-//				OLED_Printf("/s$55/p%s\r\n", heaterStateStr2[heaterTop->state]);
-//				OLED_Printf("/s$5B/p%s\r\n", heaterStateStr2[heaterBottom->state]);
-//				OLED_Printf("/s$65/p%3.1f  \r\n", heaterTop->errorSum);
-//				OLED_Printf("/s$6B/p%3.1f  \r\n", heaterBottom->errorSum);
+				OLED_Printf("/s$25/y%3.1f  \r\n", tempTop);
+				OLED_Printf("/s$2B/y%3.1f  \r\n", tempBottom);
 				OLED_Printf("/s$45/g%03d:%02d", tck / 60000,(tck / 1000) % 60);
 			}
 		}
@@ -600,16 +583,15 @@ void Heat2(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 				OLED_Clear();
 				if(graphmode == 1){
 					grn1 ->Print(grn1, 0x0000FF);
-					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempU, 0xFF4444);
+					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempTop, 0xFF4444);
 				}
 				else if(graphmode == 2){
 					grn2 ->Print(grn2, 0x00FF00);
-					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempD, 0xFF4444);
+					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempBottom, 0xFF4444);
 				}
 			}
 
 			OLED_Line(0, 53, 95, 53, 0xFFFF00);
-//			OLED_Printf("/s$60/g%d:$64/y%d/$68/r%d[\'c]", (HAL_GetTick() - heatTime) / 60000, (int)temp, (int)heaterTop->target);
 		}
 	}
 	heaterTop->stop(heaterTop);
@@ -723,10 +705,8 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	idx = 0;
 	curs = 2;
 	int heaterOn = 1;
-//	float targetU = 30.0f;
-//	float targetD = 30.0f;
-	float tempU = tempTop->read(tempTop);
-	float tempD = tempBottom->read(tempBottom);
+	float tempTop = thermoTop->read(thermoTop);
+	float tempBottom = thermoBottom->read(thermoBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
 	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
@@ -932,21 +912,21 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 			}
 		}
 
-		tempU = tempTop->read(tempTop);
-		tempD = tempBottom->read(tempBottom);
+		tempTop = thermoTop->read(thermoTop);
+		tempBottom = thermoBottom->read(thermoBottom);
 		if(HAL_GetTick() - heatTime > threshold_time && idx <= timer / 10 - 1){
 			idx++;
-			grn1->Add(grn1, idx * (float)time_interval, tempU);
-			grn2->Add(grn2, idx * (float)time_interval, tempD);
+			grn1->Add(grn1, idx * (float)time_interval, tempTop);
+			grn2->Add(grn2, idx * (float)time_interval, tempBottom);
 			threshold_time += time_interval * 60000UL;
 		}
 		if(HAL_GetTick() - pTime > 200){
 			pTime += 200;
-			Switch_LED_Temperature((tempU + tempD) / 2.0);
+			Switch_LED_Temperature((tempTop + tempBottom) / 2.0);
 			//온도 프로필에서 설정한 값의 2배 속도로 움직이게 하여 안정적으로 작동시킵니다.
 			if(!graphmode){
-				OLED_Printf("/s$25/y%3.1f  \r\n", tempU);
-				OLED_Printf("/s$2B/y%3.1f  \r\n", tempD);
+				OLED_Printf("/s$25/y%3.1f  \r\n", tempTop);
+				OLED_Printf("/s$2B/y%3.1f  \r\n", tempBottom);
 				OLED_Printf("/s$10/yDUTY$15%1.2f$1B%1.2f", heaterTop->duty, heaterBottom->duty);
 			}
 		}
@@ -956,11 +936,11 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 				OLED_Clear();
 				if(graphmode == 1){
 					grn1 ->Print(grn1, 0x0000FF);
-					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempU, 0xFF4444);
+					Graph_PrintPoint(grn1, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempTop, 0xFF4444);
 				}
 				else if(graphmode == 2){
 					grn2 ->Print(grn2, 0x00FF00);
-					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempD, 0xFF4444);
+					Graph_PrintPoint(grn2, (float) (HAL_GetTick() - heatTime) / 60000.0f, tempBottom, 0xFF4444);
 				}
 			}
 
