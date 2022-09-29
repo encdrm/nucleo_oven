@@ -41,7 +41,7 @@ void profile(){
 	enum {
 		BTPARSE_IDLE, BTPARSE_READ, BTPARSE_WRITEGRAPH
 	};
-	uint8_t buffer[200] = {0};
+	uint8_t buffer[3000] = {0};
 	int bufferIdx = 0;
 	uint8_t Data;
 	char bufferX[20] = { 0 };
