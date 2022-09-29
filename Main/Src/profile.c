@@ -150,13 +150,13 @@ void profile(){
 					for (int btIdx = 0;btIdx<bufferIdx;btIdx++) {
 						Data = *(buffer+btIdx);
 						switch (Data) {
-						case 't':	//
+						case 'u':	//
 							flag_start = true;
 							flag_bottom = false;
 							btTransCount = 0;
 							btParseState = BTPARSE_READ;
 							continue;
-						case 'b':
+						case 'd':
 							flag_start = true;
 							flag_bottom = true;
 							btTransCount = 0;
