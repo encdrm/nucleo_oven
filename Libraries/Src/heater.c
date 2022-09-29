@@ -139,10 +139,12 @@ static void Heater_Controller(tempsensor_t *tempsensorobj, heater_t *heaterobj){
 			break;
 
 		case TRANSIENT:
-			heaterobj->errorSum = .0f;
 			heaterobj->duty = Control_PID(heaterobj, PIDTransient);
 			if (!heaterobj->onFlag) heaterobj->state = OFF;
-			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) heaterobj->state = STEADY;
+			else if (abs(heaterobj->target - heaterobj->current) <= DEVIATION) {
+				heaterobj->errorSum = .0f;
+				heaterobj->state = STEADY;
+			}
 			break;
 
 		case STEADY:

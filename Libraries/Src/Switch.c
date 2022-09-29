@@ -79,7 +79,7 @@ uint16_t Switch_Read(){
 		break;
 	case SWITCH_STATE_PRE_DOWN:
 		if(Switch_input){
-			if(HAL_GetTick() - Switch_time > 80){
+			if(HAL_GetTick() - Switch_time > 40){
 				Switch_state = SWITCH_STATE_DOWN;
 				return Switch_sum;
 			}
@@ -103,7 +103,7 @@ uint16_t Switch_Read(){
 		break;
 	case SWITCH_STATE_PRE_IDLE:
 		if(!Switch_input){
-			if(HAL_GetTick() - Switch_lowTime > 80){
+			if(HAL_GetTick() - Switch_lowTime > 40){
 				Switch_time = HAL_GetTick();
 				Switch_state = SWITCH_STATE_IDLE;
 				Switch_sum = 0;
@@ -125,7 +125,7 @@ uint16_t Switch_Read(){
 		break;
 	case SWITCH_STATE_PRE_IDLE_LONG:
 		if(!Switch_input){
-			if(HAL_GetTick() - Switch_lowTime > 80){
+			if(HAL_GetTick() - Switch_lowTime > 40){
 				Switch_time = HAL_GetTick();
 				Switch_state = SWITCH_STATE_IDLE;
 				Switch_sum = 0;
