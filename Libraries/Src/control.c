@@ -9,8 +9,8 @@
 
 PIDConst PIDTransient = {
 		.2f,		// kp
-		.0f,		// ki
-		.0f,		// kd
+		.0002f,		// ki
+		.1f,		// kd
 		10.f,		// filterConst
 		10.f,		// antiWindUpConst
 		.25f		// deadBandConst
