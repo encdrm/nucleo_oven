@@ -8,8 +8,8 @@
 #include <stdio.h>
 
 PIDConst PIDTransient = {
-		.2f,		// kp
-		0.01f,		// ki
+		.1f,		// kp
+		.01f,		// ki
 		.2f,		// kd
 		20.f,		// filterConst
 		20.f,		// antiWindUpConst
