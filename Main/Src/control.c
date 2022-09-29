@@ -9,21 +9,22 @@
 
 PIDConst PIDTransient = {
 		.2f,		// kp
-		.0f,		// ki
-		.0f,		// kd
-		10.f,		// filterConst
-		10.f,		// antiWindUpConst
-		.25f		// deadBandConst
-};
-
-PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 하락 목표
-		.026085f,	// kp
-		.000235f,	// ki
-		.72283f,	// kd
+		0.01f,		// ki
+		.2f,		// kd
 		20.f,		// filterConst
 		20.f,		// antiWindUpConst
 		.25f		// deadBandConst
 };
+
+PIDConst PIDSteady = { //80% duty 초당 0.5도 상승, 0% duty 초당 0.5도 하락 목표
+		.015f,		// kp
+		.04f,		// ki
+		.4f,		// kd
+		20.f,		// filterConst
+		20.f,		// antiWindUpConst
+		.25f		// deadBandConst
+};
+
 
 float Control_PID(heater_t *heaterobj, PIDConst PIDMode){
 	float duty;

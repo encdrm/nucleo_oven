@@ -615,9 +615,9 @@ Menu_t Heat3List[] = {
 
 extern uint32_t OLED_bgColor;
 void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
-	PIDConst PIDTransient_temp = PIDTransient;
-	PIDConst PIDSteady_temp = PIDSteady;
-	PIDSteady = PIDTransient;
+	//PIDConst PIDTransient_temp = PIDTransient;
+	//PIDConst PIDSteady_temp = PIDSteady;
+	//PIDSteady = PIDTransient;
 	OLED_Clear();
 	//인터벌 및 타이머 설정 창입니다.
 	OLED_MenuUI("< HEAT:/bOFF       ", 0xFF0000, 0x000000, HeatTimerList, 3, 0xFFFF00);
@@ -953,8 +953,8 @@ void Heat3(){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 �
 	profile_upper = grn1;
 	profile_lower = grn2;
 
-	PIDTransient = PIDTransient_temp;
-	PIDSteady = PIDSteady_temp;
+	//PIDTransient = PIDTransient_temp;
+	//PIDSteady = PIDSteady_temp;
 }
 
 
