@@ -21,6 +21,7 @@ typedef struct _setting_t {
 	// Methods
 	void (*feature_on)(setting_t * settingobj, char *featureName);			// 기능을 켜기 위한 객체
 	void (*feature_off)(setting_t * settingobj, char *featureName);  		// 기능을 끄기 위한 객체
+	void (*feature_toggle)(setting_t * settingobj, char *featureName);  	// 기능을 toggle
 	uint32_t (*feature_state)(setting_t * settingobj, char *featureName);	// 기능 상태 반환하는 객체
 
 	// Private fields

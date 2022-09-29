@@ -1,9 +1,11 @@
 #include "profile.h"
+#include "setting.h"
 
-
+extern UART_HandleTypeDef huart1;
 extern tempsensor_t *thermoTop;
 extern tempsensor_t *thermoBottom;
-extern UART_HandleTypeDef huart1;
+extern setting_t *ovenSetting;
+
 
 graph_t * profile_upper;
 graph_t * profile_lower;
@@ -15,7 +17,6 @@ uint32_t time_interval = 10;//작동 중 오류를 방지하기 위해 임시적
 //tData값은 항상 간격이 일정할 필요는 없지만, 자동 인터벌 설정을 지원받기 위해서는 간격 편차가 일정 값 이하여야 함.
 //자동 인터벌 값을 인터벌 값을 평균내서 구하며, 타이머에 추가 시 이를 반영.
 void Heat(graph_t * gr1, graph_t * gr2);
-
 
 Menu_t profileList[] = {
 		{NULL, "/yGetProfile/r$1F>", COLOR_PINK},
@@ -274,6 +275,7 @@ void profile(){
 	profile_lower = g2;
 }
 
+
 void Profile_Set(graph_t * gr1, graph_t * gr2){
 	uint16_t idx = 0;
 	OLED_Line(0, 53, 95, 53, 0xFF00FF);
@@ -424,8 +426,8 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 	heaterBottom -> target = gr2->yData[0];
 	OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 	OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
-	OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-	OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+	OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+	OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 	int idx = 0;
 	int curs = 4;
 	int heaterOn = 1;
@@ -438,12 +440,12 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 	float tempBottom = thermoBottom->read(thermoBottom);
 	heaterTop->start(heaterTop);
 	heaterBottom->start(heaterBottom);
-	HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 0);
+	ovenSetting->feature_on(ovenSetting, "lamp");
 	HAL_Delay(500);
 	heaterTop -> target = target1U;
 	heaterBottom -> target = target1D;
-	HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, GPIO_PIN_SET);	// Convection 팬 끄기
-	HAL_GPIO_WritePin(DCFAN_GPIO_Port, DCFAN_Pin, GPIO_PIN_SET);	// 냉각팬 켜기
+	ovenSetting->feature_off(ovenSetting, "convection");	// Convection 팬 끄기
+	ovenSetting->feature_on(ovenSetting, "fan");	// 냉각팬 켜기
 	uint32_t heatTime = HAL_GetTick();
 	uint32_t pTime = HAL_GetTick();
 	uint32_t gTime = HAL_GetTick();
@@ -465,7 +467,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			htim2.Instance->CCR1 = 256;
 			HAL_Delay(50);
 			htim2.Instance->CCR1 = 0;
-			HAL_GPIO_WritePin(LAMP_GPIO_Port, LAMP_Pin, 1);
+			ovenSetting->feature_off(ovenSetting, "lamp");
 			heaterTop->stop(heaterTop);
 			heaterBottom->stop(heaterBottom);
 			heaterOn = 0;
@@ -484,14 +486,14 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			OLED_bgColor = 0x000000;
 			OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 			OLED_Printf("/s$3B/y%3.1f  \r\n", heaterTop->target);
-			OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+			OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+			OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 			OLED_Cursor(curs, 0xFF0000);
 		}
 		else if(sw == SW_ENTER && !graphmode && curs == 4){//콘벡숀 모오터 돌리기!
-			HAL_GPIO_WritePin(Motor1_GPIO_Port, Motor1_Pin, (Motor1_GPIO_Port->ODR) & Motor1_Pin?0:1);
-			OLED_Printf("/s$55/rC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-			OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+			ovenSetting->feature_toggle(ovenSetting, "convection");
+			OLED_Printf("/s$55/rC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+			OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 		}
 		else if(sw == SW_RIGHT && !pause){//그래프 띄우기
 			if(curs == 5){
@@ -508,15 +510,15 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 
 					OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
 					OLED_Printf("/s$3B/y%3.1f  \r\n", heaterBottom->target);
-					OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-					OLED_Printf("/s$5B/yR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+					OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+					OLED_Printf("/s$5B/yR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 					OLED_Cursor(curs, 0xFF0000);
 				}
 			}
 			else if(curs == 4){
-				HAL_GPIO_WritePin(Motor2_GPIO_Port, Motor2_Pin, (Motor2_GPIO_Port->ODR) & Motor2_Pin?0:1);
-				OLED_Printf("/s$55/yC:%s  \r\n", (Motor1_GPIO_Port -> ODR) & Motor1_Pin ? "OFF" : "ON ");
-				OLED_Printf("/s$5B/rR:%s  \r\n", (Motor2_GPIO_Port -> ODR) & Motor2_Pin ? "OFF" : "ON ");
+				ovenSetting->feature_toggle(ovenSetting, "rotisserie");
+				OLED_Printf("/s$55/yC:%s  \r\n", ovenSetting->feature_state(ovenSetting, "convection") ? "ON " : "OFF");
+				OLED_Printf("/s$5B/rR:%s  \r\n", ovenSetting->feature_state(ovenSetting, "rotisserie") ? "ON " : "OFF");
 			}
 		}
 		else if(sw == SW_TOP && pause){
