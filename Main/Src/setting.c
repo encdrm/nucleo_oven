@@ -47,7 +47,7 @@ setting_t *Custom_Setting(feature_t featureList[], uint32_t feature_count) {
 __STATIC_INLINE feature_t *__get_feature(feature_t featList[], int featCount, const char *featureName) {
 	int idx;
 	for (idx=0; idx<featCount; idx++) {
-		if (!strcmp(featureName ,featList[idx].name)) // strcmp는 같으면 0을 반환함.
+		if (!strcmp(featureName, featList[idx].name)) // strcmp는 같으면 0을 반환함.
 			break;
 	}
 	if (idx == featCount)	// Cannot find feature

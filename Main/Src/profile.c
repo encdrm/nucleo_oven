@@ -377,20 +377,6 @@ void Profile_Set(graph_t * gr1, graph_t * gr2){
 		else if(sw == SW_LEFT){
 			break;
 		}
-		/*else if(sw == SW_RIGHT){
-			Heat2(gr1, gr2);
-
-			OLED_Clear();
-			OLED_Line(0, 53, 95, 53, 0xFF00FF);
-			gr1 -> Print(gr1, 0x0000FF);
-			gr2 -> Print(gr2, 0x00FF00);
-			_Graph_PrintPoint(gr1, idx, 0xFF8800);
-			_Graph_PrintPoint(gr2, idx, 0xFF8800);
-			OLED_Printf("/s/p$60<$6F>");
-			OLED_Printf("/s$62/rt%03d$66/yu%03d$6A/yd%03d", (int)gr1->xData[idx], (int)gr1->yData[idx], (int)gr2->yData[idx]);
-			pTime = HAL_GetTick();
-			state = 0;
-		}*/
 		if(HAL_GetTick() - pTime > 100){
 			pTime += 100;
 			Switch_LED_Temperature((gr1->yData[idx] + gr2->yData[idx])/2.0);
@@ -608,6 +594,7 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 			if(!graphmode){
 				uint32_t tck = HAL_GetTick() - heatTime;
+				ovenSetting->heatruntime = tck;
 				OLED_Printf("/s$25/y%3.1f  \r\n", tempTop);
 				OLED_Printf("/s$2B/y%3.1f  \r\n", tempBottom);
 				OLED_Printf("/s$35/y%3.1f  \r\n", heaterTop->target);
@@ -641,7 +628,6 @@ void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 �
 			}
 
 			OLED_Line(0, 53, 95, 53, 0xFFFF00);
-//			OLED_Printf("/s$60/g%d:$64/y%d/$68/r%d[\'c]", (HAL_GetTick() - heatTime) / 60000, (int)temp, (int)heaterTop->target);
 		}
 	}
 	heaterTop->stop(heaterTop);
