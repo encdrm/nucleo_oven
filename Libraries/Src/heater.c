@@ -10,7 +10,7 @@
 #include "setting.h"
 
 // TRANSIENT <-> STEADY 전환 기준이 되는 온도 편차. 타겟 온도와 차이가 더 커지면 TRANSIENT, 작아지면 STEADY 상태로 전환
-#define DEVIATION		1.f
+#define DEVIATION		2.f
 
 // heater state
 enum {
