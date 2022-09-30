@@ -400,6 +400,7 @@ Menu_t HeatList[] = {
 extern TIM_HandleTypeDef htim2;
 extern uint32_t OLED_bgColor;
 void Heat(graph_t * gr1, graph_t * gr2){//Graph에 따라 분 단위로 시간 경과에 따라 온도를 설정합니다.
+	ovenSetting->heatruntime = 0;
 	htim2.Instance->CCR1 = 256;
 	HAL_Delay(300);
 	htim2.Instance->CCR1 = 0;
